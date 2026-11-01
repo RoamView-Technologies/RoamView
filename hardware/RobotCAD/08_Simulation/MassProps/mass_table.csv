@@ -1,0 +1,40 @@
+PartNo,Name,Source,Volume_cm3,Mass_g,Basis,Saved
+RV-301,Head,PRINT,269.5,309.9,PETG 1.15 g/cm3 eff.,True
+RV-302,HeadBezel,PRINT,78.2,89.9,PETG 1.15 g/cm3 eff.,True
+RV-303,OAK_Wedge,PRINT,20.5,14.3,PETG 0.7 g/cm3 eff.,True
+RV-304,LidarPedestal,PRINT,63.4,44.4,PETG 0.7 g/cm3 eff.,True
+RV-305,Bumper,PRINT,377.8,275.8,TPU 0.73 g/cm3 eff.,True
+RV-306,ChargePadHolder,PRINT,30.6,21.4,PETG 0.7 g/cm3 eff.,True
+RV-307,CliffSensorMount,PRINT,7.7,5.4,PETG 0.7 g/cm3 eff.,True
+RV-308,FrontCasterHousing,PRINT,38.4,26.9,PETG 0.7 g/cm3 eff.,True
+RV-309,FrontCasterCarriage,PRINT,7.4,5.2,PETG 0.7 g/cm3 eff.,True
+RV-310,RearCasterRiser,PRINT,87.8,61.5,PETG 0.7 g/cm3 eff.,True
+RV-311,ComputeTray,PRINT,44.8,31.3,PETG 0.7 g/cm3 eff.,True
+RV-312,DriverMount,PRINT,9.6,6.7,PETG 0.7 g/cm3 eff.,True
+RV-313,SkinSide,PRINT,82.8,95.2,PETG 1.15 g/cm3 eff.,True
+RV-314,SkinFront,PRINT,81.4,93.6,PETG 1.15 g/cm3 eff.,True
+RV-315,SkinRear,PRINT,67.2,77.3,PETG 1.15 g/cm3 eff.,True
+RV-316,DrawerFace,PRINT,39.7,27.8,PETG 0.7 g/cm3 eff.,True
+RV-430,DeckPlate,SHEET,273.5,733.0,5052 2.68 g/cm3,True
+RV-431,FloorPan,SHEET,170.6,457.1,5052 2.68 g/cm3,True
+RV-432,BatteryDrawerTray,SHEET,104.4,279.8,5052 2.68 g/cm3,True
+RV-433,DrawerGuide,SHEET,23.4,62.7,5052 2.68 g/cm3,True
+RV-434,MotorBracket,SHEET,11.3,30.4,5052 2.68 g/cm3,True
+RV-435,ChargePad,SHEET,0.5,4.3,8.5 g/cm3,True
+RV-410,ChassisFrame_2020,WELD,1702.9,2250.0,2020 0.46 kg/m + hardware,True
+RV-420,SensorTower_2020,WELD,311.4,450.0,2020 0.46 kg/m + hardware,True
+RV-521,RaspberryPi5_ActiveCooler,COTS,46.6,72.0,datasheet / estimate (Mass_g),True
+RV-522,ESP32_ExpansionBoard38P_DevKit,COTS,21.8,35.0,datasheet / estimate (Mass_g),True
+RV-552,TouchDisplay2_7in,COTS,266.3,270.0,datasheet / estimate (Mass_g),True
+RV-531,MotorDriver_DFR0601,COTS,22.1,30.0,datasheet / estimate (Mass_g),True
+RV-532,PowerPCB_Envelope,ENVELOPE,456.0,150.0,datasheet / estimate (Mass_g),True
+RV-541,Battery4S_Envelope,ENVELOPE,1254.9,900.0,datasheet / estimate (Mass_g),True
+RV-551,EStop_22mm_Box,COTS,53.2,80.0,datasheet / estimate (Mass_g),True
+RV-501,Gearmotor_37D_70to1_Enc,COTS,69.8,215.0,datasheet / estimate (Mass_g),True
+RV-511,OAK-D-Pro-W,COTS,67.7,91.0,datasheet / estimate (Mass_g),True
+RV-512,LiDAR_STL-19P,COTS,45.9,45.0,datasheet / estimate (Mass_g),True
+RV-513,ToF_VL53L4CD_Adafruit5396,COTS,0.9,1.8,datasheet / estimate (Mass_g),True
+RV-514,OAK_Y_Adapter,COTS,8.2,10.0,datasheet / estimate (Mass_g),True
+RV-502,SonicHub_1309_6mm,COTS,6.0,14.0,datasheet / estimate (Mass_g),True
+RV-503,Wheel_Wasteland_144x52,COTS,628.1,348.0,datasheet / estimate (Mass_g),True
+RV-504,Caster_2in_Swivel,COTS,57.7,60.0,datasheet / estimate (Mass_g),True

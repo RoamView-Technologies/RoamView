@@ -1,0 +1,9 @@
+FEA drawer_guide
+  RV-433 5052-H32 1.5 mm L; 11.8 N per guide (2 g) along the tray footprint
+  supported on the mid cross members (1089 facets) + 2 bolt holes (104 facets)
+  hand calc: 11.7 MPa, 0.17 mm deflection, FS 17
+  mesh: 27308 nodes, 79997 quadratic tets
+  applied load (sum): (0.0, -11.8, 0.0) N
+  max displacement: 0.1166 mm
+  von Mises: peak 19.5 MPa (single element, includes fixture singularities), 99.5th percentile 4.3 MPa
+  safety factor on yield 193 MPa: 9.9 (peak), 44.5 (99.5 %)  -> PASS vs FS >= 3

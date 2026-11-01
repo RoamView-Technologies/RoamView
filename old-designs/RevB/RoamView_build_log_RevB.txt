@@ -1,0 +1,148 @@
+15:40:27  RoamView Rev B build - SOLIDWORKS 34.4.1 - spec RoamView_RevB_spec.json (2026-09-28)
+15:40:27  === RoamView_Baseplate_RevB (RV-CH-001B) ===
+15:40:30      plate: volume 421725 mm3
+15:40:31      Cut_DeckPosts_M5 (4): volume 421725 -> 421155 mm3
+15:40:31      Cut_CasterMounts_M5 (8): volume 421155 -> 420015 mm3
+15:40:31      Cut_SpringHoles_18 (2): volume 420015 -> 416961 mm3
+15:40:32      Cut_SpringCups_M2p5 (4): volume 416961 -> 416824 mm3
+15:40:32      Cut_PivotHangers_M4 (4): volume 416824 -> 416442 mm3
+15:40:33      Cut_BatteryTray_M3 (4): volume 416442 -> 416224 mm3
+15:40:33      Cut_BatteryStraps (4): volume 416224 -> 414578 mm3
+15:40:34      Cut_PowerBoard_M3 (2): volume 414578 -> 414469 mm3
+15:40:34      Cut_MotorDriver_M3 (4): volume 414469 -> 414252 mm3
+15:40:34      Cut_Splices_M3 (2): volume 414252 -> 414143 mm3
+15:40:35      Cut_ChargeContacts_M4 (4): volume 414143 -> 413761 mm3
+15:40:35      Cut_Bumper_M4 (2): volume 413761 -> 413570 mm3
+15:40:36      Cut_CliffSensors_M2p5 (8): volume 413570 -> 413295 mm3
+15:40:36      Cut_FuseF2_M3 (1): volume 413295 -> 413241 mm3
+15:40:37      Cut_PassThroughs (3): volume 413241 -> 404264 mm3
+15:40:37      volume 404264.4 mm3 (model 404267.0) OK; box [-160.0, -0.103, -130.0, 160.0, 6.0, 130.0] OK; mass 1.092 kg
+15:40:38      save RoamView_Baseplate_RevB.SLDPRT: ok
+15:40:38      save RoamView_Baseplate_RevB.STEP: ok
+15:40:39      save RoamView_Baseplate_RevB_iso.png: ok
+15:40:40      save RoamView_Baseplate_RevB_top.png: ok
+15:40:40  === RoamView_TopDeck_RevB (RV-CH-002B) ===
+15:40:43      plate: volume 248570 mm3
+15:40:44      Cut_DeckPosts_M5 (4): volume 248570 -> 248285 mm3
+15:40:44      Cut_LidarRiser_M3 (4): volume 248285 -> 248176 mm3
+15:40:45      Cut_LidarCable_20 (1): volume 248176 -> 247233 mm3
+15:40:45      Cut_Pi5_M2p5 (4): volume 247233 -> 247165 mm3
+15:40:45      Cut_ESP32Carrier_M3 (2): volume 247165 -> 247110 mm3
+15:40:46      Cut_EStop_22p5 (1): volume 247110 -> 245917 mm3
+15:40:46      Cut_Camera_M4 (4): volume 245917 -> 245727 mm3
+15:40:47      Cut_Lights_16 (2): volume 245727 -> 244520 mm3
+15:40:47      Cut_Handle_M5 (2): volume 244520 -> 244378 mm3
+15:40:47      Cut_PowerBlocks_M3 (8): volume 244378 -> 244160 mm3
+15:40:48      Cut_K2Relay_M2p5 (4): volume 244160 -> 244091 mm3
+15:40:48      Cut_LidarSplice_M3 (1): volume 244091 -> 244064 mm3
+15:40:49      Cut_MicArray_M3 (4): volume 244064 -> 243955 mm3
+15:40:49      Cut_Speaker_M3 (3): volume 243955 -> 243873 mm3
+15:40:50      Cut_PassThroughs (5): volume 243873 -> 238649 mm3
+15:40:50      volume 238648.7 mm3 (model 238650.5) OK; box [-160.0, -0.103, -130.0, 160.0, 3.0, 130.0] OK; mass 0.644 kg
+15:40:51      save RoamView_TopDeck_RevB.SLDPRT: ok
+15:40:51      save RoamView_TopDeck_RevB.STEP: ok
+15:40:52      save RoamView_TopDeck_RevB_iso.png: ok
+15:40:53      save RoamView_TopDeck_RevB_top.png: ok
+15:40:53  --- RoamView_Post2020_RevB  [post_fl, post_fr, post_rl, post_rr]
+15:40:56      save RoamView_Post2020_RevB.SLDPRT: ok
+15:40:56  --- RoamView_DriveWheel125_RevB  [wheel_l, wheel_r]
+15:40:59      save RoamView_DriveWheel125_RevB.SLDPRT: ok
+15:40:59  --- RoamView_DriveModule_L_RevB  [motor_l]
+15:41:06      save RoamView_DriveModule_L_RevB.SLDPRT: ok
+15:41:07  --- RoamView_DriveModule_R_RevB  [motor_r]
+15:41:13      save RoamView_DriveModule_R_RevB.SLDPRT: ok
+15:41:14  --- RoamView_PivotHanger_L_RevB  [hanger_l]
+15:41:18      save RoamView_PivotHanger_L_RevB.SLDPRT: ok
+15:41:18  --- RoamView_PivotHanger_R_RevB  [hanger_r]
+15:41:22      save RoamView_PivotHanger_R_RevB.SLDPRT: ok
+15:41:22  --- RoamView_SpringAssy_RevB  [spring_l, spring_r]
+15:41:27      save RoamView_SpringAssy_RevB.SLDPRT: ok
+15:41:28  --- RoamView_Caster3in_F_RevB  [caster_f]
+15:41:36      save RoamView_Caster3in_F_RevB.SLDPRT: ok
+15:41:36  --- RoamView_Caster3in_R_RevB  [caster_r]
+15:41:44      save RoamView_Caster3in_R_RevB.SLDPRT: ok
+15:41:45  --- RoamView_BatteryTray_RevB  [battery_tray]
+15:41:49      save RoamView_BatteryTray_RevB.SLDPRT: ok
+15:41:50  --- RoamView_Battery4S2P_RevB  [battery]
+15:41:56      save RoamView_Battery4S2P_RevB.SLDPRT: ok
+15:41:56  --- RoamView_PowerBoard_RevB  [pdb]
+15:42:07      save RoamView_PowerBoard_RevB.SLDPRT: ok
+15:42:07  --- RoamView_WagoSplices_RevB  [wago]
+15:42:12      save RoamView_WagoSplices_RevB.SLDPRT: ok
+15:42:13  --- RoamView_XT60_RevB  [xt60]
+15:42:16      save RoamView_XT60_RevB.SLDPRT: ok
+15:42:16  --- RoamView_MotorDriver_RevB  [driver]
+15:42:25      save RoamView_MotorDriver_RevB.SLDPRT: ok
+15:42:25  --- RoamView_ChargeGuard_RevB  [chg]
+15:42:29      save RoamView_ChargeGuard_RevB.SLDPRT: ok
+15:42:29  --- RoamView_ChargeContact_P_RevB  [contact_p]
+15:42:33      save RoamView_ChargeContact_P_RevB.SLDPRT: ok
+15:42:33  --- RoamView_ChargeContact_N_RevB  [contact_n]
+15:42:38      save RoamView_ChargeContact_N_RevB.SLDPRT: ok
+15:42:38  --- RoamView_Bumper_RevB  [bumper]
+15:42:49      save RoamView_Bumper_RevB.SLDPRT: ok
+15:42:50  --- RoamView_CliffSensor_RevB  [cliff_fl, cliff_fr, cliff_rl, cliff_rr]
+15:42:55      save RoamView_CliffSensor_RevB.SLDPRT: ok
+15:42:56  --- RoamView_DeckPlug6_RevB  [plug_pwr]
+15:42:59      save RoamView_DeckPlug6_RevB.SLDPRT: ok
+15:42:59  --- RoamView_DeckPlug24_RevB  [plug_sig]
+15:43:02      save RoamView_DeckPlug24_RevB.SLDPRT: ok
+15:43:02  --- RoamView_LidarRiser40_RevB  [riser]
+15:43:05      save RoamView_LidarRiser40_RevB.SLDPRT: ok
+15:43:05  --- RoamView_LidarD500_RevB  [lidar]
+15:43:09      save RoamView_LidarD500_RevB.SLDPRT: ok
+15:43:10  --- RoamView_OakDProW_RevB  [oak]
+15:43:15      save RoamView_OakDProW_RevB.SLDPRT: ok
+15:43:15  --- RoamView_EStop_RevB  [estop]
+15:43:19      save RoamView_EStop_RevB.SLDPRT: ok
+15:43:19  --- RoamView_Pi5_RevB  [pi5]
+15:43:28      save RoamView_Pi5_RevB.SLDPRT: ok
+15:43:29  --- RoamView_PiHat_RevB  [pi_hat]
+15:43:37      save RoamView_PiHat_RevB.SLDPRT: ok
+15:43:37  --- RoamView_ESP32Carrier_RevB  [esp32]
+15:43:46      save RoamView_ESP32Carrier_RevB.SLDPRT: ok
+15:43:47  --- RoamView_RCReceiver_RevB  [rx1]
+15:43:52      save RoamView_RCReceiver_RevB.SLDPRT: ok
+15:43:52  --- RoamView_OakYAdapter_RevB  [yadapter]
+15:43:55      save RoamView_OakYAdapter_RevB.SLDPRT: ok
+15:43:55  --- RoamView_MicArray_RevB  [mic]
+15:44:03      save RoamView_MicArray_RevB.SLDPRT: ok
+15:44:03  --- RoamView_Speaker_RevB  [speaker]
+15:44:06      save RoamView_Speaker_RevB.SLDPRT: ok
+15:44:07  --- RoamView_LightRec_RevB  [led_rec]
+15:44:11      save RoamView_LightRec_RevB.SLDPRT: ok
+15:44:12  --- RoamView_LightStatus_RevB  [led_status]
+15:44:16      save RoamView_LightStatus_RevB.SLDPRT: ok
+15:44:17  --- RoamView_Handle_RevB  [handle]
+15:44:23      save RoamView_Handle_RevB.SLDPRT: ok
+15:44:24  --- RoamView_ComputePower_RevB  [cpwr]
+15:44:35      save RoamView_ComputePower_RevB.SLDPRT: ok
+15:44:35  --- RoamView_SensorPower_RevB  [spwr]
+15:44:44      save RoamView_SensorPower_RevB.SLDPRT: ok
+15:44:45  --- RoamView_K2Relay_RevB  [k2]
+15:44:52      save RoamView_K2Relay_RevB.SLDPRT: ok
+15:44:53  --- RoamView_LidarSplice_RevB  [j2]
+15:44:56      save RoamView_LidarSplice_RevB.SLDPRT: ok
+15:44:56  === RoamView_Harness_RevB (62 conductors) ===
+15:45:35      swept 62 of 62 conductors
+15:45:36      save RoamView_Harness_RevB.SLDPRT: ok
+15:45:36      harness in 39.9 s
+15:45:36  === RoamView_Chassis_RevB (assembly) ===
+15:45:39      loaded 43 part files
+15:45:48      placed and fixed 50 components
+15:45:49      interference check (parts only): 6
+15:45:49         RoamView_DriveModule_L_RevB-1 <-> RoamView_PivotHanger_L_RevB-1  251.3 mm3
+15:45:49         RoamView_DriveModule_R_RevB-1 <-> RoamView_PivotHanger_R_RevB-1  251.3 mm3
+15:45:49         RoamView_DriveWheel125_RevB-1 <-> RoamView_DriveModule_L_RevB-1  197.9 mm3
+15:45:49         RoamView_DriveWheel125_RevB-2 <-> RoamView_DriveModule_R_RevB-1  197.9 mm3
+15:45:49         RoamView_DriveModule_L_RevB-1 <-> RoamView_SpringAssy_RevB-1  78.5 mm3
+15:45:49         RoamView_DriveModule_R_RevB-1 <-> RoamView_SpringAssy_RevB-2  78.5 mm3
+15:45:51      components in the assembly: 51
+15:45:52      save RoamView_Chassis_RevB.SLDASM: ok
+15:45:54      save RoamView_Chassis_RevB.STEP: ok
+15:45:55      save RoamView_Chassis_RevB_iso.png: ok
+15:45:56      save RoamView_Chassis_RevB_trimetric.png: ok
+15:45:56      save RoamView_Chassis_RevB_side.png: ok
+15:45:57      save RoamView_Chassis_RevB_top.png: ok
+15:45:58      save RoamView_Chassis_RevB_front.png: ok
+15:45:59  BUILD COMPLETE in 332 s: 2 plates, 40 part files, 62 conductors; failed parts none; failed conductors none

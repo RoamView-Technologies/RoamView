@@ -1,0 +1,29 @@
+RV-100 collision sweeps (moving parts placed explicitly; originals hidden; touching faces ignored)
+  drawer pulled 0 mm                           CLEAR
+  drawer pulled 100 mm                         CLEAR
+  drawer pulled 200 mm                         CLEAR
+  drawer pulled 333 mm                         CLEAR
+  front caster   0 deg, spring +0 mm           CLEAR
+  front caster  45 deg, spring +0 mm           CLEAR
+  front caster  90 deg, spring +0 mm           CLEAR
+  front caster 135 deg, spring +0 mm           CLEAR
+  front caster 180 deg, spring +0 mm           CLEAR
+  front caster 225 deg, spring +0 mm           CLEAR
+  front caster 270 deg, spring +0 mm           CLEAR
+  front caster 315 deg, spring +0 mm           CLEAR
+  front caster   0 deg, spring +10 mm          CLEAR
+  front caster  45 deg, spring +10 mm          CLEAR
+  front caster  90 deg, spring +10 mm          CLEAR
+  front caster 135 deg, spring +10 mm          CLEAR
+  front caster 180 deg, spring +10 mm          CLEAR
+  front caster 225 deg, spring +10 mm          CLEAR
+  front caster 270 deg, spring +10 mm          CLEAR
+  front caster 315 deg, spring +10 mm          CLEAR
+  rear caster   0 deg                          CLEAR
+  rear caster  45 deg                          CLEAR
+  rear caster  90 deg                          CLEAR
+  rear caster 135 deg                          CLEAR
+  rear caster 180 deg                          CLEAR
+  rear caster 225 deg                          CLEAR
+  rear caster 270 deg                          CLEAR
+  rear caster 315 deg                          CLEAR

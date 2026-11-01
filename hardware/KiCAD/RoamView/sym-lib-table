@@ -1,0 +1,4 @@
+(sym_lib_table
+	(version 7)
+	(lib (name "RoamView")(type "KiCad")(uri "${KIPRJMOD}/RoamView.kicad_sym")(options "")(descr "RoamView project symbols (Pololu/Adafruit/DFRobot modules, rail symbols)"))
+)

@@ -1,0 +1,37 @@
+# Patrol for scripts/patrol.py: charging dock -> west aisles -> front racetrack -> centre -> receiving
+# -> east aisles -> back to the dock. x, y in the map frame (m); yaw faces the next waypoint.
+frame_id: map
+waypoints:
+  - {x: 1.60, y: 92.00, yaw: 0.000}
+  - {x: 5.50, y: 92.00, yaw: -0.405}
+  - {x: 16.00, y: 87.50, yaw: 0.000}
+  - {x: 26.00, y: 87.50, yaw: -1.019}
+  - {x: 30.00, y: 81.00, yaw: 0.000}
+  - {x: 44.30, y: 81.00, yaw: -1.571}
+  - {x: 44.30, y: 49.00, yaw: 3.142}
+  - {x: 4.60, y: 49.00, yaw: -1.571}
+  - {x: 4.60, y: 17.00, yaw: 0.000}
+  - {x: 65.00, y: 17.00, yaw: 1.571}
+  - {x: 65.00, y: 81.00, yaw: 0.000}
+  - {x: 85.70, y: 81.00, yaw: 0.000}
+  - {x: 119.00, y: 81.00, yaw: 1.571}
+  - {x: 119.00, y: 94.00, yaw: -1.571}
+  - {x: 119.00, y: 81.00, yaw: 0.000}
+  - {x: 125.40, y: 81.00, yaw: -1.571}
+  - {x: 125.40, y: 17.00, yaw: 3.142}
+  - {x: 85.70, y: 17.00, yaw: 1.571}
+  - {x: 85.70, y: 49.00, yaw: 3.142}
+  - {x: 44.30, y: 49.00, yaw: -1.571}
+  - {x: 44.30, y: 17.00, yaw: 3.142}
+  - {x: 4.60, y: 17.00, yaw: 1.571}
+  - {x: 4.60, y: 81.00, yaw: 0.000}
+  - {x: 26.00, y: 81.00, yaw: 1.571}
+  - {x: 26.00, y: 87.50, yaw: 3.142}
+  - {x: 16.00, y: 87.50, yaw: 2.737}
+  - {x: 5.50, y: 92.00, yaw: 3.142}
+  - {x: 1.60, y: 92.00, yaw: 0.000}
+# spawn presets (sim.launch.py spawn:=..., nav.launch.py spawn:=..., patrol.py start:=...)
+spawns:
+  dock: [1.6, 92.0, 0.0]
+  entrance: [115.0, 6.0, 1.5708]
+  receiving: [119.0, 90.0, 1.5708]

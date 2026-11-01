@@ -1,0 +1,9 @@
+# Everything in this folder runs on Linux (WSL or Docker), so text files keep Unix line endings (LF), also in a
+# Windows checkout with core.autocrlf=true. A shell or Python script with Windows line endings does not start
+# ("bad interpreter", "$'\r': command not found"), and the Docker image copies entrypoint.sh as it is.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.pgm binary
+*.bin binary
+*.glb binary

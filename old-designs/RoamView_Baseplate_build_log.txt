@@ -1,0 +1,98 @@
+15:05:04  RoamView baseplate build - SOLIDWORKS 34.4.1
+15:05:04  Closing unsaved leftover from an earlier run: Part1
+15:05:04  Closing unsaved leftover from an earlier run: Part2
+15:05:04  Template: C:\ProgramData\SolidWorks\SOLIDWORKS 2026\templates\Part.prtdot
+15:05:05  New document: Part3 (type 1)
+15:05:05  Feature tree:
+15:05:05     Comments  [CommentsFolder]
+15:05:05     Favorites  [FavoriteFolder]
+15:05:05     History  [HistoryFolder]
+15:05:05     Selection Sets  [SelectionSetFolder]
+15:05:05     Sensors  [SensorFolder]
+15:05:05     Design Binder  [DocsFolder]
+15:05:05     Annotations  [DetailCabinet]
+15:05:05     Surface Bodies  [SurfaceBodyFolder]
+15:05:05     Solid Bodies  [SolidBodyFolder]
+15:05:05     Lights and Cameras  [EnvFolder]
+15:05:05     Markups  [InkMarkupFolder]
+15:05:05     Equations  [EqnFolder]
+15:05:05     Material <not specified>  [MaterialFolder]
+15:05:05     Front Plane  [RefPlane]
+15:05:05     Top Plane  [RefPlane]
+15:05:05     Right Plane  [RefPlane]
+15:05:05     Origin  [OriginProfileFeature]
+15:05:06    points 28 -> 28 (merged 0)
+15:05:06    sketch SK_Plate
+15:05:07    Plate box (mm): X -160.0 .. 160.0   Y 0.0 .. 6.0   Z -130.0 .. 130.0
+15:05:07    points 24 -> 24 (merged 0)
+15:05:08    sketch SK_MotorMounts
+15:05:08    cut Cut_MotorMounts_M3 ok (attempt 1), volume 434829 -> 433632 mm3
+15:05:08    points 48 -> 48 (merged 0)
+15:05:08    sketch SK_CasterMounts
+15:05:09    cut Cut_CasterMounts_M4 ok (attempt 1), volume 433632 -> 431141 mm3
+15:05:09    points 28 -> 28 (merged 0)
+15:05:09    sketch SK_BatteryBay
+15:05:09    cut Cut_BatteryBay ok (attempt 1), volume 431141 -> 427933 mm3
+15:05:09    points 12 -> 12 (merged 0)
+15:05:10    sketch SK_CablePassThru
+15:05:10    cut Cut_CablePassThru ok (attempt 1), volume 427933 -> 420816 mm3
+15:05:10    points 44 -> 44 (merged 0)
+15:05:10    sketch SK_ElecGrid_M3
+15:05:11    cut Cut_ElecGrid_M3 ok (attempt 1), volume 420816 -> 418419 mm3
+15:05:11    points 4 -> 4 (merged 0)
+15:05:11    sketch SK_DeckPosts_M5
+15:05:11    cut Cut_DeckPosts_M5 ok (attempt 1), volume 418419 -> 417849 mm3
+15:05:11    points 4 -> 4 (merged 0)
+15:05:12    sketch SK_CliffSensors
+15:05:12    cut Cut_CliffSensorWindows ok (attempt 1), volume 417849 -> 415135 mm3
+15:05:12    points 4 -> 4 (merged 0)
+15:05:12    sketch SK_ChargeContacts
+15:05:13    cut Cut_ChargeContacts_M4 ok (attempt 1), volume 415135 -> 414753 mm3
+15:05:13  Material: 6061-T6 (SS) [SOLIDWORKS Materials]
+15:05:13  Mass: 1.120 kg   Volume: 414.8 cm3
+15:05:13  Centre of mass (mm): X -0.1  Y 3.0  Z 0.0
+15:05:13    Final box (mm): X -160.0 .. 160.0   Y -0.1 .. 6.1   Z -130.0 .. 130.0
+15:05:13  Feature tree:
+15:05:13     Comments  [CommentsFolder]
+15:05:13     Favorites  [FavoriteFolder]
+15:05:13     History  [HistoryFolder]
+15:05:13     Selection Sets  [SelectionSetFolder]
+15:05:13     Sensors  [SensorFolder]
+15:05:13     Design Binder  [DocsFolder]
+15:05:13     Annotations  [DetailCabinet]
+15:05:13     Surface Bodies  [SurfaceBodyFolder]
+15:05:13     Solid Bodies  [SolidBodyFolder]
+15:05:13     Lights and Cameras  [EnvFolder]
+15:05:13     Markups  [InkMarkupFolder]
+15:05:13     Equations  [EqnFolder]
+15:05:13     6061-T6 (SS)  [MaterialFolder]
+15:05:13     Front Plane  [RefPlane]
+15:05:13     Top Plane  [RefPlane]
+15:05:13     Right Plane  [RefPlane]
+15:05:13     Origin  [OriginProfileFeature]
+15:05:13     SK_Plate  [ProfileFeature]
+15:05:13     Plate  [Extrusion]
+15:05:13     SK_MotorMounts  [ProfileFeature]
+15:05:13     Cut_MotorMounts_M3  [ICE]
+15:05:13     SK_CasterMounts  [ProfileFeature]
+15:05:13     Cut_CasterMounts_M4  [ICE]
+15:05:13     SK_BatteryBay  [ProfileFeature]
+15:05:13     Cut_BatteryBay  [ICE]
+15:05:13     SK_CablePassThru  [ProfileFeature]
+15:05:13     Cut_CablePassThru  [ICE]
+15:05:13     SK_ElecGrid_M3  [ProfileFeature]
+15:05:13     Cut_ElecGrid_M3  [ICE]
+15:05:13     SK_DeckPosts_M5  [ProfileFeature]
+15:05:13     Cut_DeckPosts_M5  [ICE]
+15:05:13     SK_CliffSensors  [ProfileFeature]
+15:05:13     Cut_CliffSensorWindows  [ICE]
+15:05:13     SK_ChargeContacts  [ProfileFeature]
+15:05:13     Cut_ChargeContacts_M4  [ICE]
+15:05:14  Save RoamView_Baseplate.SLDPRT: True (err 0, warn 0)
+15:05:15  Save RoamView_Baseplate.STEP: True (err 0, warn 0)
+15:05:15  Save RoamView_Baseplate.STL: True (err 0, warn 0)
+15:05:15  Save RoamView_Baseplate_iso.png: True (err 0, warn 0)
+15:05:16  Save RoamView_Baseplate_iso.jpg: True (err 0, warn 0)
+15:05:16  Save RoamView_Baseplate_top.png: True (err 0, warn 0)
+15:05:16  Save RoamView_Baseplate_top.jpg: True (err 0, warn 0)
+15:05:17  BUILD COMPLETE

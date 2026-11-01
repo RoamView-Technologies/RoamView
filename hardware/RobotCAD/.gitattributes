@@ -1,0 +1,16 @@
+# CAD binaries go to Git LFS: git keeps a small pointer, GitHub's LFS store keeps the file.
+# Run `git lfs install` once per machine, or you get pointer files instead of parts.
+# Case-insensitive patterns: SolidWorks writes both .SLDPRT and .sldprt, .STEP and .step.
+*.[sS][lL][dD][pP][rR][tT] filter=lfs diff=lfs merge=lfs -text
+*.[sS][lL][dD][aA][sS][mM] filter=lfs diff=lfs merge=lfs -text
+*.[sS][lL][dD][dD][rR][wW] filter=lfs diff=lfs merge=lfs -text
+*.[sS][lL][dD][lL][fF][pP] filter=lfs diff=lfs merge=lfs -text
+*.[sS][wW][pP] filter=lfs diff=lfs merge=lfs -text
+*.[sS][tT][eE][pP] filter=lfs diff=lfs merge=lfs -text
+*.[sS][tT][pP] filter=lfs diff=lfs merge=lfs -text
+*.[sS][tT][lL] filter=lfs diff=lfs merge=lfs -text
+*.[pP][nN][gG] filter=lfs diff=lfs merge=lfs -text
+*.[jJ][pP][gG] filter=lfs diff=lfs merge=lfs -text
+*.[pP][dD][fF] filter=lfs diff=lfs merge=lfs -text
+*.[xX][lL][sS][xX] filter=lfs diff=lfs merge=lfs -text
+*.[nN][pP][yY] filter=lfs diff=lfs merge=lfs -text

@@ -1,0 +1,1708 @@
+{
+ "started": "2026-09-28 15:40:27",
+ "plates": [
+  {
+   "file": "RoamView_Baseplate_RevB",
+   "cuts": [
+    {
+     "name": "DeckPosts_M5",
+     "n": 4,
+     "removed": 570.2,
+     "ok": true
+    },
+    {
+     "name": "CasterMounts_M5",
+     "n": 8,
+     "removed": 1140.4,
+     "ok": true
+    },
+    {
+     "name": "SpringHoles_18",
+     "n": 2,
+     "removed": 3053.6,
+     "ok": true
+    },
+    {
+     "name": "SpringCups_M2p5",
+     "n": 4,
+     "removed": 137.4,
+     "ok": true
+    },
+    {
+     "name": "PivotHangers_M4",
+     "n": 4,
+     "removed": 381.7,
+     "ok": true
+    },
+    {
+     "name": "BatteryTray_M3",
+     "n": 4,
+     "removed": 217.9,
+     "ok": true
+    },
+    {
+     "name": "BatteryStraps",
+     "n": 4,
+     "removed": 1645.6,
+     "ok": true
+    },
+    {
+     "name": "PowerBoard_M3",
+     "n": 2,
+     "removed": 109.0,
+     "ok": true
+    },
+    {
+     "name": "MotorDriver_M3",
+     "n": 4,
+     "removed": 217.9,
+     "ok": true
+    },
+    {
+     "name": "Splices_M3",
+     "n": 2,
+     "removed": 109.0,
+     "ok": true
+    },
+    {
+     "name": "ChargeContacts_M4",
+     "n": 4,
+     "removed": 381.7,
+     "ok": true
+    },
+    {
+     "name": "Bumper_M4",
+     "n": 2,
+     "removed": 190.9,
+     "ok": true
+    },
+    {
+     "name": "CliffSensors_M2p5",
+     "n": 8,
+     "removed": 274.8,
+     "ok": true
+    },
+    {
+     "name": "FuseF2_M3",
+     "n": 1,
+     "removed": 54.5,
+     "ok": true
+    },
+    {
+     "name": "PassThroughs",
+     "n": 3,
+     "removed": 8976.4,
+     "ok": true
+    }
+   ],
+   "ok": true,
+   "volume": 404264.4,
+   "volume_expected": 404267.0,
+   "box": [
+    -160.0,
+    -0.103,
+    -130.0,
+    160.0,
+    6.0,
+    130.0
+   ],
+   "volume_ok": true,
+   "box_ok": true,
+   "mass_kg": 1.092,
+   "seconds": 13.3
+  },
+  {
+   "file": "RoamView_TopDeck_RevB",
+   "cuts": [
+    {
+     "name": "DeckPosts_M5",
+     "n": 4,
+     "removed": 285.1,
+     "ok": true
+    },
+    {
+     "name": "LidarRiser_M3",
+     "n": 4,
+     "removed": 109.0,
+     "ok": true
+    },
+    {
+     "name": "LidarCable_20",
+     "n": 1,
+     "removed": 942.5,
+     "ok": true
+    },
+    {
+     "name": "Pi5_M2p5",
+     "n": 4,
+     "removed": 68.7,
+     "ok": true
+    },
+    {
+     "name": "ESP32Carrier_M3",
+     "n": 2,
+     "removed": 54.5,
+     "ok": true
+    },
+    {
+     "name": "EStop_22p5",
+     "n": 1,
+     "removed": 1192.8,
+     "ok": true
+    },
+    {
+     "name": "Camera_M4",
+     "n": 4,
+     "removed": 190.9,
+     "ok": true
+    },
+    {
+     "name": "Lights_16",
+     "n": 2,
+     "removed": 1206.4,
+     "ok": true
+    },
+    {
+     "name": "Handle_M5",
+     "n": 2,
+     "removed": 142.5,
+     "ok": true
+    },
+    {
+     "name": "PowerBlocks_M3",
+     "n": 8,
+     "removed": 217.9,
+     "ok": true
+    },
+    {
+     "name": "K2Relay_M2p5",
+     "n": 4,
+     "removed": 68.7,
+     "ok": true
+    },
+    {
+     "name": "LidarSplice_M3",
+     "n": 1,
+     "removed": 27.2,
+     "ok": true
+    },
+    {
+     "name": "MicArray_M3",
+     "n": 4,
+     "removed": 109.0,
+     "ok": true
+    },
+    {
+     "name": "Speaker_M3",
+     "n": 3,
+     "removed": 81.7,
+     "ok": true
+    },
+    {
+     "name": "PassThroughs",
+     "n": 5,
+     "removed": 5224.5,
+     "ok": true
+    }
+   ],
+   "ok": true,
+   "volume": 238648.7,
+   "volume_expected": 238650.5,
+   "box": [
+    -160.0,
+    -0.103,
+    -130.0,
+    160.0,
+    3.0,
+    130.0
+   ],
+   "volume_ok": true,
+   "box_ok": true,
+   "mass_kg": 0.644,
+   "seconds": 12.8
+  }
+ ],
+ "parts": [
+  {
+   "file": "RoamView_Post2020_RevB",
+   "ids": [
+    "post_fl",
+    "post_fr",
+    "post_rl",
+    "post_rr"
+   ],
+   "ok": true,
+   "box": [
+    -10.0,
+    0.0,
+    -10.0,
+    10.0,
+    120.0,
+    10.0
+   ],
+   "box_expected": [
+    -10.0,
+    0.0,
+    -10.0,
+    10.0,
+    120.0,
+    10.0
+   ],
+   "box_ok": true,
+   "features": 1,
+   "seconds": 3.3
+  },
+  {
+   "file": "RoamView_DriveWheel125_RevB",
+   "ids": [
+    "wheel_l",
+    "wheel_r"
+   ],
+   "ok": true,
+   "box": [
+    -62.5,
+    0.0,
+    -15.0,
+    62.5,
+    125.0,
+    15.0
+   ],
+   "box_expected": [
+    -62.5,
+    0.0,
+    -15.0,
+    62.5,
+    125.0,
+    15.0
+   ],
+   "box_ok": true,
+   "features": 1,
+   "seconds": 2.9
+  },
+  {
+   "file": "RoamView_DriveModule_L_RevB",
+   "ids": [
+    "motor_l"
+   ],
+   "ok": true,
+   "box": [
+    -57.5,
+    0.0,
+    -49.0,
+    57.5,
+    40.0,
+    49.0
+   ],
+   "box_expected": [
+    -57.5,
+    0.0,
+    -49.0,
+    57.5,
+    40.0,
+    49.0
+   ],
+   "box_ok": true,
+   "features": 6,
+   "seconds": 7.3
+  },
+  {
+   "file": "RoamView_DriveModule_R_RevB",
+   "ids": [
+    "motor_r"
+   ],
+   "ok": true,
+   "box": [
+    -57.5,
+    0.0,
+    -49.0,
+    57.5,
+    40.0,
+    49.0
+   ],
+   "box_expected": [
+    -57.5,
+    0.0,
+    -49.0,
+    57.5,
+    40.0,
+    49.0
+   ],
+   "box_ok": true,
+   "features": 6,
+   "seconds": 7.0
+  },
+  {
+   "file": "RoamView_PivotHanger_L_RevB",
+   "ids": [
+    "hanger_l"
+   ],
+   "ok": true,
+   "box": [
+    -10.0,
+    0.0,
+    -8.5,
+    10.0,
+    29.0,
+    8.5
+   ],
+   "box_expected": [
+    -10.0,
+    0.0,
+    -8.5,
+    10.0,
+    29.0,
+    8.5
+   ],
+   "box_ok": true,
+   "features": 2,
+   "seconds": 4.2
+  },
+  {
+   "file": "RoamView_PivotHanger_R_RevB",
+   "ids": [
+    "hanger_r"
+   ],
+   "ok": true,
+   "box": [
+    -10.0,
+    0.0,
+    -8.5,
+    10.0,
+    29.0,
+    8.5
+   ],
+   "box_expected": [
+    -10.0,
+    0.0,
+    -8.5,
+    10.0,
+    29.0,
+    8.5
+   ],
+   "box_ok": true,
+   "features": 2,
+   "seconds": 4.0
+  },
+  {
+   "file": "RoamView_SpringAssy_RevB",
+   "ids": [
+    "spring_l",
+    "spring_r"
+   ],
+   "ok": true,
+   "box": [
+    -17.5,
+    0.0,
+    -17.5,
+    17.5,
+    55.0,
+    17.5
+   ],
+   "box_expected": [
+    -17.5,
+    0.0,
+    -17.5,
+    17.5,
+    55.0,
+    17.5
+   ],
+   "box_ok": true,
+   "features": 4,
+   "seconds": 5.7
+  },
+  {
+   "file": "RoamView_Caster3in_F_RevB",
+   "ids": [
+    "caster_f"
+   ],
+   "ok": true,
+   "box": [
+    -44.05,
+    0.0,
+    -30.0,
+    44.05,
+    93.0,
+    30.0
+   ],
+   "box_expected": [
+    -44.05,
+    0.0,
+    -30.0,
+    44.05,
+    93.0,
+    30.0
+   ],
+   "box_ok": true,
+   "features": 8,
+   "seconds": 8.4
+  },
+  {
+   "file": "RoamView_Caster3in_R_RevB",
+   "ids": [
+    "caster_r"
+   ],
+   "ok": true,
+   "box": [
+    -44.05,
+    -0.0,
+    -30.0,
+    44.05,
+    93.0,
+    30.0
+   ],
+   "box_expected": [
+    -44.05,
+    0.0,
+    -30.0,
+    44.05,
+    93.0,
+    30.0
+   ],
+   "box_ok": true,
+   "features": 8,
+   "seconds": 8.3
+  },
+  {
+   "file": "RoamView_BatteryTray_RevB",
+   "ids": [
+    "battery_tray"
+   ],
+   "ok": true,
+   "box": [
+    -48.0,
+    0.0,
+    -40.5,
+    48.0,
+    12.0,
+    40.5
+   ],
+   "box_expected": [
+    -48.0,
+    0.0,
+    -40.5,
+    48.0,
+    12.0,
+    40.5
+   ],
+   "box_ok": true,
+   "features": 3,
+   "seconds": 5.0
+  },
+  {
+   "file": "RoamView_Battery4S2P_RevB",
+   "ids": [
+    "battery"
+   ],
+   "ok": true,
+   "box": [
+    -45.0,
+    0.0,
+    -39.5,
+    45.0,
+    43.5,
+    39.5
+   ],
+   "box_expected": [
+    -45.0,
+    0.0,
+    -39.5,
+    45.0,
+    43.5,
+    39.5
+   ],
+   "box_ok": true,
+   "features": 7,
+   "seconds": 6.6
+  },
+  {
+   "file": "RoamView_PowerBoard_RevB",
+   "ids": [
+    "pdb"
+   ],
+   "ok": true,
+   "box": [
+    -25.5,
+    0.0,
+    -40.5,
+    25.5,
+    33.1,
+    40.5
+   ],
+   "box_expected": [
+    -25.5,
+    0.0,
+    -40.5,
+    25.5,
+    33.1,
+    40.5
+   ],
+   "box_ok": true,
+   "features": 14,
+   "seconds": 10.9
+  },
+  {
+   "file": "RoamView_WagoSplices_RevB",
+   "ids": [
+    "wago"
+   ],
+   "ok": true,
+   "box": [
+    -10.5,
+    0.0,
+    -33.0,
+    10.5,
+    14.0,
+    33.0
+   ],
+   "box_expected": [
+    -10.5,
+    0.0,
+    -33.0,
+    10.5,
+    14.0,
+    33.0
+   ],
+   "box_ok": true,
+   "features": 4,
+   "seconds": 5.7
+  },
+  {
+   "file": "RoamView_XT60_RevB",
+   "ids": [
+    "xt60"
+   ],
+   "ok": true,
+   "box": [
+    -4.0,
+    0.0,
+    -17.0,
+    4.0,
+    9.0,
+    17.0
+   ],
+   "box_expected": [
+    -4.0,
+    0.0,
+    -17.0,
+    4.0,
+    9.0,
+    17.0
+   ],
+   "box_ok": true,
+   "features": 1,
+   "seconds": 3.1
+  },
+  {
+   "file": "RoamView_MotorDriver_RevB",
+   "ids": [
+    "driver"
+   ],
+   "ok": true,
+   "box": [
+    -25.0,
+    0.0,
+    -25.0,
+    25.0,
+    18.5,
+    25.0
+   ],
+   "box_expected": [
+    -25.0,
+    0.0,
+    -25.0,
+    25.0,
+    18.5,
+    25.0
+   ],
+   "box_ok": true,
+   "features": 8,
+   "seconds": 9.0
+  },
+  {
+   "file": "RoamView_ChargeGuard_RevB",
+   "ids": [
+    "chg"
+   ],
+   "ok": true,
+   "box": [
+    -28.0,
+    0.0,
+    -10.5,
+    28.0,
+    15.0,
+    10.5
+   ],
+   "box_expected": [
+    -28.0,
+    0.0,
+    -10.5,
+    28.0,
+    15.0,
+    10.5
+   ],
+   "box_ok": true,
+   "features": 2,
+   "seconds": 4.1
+  },
+  {
+   "file": "RoamView_ChargeContact_P_RevB",
+   "ids": [
+    "contact_p"
+   ],
+   "ok": true,
+   "box": [
+    -12.5,
+    0.0,
+    -12.0,
+    12.5,
+    40.0,
+    12.0
+   ],
+   "box_expected": [
+    -12.5,
+    0.0,
+    -12.0,
+    12.5,
+    40.0,
+    12.0
+   ],
+   "box_ok": true,
+   "features": 2,
+   "seconds": 4.2
+  },
+  {
+   "file": "RoamView_ChargeContact_N_RevB",
+   "ids": [
+    "contact_n"
+   ],
+   "ok": true,
+   "box": [
+    -12.5,
+    0.0,
+    -12.0,
+    12.5,
+    40.0,
+    12.0
+   ],
+   "box_expected": [
+    -12.5,
+    0.0,
+    -12.0,
+    12.5,
+    40.0,
+    12.0
+   ],
+   "box_ok": true,
+   "features": 2,
+   "seconds": 4.3
+  },
+  {
+   "file": "RoamView_Bumper_RevB",
+   "ids": [
+    "bumper"
+   ],
+   "ok": true,
+   "box": [
+    -17.5,
+    0.0,
+    -125.0,
+    17.5,
+    43.0,
+    125.0
+   ],
+   "box_expected": [
+    -17.5,
+    0.0,
+    -125.0,
+    17.5,
+    43.0,
+    125.0
+   ],
+   "box_ok": true,
+   "features": 13,
+   "seconds": 11.7
+  },
+  {
+   "file": "RoamView_CliffSensor_RevB",
+   "ids": [
+    "cliff_fl",
+    "cliff_fr",
+    "cliff_rl",
+    "cliff_rr"
+   ],
+   "ok": true,
+   "box": [
+    -12.7,
+    0.0,
+    -8.89,
+    12.7,
+    6.0,
+    8.89
+   ],
+   "box_expected": [
+    -12.7,
+    0.0,
+    -8.89,
+    12.7,
+    6.0,
+    8.89
+   ],
+   "box_ok": true,
+   "features": 4,
+   "seconds": 6.2
+  },
+  {
+   "file": "RoamView_DeckPlug6_RevB",
+   "ids": [
+    "plug_pwr"
+   ],
+   "ok": true,
+   "box": [
+    -5.0,
+    0.0,
+    -5.0,
+    5.0,
+    26.0,
+    5.0
+   ],
+   "box_expected": [
+    -5.0,
+    0.0,
+    -5.0,
+    5.0,
+    26.0,
+    5.0
+   ],
+   "box_ok": true,
+   "features": 1,
+   "seconds": 3.2
+  },
+  {
+   "file": "RoamView_DeckPlug24_RevB",
+   "ids": [
+    "plug_sig"
+   ],
+   "ok": true,
+   "box": [
+    -5.0,
+    0.0,
+    -5.0,
+    5.0,
+    39.0,
+    5.0
+   ],
+   "box_expected": [
+    -5.0,
+    0.0,
+    -5.0,
+    5.0,
+    39.0,
+    5.0
+   ],
+   "box_ok": true,
+   "features": 1,
+   "seconds": 3.3
+  },
+  {
+   "file": "RoamView_LidarRiser40_RevB",
+   "ids": [
+    "riser"
+   ],
+   "ok": true,
+   "box": [
+    -25.0,
+    0.0,
+    -25.0,
+    25.0,
+    40.0,
+    25.0
+   ],
+   "box_expected": [
+    -25.0,
+    0.0,
+    -25.0,
+    25.0,
+    40.0,
+    25.0
+   ],
+   "box_ok": true,
+   "features": 1,
+   "seconds": 3.1
+  },
+  {
+   "file": "RoamView_LidarD500_RevB",
+   "ids": [
+    "lidar"
+   ],
+   "ok": true,
+   "box": [
+    -27.0,
+    0.0,
+    -23.0,
+    27.0,
+    35.0,
+    23.0
+   ],
+   "box_expected": [
+    -27.0,
+    0.0,
+    -23.0,
+    27.0,
+    35.0,
+    23.0
+   ],
+   "box_ok": true,
+   "features": 2,
+   "seconds": 4.4
+  },
+  {
+   "file": "RoamView_OakDProW_RevB",
+   "ids": [
+    "oak"
+   ],
+   "ok": true,
+   "box": [
+    -20.0,
+    0.0,
+    -48.5,
+    20.0,
+    40.0,
+    48.5
+   ],
+   "box_expected": [
+    -20.0,
+    0.0,
+    -48.5,
+    20.0,
+    40.0,
+    48.5
+   ],
+   "box_ok": true,
+   "features": 3,
+   "seconds": 5.2
+  },
+  {
+   "file": "RoamView_EStop_RevB",
+   "ids": [
+    "estop"
+   ],
+   "ok": true,
+   "box": [
+    -20.0,
+    0.0,
+    -20.0,
+    20.0,
+    77.0,
+    20.0
+   ],
+   "box_expected": [
+    -20.0,
+    0.0,
+    -20.0,
+    20.0,
+    77.0,
+    20.0
+   ],
+   "box_ok": true,
+   "features": 2,
+   "seconds": 3.9
+  },
+  {
+   "file": "RoamView_Pi5_RevB",
+   "ids": [
+    "pi5"
+   ],
+   "ok": true,
+   "box": [
+    -42.5,
+    0.0,
+    -28.0,
+    42.5,
+    23.6,
+    28.0
+   ],
+   "box_expected": [
+    -42.5,
+    0.0,
+    -28.0,
+    42.5,
+    23.6,
+    28.0
+   ],
+   "box_ok": true,
+   "features": 10,
+   "seconds": 9.9
+  },
+  {
+   "file": "RoamView_PiHat_RevB",
+   "ids": [
+    "pi_hat"
+   ],
+   "ok": true,
+   "box": [
+    -32.5,
+    0.0,
+    -28.25,
+    32.5,
+    29.0,
+    28.25
+   ],
+   "box_expected": [
+    -32.5,
+    0.0,
+    -28.25,
+    32.5,
+    29.0,
+    28.25
+   ],
+   "box_ok": true,
+   "features": 7,
+   "seconds": 8.1
+  },
+  {
+   "file": "RoamView_ESP32Carrier_RevB",
+   "ids": [
+    "esp32"
+   ],
+   "ok": true,
+   "box": [
+    -41.5,
+    0.0,
+    -25.5,
+    41.5,
+    20.0,
+    25.5
+   ],
+   "box_expected": [
+    -41.5,
+    0.0,
+    -25.5,
+    41.5,
+    20.0,
+    25.5
+   ],
+   "box_ok": true,
+   "features": 11,
+   "seconds": 9.8
+  },
+  {
+   "file": "RoamView_RCReceiver_RevB",
+   "ids": [
+    "rx1"
+   ],
+   "ok": true,
+   "box": [
+    -23.5,
+    0.0,
+    -13.0,
+    23.5,
+    37.0,
+    13.0
+   ],
+   "box_expected": [
+    -23.5,
+    0.0,
+    -13.0,
+    23.5,
+    37.0,
+    13.0
+   ],
+   "box_ok": true,
+   "features": 3,
+   "seconds": 5.3
+  },
+  {
+   "file": "RoamView_OakYAdapter_RevB",
+   "ids": [
+    "yadapter"
+   ],
+   "ok": true,
+   "box": [
+    -20.0,
+    0.0,
+    -8.0,
+    20.0,
+    10.0,
+    8.0
+   ],
+   "box_expected": [
+    -20.0,
+    0.0,
+    -8.0,
+    20.0,
+    10.0,
+    8.0
+   ],
+   "box_ok": true,
+   "features": 1,
+   "seconds": 3.2
+  },
+  {
+   "file": "RoamView_MicArray_RevB",
+   "ids": [
+    "mic"
+   ],
+   "ok": true,
+   "box": [
+    -35.0,
+    0.0,
+    -35.0,
+    35.0,
+    9.6,
+    35.0
+   ],
+   "box_expected": [
+    -35.0,
+    0.0,
+    -35.0,
+    35.0,
+    9.6,
+    35.0
+   ],
+   "box_ok": true,
+   "features": 6,
+   "seconds": 7.9
+  },
+  {
+   "file": "RoamView_Speaker_RevB",
+   "ids": [
+    "speaker"
+   ],
+   "ok": true,
+   "box": [
+    -22.0,
+    0.0,
+    -22.0,
+    22.0,
+    30.0,
+    22.0
+   ],
+   "box_expected": [
+    -22.0,
+    0.0,
+    -22.0,
+    22.0,
+    30.0,
+    22.0
+   ],
+   "box_ok": true,
+   "features": 1,
+   "seconds": 3.3
+  },
+  {
+   "file": "RoamView_LightRec_RevB",
+   "ids": [
+    "led_rec"
+   ],
+   "ok": true,
+   "box": [
+    -10.0,
+    0.0,
+    -10.0,
+    10.0,
+    32.0,
+    10.0
+   ],
+   "box_expected": [
+    -10.0,
+    0.0,
+    -10.0,
+    10.0,
+    32.0,
+    10.0
+   ],
+   "box_ok": true,
+   "features": 3,
+   "seconds": 5.0
+  },
+  {
+   "file": "RoamView_LightStatus_RevB",
+   "ids": [
+    "led_status"
+   ],
+   "ok": true,
+   "box": [
+    -10.0,
+    0.0,
+    -10.0,
+    10.0,
+    32.0,
+    10.0
+   ],
+   "box_expected": [
+    -10.0,
+    0.0,
+    -10.0,
+    10.0,
+    32.0,
+    10.0
+   ],
+   "box_ok": true,
+   "features": 3,
+   "seconds": 5.1
+  },
+  {
+   "file": "RoamView_Handle_RevB",
+   "ids": [
+    "handle"
+   ],
+   "ok": true,
+   "box": [
+    -10.0,
+    0.0,
+    -121.0,
+    10.0,
+    46.0,
+    121.0
+   ],
+   "box_expected": [
+    -10.0,
+    0.0,
+    -121.0,
+    10.0,
+    46.0,
+    121.0
+   ],
+   "box_ok": true,
+   "features": 5,
+   "seconds": 7.0
+  },
+  {
+   "file": "RoamView_ComputePower_RevB",
+   "ids": [
+    "cpwr"
+   ],
+   "ok": true,
+   "box": [
+    -30.0,
+    0.0,
+    -20.0,
+    30.0,
+    36.6,
+    20.0
+   ],
+   "box_expected": [
+    -30.0,
+    0.0,
+    -20.0,
+    30.0,
+    36.6,
+    20.0
+   ],
+   "box_ok": true,
+   "features": 11,
+   "seconds": 11.2
+  },
+  {
+   "file": "RoamView_SensorPower_RevB",
+   "ids": [
+    "spwr"
+   ],
+   "ok": true,
+   "box": [
+    -30.0,
+    0.0,
+    -20.0,
+    30.0,
+    22.3,
+    20.0
+   ],
+   "box_expected": [
+    -30.0,
+    0.0,
+    -20.0,
+    30.0,
+    22.3,
+    20.0
+   ],
+   "box_ok": true,
+   "features": 9,
+   "seconds": 9.7
+  },
+  {
+   "file": "RoamView_K2Relay_RevB",
+   "ids": [
+    "k2"
+   ],
+   "ok": true,
+   "box": [
+    -21.5,
+    0.0,
+    -12.5,
+    21.5,
+    25.4,
+    12.5
+   ],
+   "box_expected": [
+    -21.5,
+    0.0,
+    -12.5,
+    21.5,
+    25.4,
+    12.5
+   ],
+   "box_ok": true,
+   "features": 6,
+   "seconds": 8.1
+  },
+  {
+   "file": "RoamView_LidarSplice_RevB",
+   "ids": [
+    "j2"
+   ],
+   "ok": true,
+   "box": [
+    -7.0,
+    0.0,
+    -6.0,
+    7.0,
+    8.0,
+    6.0
+   ],
+   "box_expected": [
+    -7.0,
+    0.0,
+    -6.0,
+    7.0,
+    8.0,
+    6.0
+   ],
+   "box_ok": true,
+   "features": 1,
+   "seconds": 3.3
+  }
+ ],
+ "harness": [
+  {
+   "name": "P01+",
+   "od": 3.2,
+   "points": 37,
+   "ok": true
+  },
+  {
+   "name": "P01-",
+   "od": 3.2,
+   "points": 38,
+   "ok": true
+  },
+  {
+   "name": "P02+",
+   "od": 3.2,
+   "points": 49,
+   "ok": true
+  },
+  {
+   "name": "P02-",
+   "od": 3.2,
+   "points": 46,
+   "ok": true
+  },
+  {
+   "name": "P03+",
+   "od": 2.3,
+   "points": 69,
+   "ok": true
+  },
+  {
+   "name": "P03-",
+   "od": 2.3,
+   "points": 69,
+   "ok": true
+  },
+  {
+   "name": "P04+",
+   "od": 2.3,
+   "points": 66,
+   "ok": true
+  },
+  {
+   "name": "P04-",
+   "od": 2.3,
+   "points": 67,
+   "ok": true
+  },
+  {
+   "name": "P05+",
+   "od": 2.3,
+   "points": 46,
+   "ok": true
+  },
+  {
+   "name": "P05-",
+   "od": 2.3,
+   "points": 49,
+   "ok": true
+  },
+  {
+   "name": "P06+",
+   "od": 2.3,
+   "points": 60,
+   "ok": true
+  },
+  {
+   "name": "P06-",
+   "od": 2.3,
+   "points": 57,
+   "ok": true
+  },
+  {
+   "name": "P07+",
+   "od": 2.3,
+   "points": 21,
+   "ok": true
+  },
+  {
+   "name": "P07-",
+   "od": 2.3,
+   "points": 22,
+   "ok": true
+  },
+  {
+   "name": "P08+",
+   "od": 2.3,
+   "points": 52,
+   "ok": true
+  },
+  {
+   "name": "P08-",
+   "od": 2.3,
+   "points": 53,
+   "ok": true
+  },
+  {
+   "name": "P09+",
+   "od": 2.3,
+   "points": 143,
+   "ok": true
+  },
+  {
+   "name": "P09-",
+   "od": 2.3,
+   "points": 143,
+   "ok": true
+  },
+  {
+   "name": "P10+",
+   "od": 2.0,
+   "points": 76,
+   "ok": true
+  },
+  {
+   "name": "P10-",
+   "od": 2.0,
+   "points": 76,
+   "ok": true
+  },
+  {
+   "name": "P11+",
+   "od": 1.5,
+   "points": 59,
+   "ok": true
+  },
+  {
+   "name": "P11-",
+   "od": 1.5,
+   "points": 59,
+   "ok": true
+  },
+  {
+   "name": "P12+",
+   "od": 1.7,
+   "points": 50,
+   "ok": true
+  },
+  {
+   "name": "P12-",
+   "od": 1.7,
+   "points": 51,
+   "ok": true
+  },
+  {
+   "name": "P13+",
+   "od": 1.5,
+   "points": 54,
+   "ok": true
+  },
+  {
+   "name": "P13-",
+   "od": 1.5,
+   "points": 54,
+   "ok": true
+  },
+  {
+   "name": "P14+",
+   "od": 3.2,
+   "points": 37,
+   "ok": true
+  },
+  {
+   "name": "P14-",
+   "od": 3.2,
+   "points": 28,
+   "ok": true
+  },
+  {
+   "name": "P15",
+   "od": 2.6,
+   "points": 15,
+   "ok": true
+  },
+  {
+   "name": "P16",
+   "od": 2.6,
+   "points": 124,
+   "ok": true
+  },
+  {
+   "name": "P17",
+   "od": 2.6,
+   "points": 86,
+   "ok": true
+  },
+  {
+   "name": "P18+",
+   "od": 2.0,
+   "points": 60,
+   "ok": true
+  },
+  {
+   "name": "P18-",
+   "od": 2.0,
+   "points": 62,
+   "ok": true
+  },
+  {
+   "name": "P19+",
+   "od": 2.0,
+   "points": 60,
+   "ok": true
+  },
+  {
+   "name": "P19-",
+   "od": 2.0,
+   "points": 61,
+   "ok": true
+  },
+  {
+   "name": "P20+",
+   "od": 2.0,
+   "points": 122,
+   "ok": true
+  },
+  {
+   "name": "P20-",
+   "od": 2.0,
+   "points": 122,
+   "ok": true
+  },
+  {
+   "name": "D01",
+   "od": 4.2,
+   "points": 30,
+   "ok": true
+  },
+  {
+   "name": "D02",
+   "od": 4.2,
+   "points": 68,
+   "ok": true
+  },
+  {
+   "name": "D03",
+   "od": 2.8,
+   "points": 40,
+   "ok": true
+  },
+  {
+   "name": "D04",
+   "od": 1.8,
+   "points": 99,
+   "ok": true
+  },
+  {
+   "name": "D05",
+   "od": 2.0,
+   "points": 81,
+   "ok": true
+  },
+  {
+   "name": "D06",
+   "od": 6.5,
+   "points": 16,
+   "ok": true
+  },
+  {
+   "name": "D07",
+   "od": 2.6,
+   "points": 36,
+   "ok": true
+  },
+  {
+   "name": "D08",
+   "od": 2.2,
+   "points": 109,
+   "ok": true
+  },
+  {
+   "name": "D09",
+   "od": 2.2,
+   "points": 106,
+   "ok": true
+  },
+  {
+   "name": "D10",
+   "od": 2.2,
+   "points": 71,
+   "ok": true
+  },
+  {
+   "name": "D11",
+   "od": 2.4,
+   "points": 212,
+   "ok": true
+  },
+  {
+   "name": "D12",
+   "od": 2.4,
+   "points": 178,
+   "ok": true
+  },
+  {
+   "name": "D13",
+   "od": 2.4,
+   "points": 164,
+   "ok": true
+  },
+  {
+   "name": "D14",
+   "od": 2.2,
+   "points": 91,
+   "ok": true
+  },
+  {
+   "name": "D15",
+   "od": 1.8,
+   "points": 226,
+   "ok": true
+  },
+  {
+   "name": "D16",
+   "od": 1.8,
+   "points": 190,
+   "ok": true
+  },
+  {
+   "name": "D17",
+   "od": 1.8,
+   "points": 133,
+   "ok": true
+  },
+  {
+   "name": "D18",
+   "od": 1.8,
+   "points": 110,
+   "ok": true
+  },
+  {
+   "name": "D19",
+   "od": 1.8,
+   "points": 126,
+   "ok": true
+  },
+  {
+   "name": "D20",
+   "od": 3.8,
+   "points": 64,
+   "ok": true
+  },
+  {
+   "name": "D21",
+   "od": 3.8,
+   "points": 107,
+   "ok": true
+  },
+  {
+   "name": "D22",
+   "od": 2.0,
+   "points": 32,
+   "ok": true
+  },
+  {
+   "name": "D23",
+   "od": 2.0,
+   "points": 113,
+   "ok": true
+  },
+  {
+   "name": "D24",
+   "od": 2.2,
+   "points": 77,
+   "ok": true
+  },
+  {
+   "name": "D25",
+   "od": 2.2,
+   "points": 97,
+   "ok": true
+  }
+ ],
+ "assembly": {
+  "interference": [
+   {
+    "components": [
+     "RoamView_DriveModule_L_RevB-1",
+     "RoamView_PivotHanger_L_RevB-1"
+    ],
+    "volume_mm3": 251.3
+   },
+   {
+    "components": [
+     "RoamView_DriveModule_R_RevB-1",
+     "RoamView_PivotHanger_R_RevB-1"
+    ],
+    "volume_mm3": 251.3
+   },
+   {
+    "components": [
+     "RoamView_DriveWheel125_RevB-1",
+     "RoamView_DriveModule_L_RevB-1"
+    ],
+    "volume_mm3": 197.9
+   },
+   {
+    "components": [
+     "RoamView_DriveWheel125_RevB-2",
+     "RoamView_DriveModule_R_RevB-1"
+    ],
+    "volume_mm3": 197.9
+   },
+   {
+    "components": [
+     "RoamView_DriveModule_L_RevB-1",
+     "RoamView_SpringAssy_RevB-1"
+    ],
+    "volume_mm3": 78.5
+   },
+   {
+    "components": [
+     "RoamView_DriveModule_R_RevB-1",
+     "RoamView_SpringAssy_RevB-2"
+    ],
+    "volume_mm3": 78.5
+   }
+  ],
+  "components": 51,
+  "saved": true,
+  "step": true,
+  "seconds": 22.4
+ },
+ "errors": [],
+ "seconds": 331.5,
+ "summary": {
+  "plates": 2,
+  "parts": 40,
+  "failed": [],
+  "conductors": 62,
+  "conductors_failed": []
+ }
+}

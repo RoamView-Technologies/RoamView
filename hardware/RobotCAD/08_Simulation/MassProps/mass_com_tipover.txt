@@ -1,0 +1,23 @@
+RV-100 mass properties (component mass overrides applied)
+  total mass          8.63 kg
+  centre of mass      x    -2.1  y    -0.6  z   147.3 mm  (ROS, origin = floor under axle)
+  drawer + battery    1.21 kg
+  [drawer closed] COM x = -2.1 mm
+      tip about front-left (F-L)     margin  113.1 mm  -> static tip angle  37.5 deg
+      tip about rear-left (L-B)      margin  109.8 mm  -> static tip angle  36.7 deg
+      tip about rear-right (B-R)     margin  109.0 mm  -> static tip angle  36.5 deg
+      tip about front-right (R-F)    margin  112.4 mm  -> static tip angle  37.4 deg
+      minimum tip angle 36.5 deg  (PASS >= 20 deg)
+  [drawer out 150 mm] COM x = -23.1 mm
+      tip about front-left (F-L)     margin  129.8 mm  -> static tip angle  41.4 deg
+      tip about rear-left (L-B)      margin   93.1 mm  -> static tip angle  32.3 deg
+      tip about rear-right (B-R)     margin   92.4 mm  -> static tip angle  32.1 deg
+      tip about front-right (R-F)    margin  129.1 mm  -> static tip angle  41.2 deg
+      minimum tip angle 32.1 deg  (PASS >= 20 deg)
+  [drawer out 250 mm] COM x = -37.1 mm
+      tip about front-left (F-L)     margin  140.9 mm  -> static tip angle  43.7 deg
+      tip about rear-left (L-B)      margin   82.0 mm  -> static tip angle  29.1 deg
+      tip about rear-right (B-R)     margin   81.2 mm  -> static tip angle  28.9 deg
+      tip about front-right (R-F)    margin  140.2 mm  -> static tip angle  43.6 deg
+      minimum tip angle 28.9 deg  (PASS >= 20 deg)
+  static load split (front caster preload ignored): rear caster 1.2 N, each drive wheel 41.7 N

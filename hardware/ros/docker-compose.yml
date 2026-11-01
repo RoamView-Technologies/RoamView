@@ -1,7 +1,12 @@
+# Two services, both built from the Dockerfile in this folder (see README.md):
+#   ros2  the general ROS 2 Lyrical dev container (ros-base)       docker compose run --rm ros2
+#   sim   the RoamView simulation: Gazebo, Nav2, RViz               docker compose up -d sim
+#         On WSL, add docker-compose.wsl-gpu.yml so the windows draw on your GPU (README.md, section 5).
 services:
   ros2:
     build:
       context: .
+      target: base
       args:
         ROS_DISTRO: lyrical
         INSTALL_DESKTOP: "false"   # switch to "true" to include RViz2/demos/GUI tools
@@ -14,5 +19,35 @@ services:
       - DISPLAY=${DISPLAY}        # needed only if INSTALL_DESKTOP=true / running GUI apps
       - QT_X11_NO_MITSHM=1
     volumes:
-      - ./src:/root/ros2_ws/src           # volume for ROS. this is to be decided. 
+      - ./src:/root/ros2_ws/src           # volume for ROS. this is to be decided.
       - /tmp/.X11-unix:/tmp/.X11-unix:rw  # X11 socket, needed only for GUI apps (Linux host)
+
+  sim:
+    build:
+      context: .
+      target: sim
+      args:
+        ROS_DISTRO: lyrical
+    image: roamview-sim:lyrical
+    container_name: roamview_sim
+    stdin_open: true
+    tty: true
+    network_mode: host
+    shm_size: "2gb"               # room for camera images and point clouds in shared memory
+    environment:
+      - DISPLAY=${DISPLAY:-:0}
+      - QT_X11_NO_MITSHM=1
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-0}
+    volumes:
+      - ./src:/root/ros2_ws/src           # the packages: edit on the host, build in the container
+      - sim_build:/root/ros2_ws/build     # colcon's output, kept between runs
+      - sim_install:/root/ros2_ws/install
+      - sim_log:/root/ros2_ws/log
+      - sim_gz:/root/.gz                  # Gazebo's download cache (the shoppers' walking animation)
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw  # X11 socket: the Gazebo window and RViz
+
+volumes:
+  sim_build:
+  sim_install:
+  sim_log:
+  sim_gz:

@@ -1,0 +1,373 @@
+<?xml version="1.0"?>
+<!--
+  RoamView Rev B (layout 2) for ROS 2 + Gazebo.
+
+  Numbers come from old-designs/Interconnect_RevB/model_b.py and cog_b.py (2026-09-28). The shapes you see are
+  generated into roamview_body.xacro; the physics below (masses, joints, springs, contacts) is hand-written.
+  Frames follow REP 103/105: x forward, y left, z up. base_footprint = the floor under the drive-axle centre
+  (the CAD origin: CAD X = x, CAD Z = -y, CAD Y = z). base_link sits on the axle line, 62.5 mm up.
+
+  Launch arguments pass these through (see launch/sim.launch.py):
+    camera       true | false   OAK-D Pro W as an RGB-D camera (turn off for a slow PC)
+    suspension   true | false   sprung trailing-arm drive modules, or wheels fixed to the chassis
+    caster_mode  swivel | ball  real swivel casters (trail 20 mm), or frictionless balls
+    cog_x, cog_z                whole-robot centre of gravity, m (cog_b.py: 4 mm behind the axle, 126 mm up)
+    max_speed, accel, decel     what the motor firmware allows (m/s, m/s^2)
+-->
+<robot name="roamview" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:arg name="camera" default="true"/>
+  <xacro:arg name="suspension" default="true"/>
+  <xacro:arg name="caster_mode" default="swivel"/>
+  <xacro:arg name="mass" default="5.71"/>
+  <xacro:arg name="cog_x" default="-0.004"/>
+  <xacro:arg name="cog_z" default="0.126"/>
+  <xacro:arg name="max_speed" default="0.5"/>
+  <xacro:arg name="accel" default="0.5"/>
+  <xacro:arg name="decel" default="0.5"/>
+  <xacro:arg name="tyre_mu" default="0.7"/>
+
+  <xacro:property name="caster_mode" value="$(arg caster_mode)"/>
+  <xacro:property name="PI" value="3.141592653589793"/>
+
+  <!-- ===== geometry (model_b.py, metres) ===== -->
+  <xacro:property name="AXLE_H" value="0.0625"/>          <!-- 125 mm wheels -->
+  <xacro:property name="WHEEL_R" value="0.0625"/>
+  <xacro:property name="WHEEL_W" value="0.030"/>
+  <xacro:property name="TRACK" value="0.224"/>
+  <xacro:property name="PIVOT_X" value="-0.066"/>         <!-- trailing-arm pivot -->
+  <xacro:property name="PIVOT_Y" value="0.0885"/>
+  <xacro:property name="PIVOT_Z" value="0.072"/>
+  <xacro:property name="BUMP_A" value="0.1521"/>          <!-- asin(10 mm / 66 mm): wheel up 10 mm -->
+  <xacro:property name="DROOP_A" value="0.0758"/>         <!-- asin(5 mm / 66 mm): wheel down 5 mm -->
+  <xacro:property name="CASTER_X" value="0.118"/>         <!-- swivel axes at x = +-118 mm -->
+  <xacro:property name="CASTER_MOUNT" value="0.089"/>     <!-- floor to caster top plate -->
+  <xacro:property name="CASTER_R" value="0.0381"/>        <!-- 3-inch wheel -->
+  <xacro:property name="CASTER_W" value="0.030"/>
+  <xacro:property name="CASTER_TRAIL" value="0.020"/>
+  <xacro:property name="SCAN_H" value="0.286"/>           <!-- D500 scan plane -->
+  <xacro:property name="CLIFF_X" value="0.131"/>          <!-- VL53L4CD cliff sensors -->
+  <xacro:property name="CLIFF_Y" value="0.087"/>
+  <xacro:property name="CLIFF_H" value="0.087"/>          <!-- sensor window height = floor range -->
+
+  <!-- ===== masses (cog_b.py) ===== -->
+  <xacro:property name="M_TOTAL" value="$(arg mass)"/>
+  <xacro:property name="M_WHEEL" value="0.12"/>
+  <xacro:property name="M_MODULE" value="0.36"/>          <!-- gearmotor + module plate + arm -->
+  <xacro:property name="M_FORK" value="0.12"/>
+  <xacro:property name="M_CWHEEL" value="0.10"/>
+  <xacro:property name="M_BUMPER" value="0.04"/>          <!-- per half -->
+  <xacro:property name="M_CHASSIS" value="${M_TOTAL - 2*(M_WHEEL + M_MODULE + M_FORK + M_CWHEEL + M_BUMPER)}"/>
+  <!-- first moments of the moving parts about the axle (kg m); casters are symmetric -->
+  <xacro:property name="SUM_MX" value="${2*M_MODULE*(-0.0175) + 2*M_BUMPER*0.1685}"/>
+  <xacro:property name="SUM_MZ" value="${2*M_WHEEL*AXLE_H + 2*M_MODULE*0.062 + 2*M_FORK*0.070 + 2*M_CWHEEL*CASTER_R + 2*M_BUMPER*0.078}"/>
+  <!-- chassis centre of gravity chosen so the whole robot lands on cog_x / cog_z -->
+  <xacro:property name="CH_X" value="${(M_TOTAL*$(arg cog_x) - SUM_MX)/M_CHASSIS}"/>
+  <xacro:property name="CH_Z" value="${(M_TOTAL*$(arg cog_z) - SUM_MZ)/M_CHASSIS}"/>
+
+  <!-- ===== suspension spring (placeholder numbers until a spring is chosen) =====
+       2 N/mm at the wheel and 20 N of wheel load at ride height, so the casters carry the rest (~16 N). -->
+  <xacro:property name="WHEEL_RATE" value="2000.0"/>      <!-- N/m at the wheel -->
+  <xacro:property name="WHEEL_PRELOAD" value="20.0"/>     <!-- N at ride height -->
+  <xacro:property name="ARM_L" value="0.066"/>
+  <xacro:property name="SPRING_K" value="${WHEEL_RATE*ARM_L*ARM_L}"/>           <!-- N m/rad -->
+  <xacro:property name="SPRING_REF" value="${-WHEEL_PRELOAD*ARM_L/SPRING_K}"/>  <!-- rad (below the droop stop) -->
+
+  <!-- ===== gearmotor (placeholder: 37D class, check once the motor is chosen) ===== -->
+  <xacro:property name="WHEEL_TORQUE" value="2.0"/>       <!-- N m per wheel -->
+  <xacro:property name="WHEEL_SPEED" value="20.0"/>       <!-- rad/s = 1.25 m/s -->
+
+  <xacro:include filename="$(find roamview_sim)/urdf/roamview_body.xacro"/>
+
+  <xacro:macro name="box_inertia" params="m x y z">
+    <inertia ixx="${m*(y*y + z*z)/12}" ixy="0" ixz="0" iyy="${m*(x*x + z*z)/12}" iyz="0" izz="${m*(x*x + y*y)/12}"/>
+  </xacro:macro>
+  <!-- solid cylinder whose axis is the link's y axis (wheels) -->
+  <xacro:macro name="wheel_inertia" params="m r w">
+    <inertia ixx="${m*(3*r*r + w*w)/12}" ixy="0" ixz="0" iyy="${m*r*r/2}" iyz="0" izz="${m*(3*r*r + w*w)/12}"/>
+  </xacro:macro>
+
+  <!-- ===================== chassis ===================== -->
+  <link name="base_footprint"/>
+  <joint name="base_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 ${AXLE_H}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="base_link">
+    <inertial>
+      <origin xyz="${CH_X} -0.0013 ${CH_Z - AXLE_H}" rpy="0 0 0"/>
+      <mass value="${M_CHASSIS}"/>
+      <!-- about the chassis CoG, from the part envelopes in model_b.py -->
+      <inertia ixx="0.0343" ixy="0.0008" ixz="0.0010" iyy="0.0524" iyz="0.0002" izz="0.0558"/>
+    </inertial>
+    <!-- simple collision shapes: the two decks, the LiDAR, the OAK-D and the handle -->
+    <collision name="lower_deck">
+      <origin xyz="0 0 ${0.096 - AXLE_H}"/>
+      <geometry><box size="0.320 0.260 0.006"/></geometry>
+    </collision>
+    <collision name="top_deck">
+      <origin xyz="0 0 ${0.2205 - AXLE_H}"/>
+      <geometry><box size="0.320 0.260 0.003"/></geometry>
+    </collision>
+    <collision name="lidar">
+      <origin xyz="0 0 ${0.2795 - AXLE_H}"/>
+      <geometry><cylinder radius="0.027" length="0.035"/></geometry>
+    </collision>
+    <collision name="oak">
+      <origin xyz="0.138 0 ${0.247 - AXLE_H}"/>
+      <geometry><box size="0.022 0.097 0.030"/></geometry>
+    </collision>
+    <collision name="handle">
+      <origin xyz="-0.148 0 ${0.260 - AXLE_H}" rpy="${PI/2} 0 0"/>
+      <geometry><cylinder radius="0.008" length="0.238"/></geometry>
+    </collision>
+  </link>
+  <xacro:rv_visual_links_base parent="base_link"/>
+
+  <!-- ===================== drive modules and wheels ===================== -->
+  <!-- s = +1 left, -1 right -->
+  <xacro:macro name="drive_side" params="side s">
+    <xacro:if value="$(arg suspension)">
+      <joint name="${side}_arm_joint" type="revolute">
+        <parent link="base_link"/>
+        <child link="${side}_arm_link"/>
+        <origin xyz="${PIVOT_X} ${s*PIVOT_Y} ${PIVOT_Z - AXLE_H}" rpy="0 0 0"/>
+        <axis xyz="0 -1 0"/>                               <!-- positive = wheel moves up (bump) -->
+        <limit lower="${-DROOP_A}" upper="${BUMP_A}" effort="1000" velocity="10"/>
+        <dynamics damping="0.2" friction="0.0"/>
+      </joint>
+      <gazebo reference="${side}_arm_joint">
+        <springReference>${SPRING_REF}</springReference>
+        <springStiffness>${SPRING_K}</springStiffness>
+      </gazebo>
+    </xacro:if>
+    <xacro:unless value="$(arg suspension)">
+      <joint name="${side}_arm_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="${side}_arm_link"/>
+        <origin xyz="${PIVOT_X} ${s*PIVOT_Y} ${PIVOT_Z - AXLE_H}" rpy="0 0 0"/>
+      </joint>
+    </xacro:unless>
+
+    <link name="${side}_arm_link">
+      <inertial>
+        <origin xyz="0.0485 ${-s*0.0425} -0.010" rpy="0 0 0"/>
+        <mass value="${M_MODULE}"/>
+        <inertia ixx="0.00025" ixy="0" ixz="0" iyy="0.00012" iyz="0" izz="0.00025"/>
+      </inertial>
+    </link>
+    <xacro:call macro="rv_visual_links_arm_${side}" parent="${side}_arm_link"/>
+
+    <joint name="${side}_wheel_joint" type="continuous">
+      <parent link="${side}_arm_link"/>
+      <child link="${side}_wheel_link"/>
+      <origin xyz="${-PIVOT_X} ${s*(TRACK/2 - PIVOT_Y)} ${AXLE_H - PIVOT_Z}" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>                                  <!-- positive = rolls forward on both sides -->
+      <limit effort="${WHEEL_TORQUE}" velocity="${WHEEL_SPEED}"/>
+      <dynamics damping="0.005" friction="0.0"/>
+    </joint>
+
+    <link name="${side}_wheel_link">
+      <inertial>
+        <mass value="${M_WHEEL}"/>
+        <xacro:wheel_inertia m="${M_WHEEL}" r="${WHEEL_R}" w="${WHEEL_W}"/>
+      </inertial>
+      <collision>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+        <geometry><cylinder radius="${WHEEL_R}" length="${WHEEL_W}"/></geometry>
+      </collision>
+    </link>
+    <xacro:call macro="rv_visual_links_wheel_${side}" parent="${side}_wheel_link"/>
+    <!-- hub and one yellow spoke so you can see the wheel turn (own links: RViz colours per link) -->
+    <joint name="${side}_wheel_hub_joint" type="fixed">
+      <parent link="${side}_wheel_link"/><child link="${side}_wheel_hub"/><origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+    <link name="${side}_wheel_hub">
+      <visual>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+        <geometry><cylinder radius="0.030" length="${WHEEL_W + 0.002}"/></geometry>
+        <material name="rv_hub"><color rgba="0.75 0.75 0.78 1"/></material>
+      </visual>
+    </link>
+    <joint name="${side}_wheel_spoke_joint" type="fixed">
+      <parent link="${side}_wheel_link"/><child link="${side}_wheel_spoke"/><origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+    <link name="${side}_wheel_spoke">
+      <visual>
+        <origin xyz="0 0 0.040" rpy="0 0 0"/>
+        <geometry><box size="0.012 ${WHEEL_W + 0.004} 0.030"/></geometry>
+        <material name="rv_spoke"><color rgba="0.93 0.72 0.12 1"/></material>
+      </visual>
+    </link>
+    <gazebo reference="${side}_wheel_link">
+      <mu1>$(arg tyre_mu)</mu1>
+      <mu2>$(arg tyre_mu)</mu2>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:drive_side side="left" s="1"/>
+  <xacro:drive_side side="right" s="-1"/>
+
+  <!-- ===================== casters ===================== -->
+  <!-- sx = +1 front, -1 rear. Parked, both wheels trail towards the robot centre (x = +-98 mm). -->
+  <xacro:macro name="caster" params="end sx">
+    <xacro:if value="${caster_mode == 'swivel'}">
+      <joint name="caster_${end}_swivel_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="caster_${end}_fork"/>
+        <origin xyz="${sx*CASTER_X} 0 ${CASTER_MOUNT - AXLE_H}" rpy="0 0 ${0.0 if sx > 0 else PI}"/>
+        <axis xyz="0 0 1"/>
+        <dynamics damping="0.002" friction="0.0"/>
+      </joint>
+      <link name="caster_${end}_fork">
+        <inertial>
+          <origin xyz="-0.008 0 -0.025"/>
+          <mass value="${M_FORK}"/>
+          <xacro:box_inertia m="${M_FORK}" x="0.045" y="0.042" z="0.050"/>
+        </inertial>
+      </link>
+      <xacro:call macro="rv_visual_links_fork_${end}" parent="caster_${end}_fork"/>
+      <joint name="caster_${end}_wheel_joint" type="continuous">
+        <parent link="caster_${end}_fork"/>
+        <child link="caster_${end}_wheel"/>
+        <origin xyz="${-CASTER_TRAIL} 0 ${CASTER_R - CASTER_MOUNT}" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+        <dynamics damping="0.0005" friction="0.0"/>
+      </joint>
+      <link name="caster_${end}_wheel">
+        <inertial>
+          <mass value="${M_CWHEEL}"/>
+          <xacro:wheel_inertia m="${M_CWHEEL}" r="${CASTER_R}" w="${CASTER_W}"/>
+        </inertial>
+        <collision>
+          <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+          <geometry><cylinder radius="${CASTER_R}" length="${CASTER_W}"/></geometry>
+        </collision>
+      </link>
+      <xacro:call macro="rv_visual_links_cwheel_${end}" parent="caster_${end}_wheel"/>
+      <gazebo reference="caster_${end}_wheel">
+        <mu1>$(arg tyre_mu)</mu1>
+        <mu2>$(arg tyre_mu)</mu2>
+      </gazebo>
+    </xacro:if>
+    <xacro:if value="${caster_mode == 'ball'}">
+      <joint name="caster_${end}_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="caster_${end}_ball"/>
+        <origin xyz="${sx*(CASTER_X - CASTER_TRAIL)} 0 ${CASTER_R - AXLE_H}" rpy="0 0 0"/>
+      </joint>
+      <link name="caster_${end}_ball">
+        <inertial>
+          <mass value="${M_FORK + M_CWHEEL}"/>
+          <xacro:box_inertia m="${M_FORK + M_CWHEEL}" x="0.05" y="0.05" z="0.05"/>
+        </inertial>
+        <visual>
+          <geometry><sphere radius="${CASTER_R}"/></geometry>
+          <material name="rv_ball"><color rgba="0.18 0.19 0.21 1"/></material>
+        </visual>
+        <collision>
+          <geometry><sphere radius="${CASTER_R}"/></geometry>
+        </collision>
+      </link>
+      <gazebo reference="caster_${end}_ball">
+        <mu1>0.0</mu1>
+        <mu2>0.0</mu2>
+      </gazebo>
+    </xacro:if>
+  </xacro:macro>
+
+  <xacro:caster end="front" sx="1"/>
+  <xacro:caster end="rear" sx="-1"/>
+
+  <!-- ===================== bumper (two halves, one switch each) ===================== -->
+  <!-- s = +1 left, -1 right. Each half is its own link so Gazebo can report its contacts. -->
+  <xacro:macro name="bumper_half" params="side s">
+    <joint name="bumper_${side}_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="bumper_${side}_link"/>
+      <origin xyz="0 0 ${-AXLE_H}" rpy="0 0 0"/>
+    </joint>
+    <gazebo reference="bumper_${side}_joint">
+      <preserveFixedJoint>true</preserveFixedJoint>
+    </gazebo>
+    <link name="bumper_${side}_link">
+      <inertial>
+        <origin xyz="0.160 ${s*0.070} 0.080"/>
+        <mass value="${M_BUMPER}"/>
+        <xacro:box_inertia m="${M_BUMPER}" x="0.03" y="0.125" z="0.044"/>
+      </inertial>
+      <!-- face, 56-100 mm above the floor, outside the notch that clears the front caster -->
+      <collision>
+        <origin xyz="0.1685 ${s*0.080} 0.078"/>
+        <geometry><box size="0.005 0.090 0.044"/></geometry>
+      </collision>
+      <!-- this half of the centre bar above the notch -->
+      <collision>
+        <origin xyz="0.1685 ${s*0.0175} 0.0905"/>
+        <geometry><box size="0.005 0.035 0.017"/></geometry>
+      </collision>
+    </link>
+    <xacro:call macro="rv_visual_links_bumper_${side}" parent="bumper_${side}_link"/>
+    <gazebo reference="bumper_${side}_link">
+      <sensor name="bumper_${side}" type="contact">
+        <always_on>true</always_on>
+        <update_rate>50</update_rate>
+        <contact>
+          <!-- gz-sim's Contact system reads the topic from inside <contact> -->
+          <topic>/model/roamview/bumper_${side}</topic>
+          <collision>bumper_${side}_link_collision</collision>
+          <collision>bumper_${side}_link_collision_1</collision>
+        </contact>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:bumper_half side="left" s="1"/>
+  <xacro:bumper_half side="right" s="-1"/>
+
+  <!-- ===================== sensor frames ===================== -->
+  <link name="lidar_link"/>
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_link"/>
+    <origin xyz="0 0 ${SCAN_H - AXLE_H}" rpy="0 0 0"/>
+  </joint>
+
+  <!-- OAK-D Pro W: lens face 149 mm ahead of the axle, 247 mm up; its IMU (BNO086) sits inside -->
+  <link name="camera_link"/>
+  <joint name="camera_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_link"/>
+    <origin xyz="0.149 0 ${0.247 - AXLE_H}" rpy="0 0 0"/>
+  </joint>
+  <link name="camera_optical_frame"/>
+  <joint name="camera_optical_joint" type="fixed">
+    <parent link="camera_link"/>
+    <child link="camera_optical_frame"/>
+    <origin xyz="0 0 0" rpy="${-PI/2} 0 ${-PI/2}"/>
+  </joint>
+  <link name="imu_link"/>
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="0.138 0 ${0.247 - AXLE_H}" rpy="0 0 0"/>
+  </joint>
+
+  <!-- cliff sensors: x axis points straight down at the floor -->
+  <xacro:macro name="cliff_frame" params="name sx sy">
+    <link name="cliff_${name}_link"/>
+    <joint name="cliff_${name}_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="cliff_${name}_link"/>
+      <origin xyz="${sx*CLIFF_X} ${sy*CLIFF_Y} ${CLIFF_H - AXLE_H}" rpy="0 ${PI/2} 0"/>
+    </joint>
+  </xacro:macro>
+  <xacro:cliff_frame name="front_left" sx="1" sy="1"/>
+  <xacro:cliff_frame name="front_right" sx="1" sy="-1"/>
+  <xacro:cliff_frame name="rear_left" sx="-1" sy="1"/>
+  <xacro:cliff_frame name="rear_right" sx="-1" sy="-1"/>
+
+  <xacro:include filename="$(find roamview_sim)/urdf/roamview_gazebo.xacro"/>
+</robot>

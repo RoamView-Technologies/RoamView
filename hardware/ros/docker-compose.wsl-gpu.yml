@@ -1,0 +1,18 @@
+# WSL2 + Docker Desktop: lets the sim container draw on the PC's GPU through WSL's D3D12 driver (any GPU brand).
+# Use it on top of docker-compose.yml: once per terminal
+#   export COMPOSE_FILE=docker-compose.yml:docker-compose.wsl-gpu.yml
+# or the same line (without "export") in a file named .env next to this one (git ignores .env); then
+#   docker compose up -d sim
+# Without it the container still runs, but draws everything in software: fine for the test world, slow for the store.
+# The flags follow Microsoft's WSLg container sample (github.com/microsoft/wslg, samples/container/Containers.md).
+services:
+  sim:
+    devices:
+      - /dev/dxg:/dev/dxg                 # WSL's GPU device
+    volumes:
+      - /usr/lib/wsl:/usr/lib/wsl:ro      # Windows' D3D12 driver libraries, as WSL provides them
+      - /mnt/wslg:/mnt/wslg               # WSLg's sockets
+    environment:
+      - LD_LIBRARY_PATH=/usr/lib/wsl/lib
+      - GALLIUM_DRIVER=d3d12              # Mesa: render through D3D12 (the launch file still keeps the sensors in software)
+      - MESA_D3D12_DEFAULT_ADAPTER_NAME=${MESA_D3D12_DEFAULT_ADAPTER_NAME:-}  # e.g. NVIDIA on a laptop with two GPUs (shell or .env)

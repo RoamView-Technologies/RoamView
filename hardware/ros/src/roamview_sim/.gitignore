@@ -1,0 +1,3 @@
+# hardware/.gitignore ignores *.bin (compiled firmware). Here .bin files are the glTF mesh buffers of the warehouse
+# club (models/warehouse_club/meshes/*.bin): without them the store has no geometry, so keep them in git.
+!*.bin

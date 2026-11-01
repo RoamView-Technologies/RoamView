@@ -1,0 +1,59 @@
+Group,PartNo,Name,Description,Qty,Vendor,VendorPN,Material,Unit_mass_g,Total_mass_g,Notes / dimension source
+MANUFACTURED - 3D print,RV-301,Head,"Head shell (front-open, 3mm walls), carries bezel, OAK and 7in display",1,,,PETG,309.9,309.9,layout SK_Side_Tower head profile; posts bolt up with 2x M5 into the 2020 bores
+MANUFACTURED - 3D print,RV-302,HeadBezel,Head front bezel with OAK wedge mount and USB-C pass-through,1,,,PETG,89.9,89.9,head front opening
+MANUFACTURED - 3D print,RV-303,OAK_Wedge,"OAK-D Pro W 5 deg tilt wedge (VESA M4 to OAK, M3 inserts to bezel)",1,,,PETG,14.3,14.3,"OAK 97x29.5, OAK_TILT"
+MANUFACTURED - 3D print,RV-304,LidarPedestal,"LiDAR pedestal, M4 to deck grid, M2.5 inserts for STL-19P",1,,,PETG,44.4,44.4,height = LIDAR_MOUNT_Z - DECK_Z; LiDAR hole positions APPROX (see RV-512)
+MANUFACTURED - 3D print,RV-305,Bumper,"Front soft bumper (TPU): 2 microswitch pockets, 2 cliff-sensor windows",1,,,TPU 95A,275.8,275.8,"globals BODY_W, BUMPER_T, BUMPER_Z0/Z1, CLIFF_*"
+MANUFACTURED - 3D print,RV-306,ChargePadHolder,Charging pad holder with dock-detect magnet pocket,1,,,PETG,21.4,21.4,pads at CONTACT_Y; magnet d6x3 for the dock reed/Hall switch
+MANUFACTURED - 3D print,RV-307,CliffSensorMount,"VL53L4CD cliff sensor cradle (50 deg), clamps the end skin to the MidCross",4,,,PETG,5.4,21.6,"CLIFF_X/Z/ANG; board screws APPROX (2x M2.5 self-tapping, drill with the board as template)"
+MANUFACTURED - 3D print,RV-308,FrontCasterHousing,Front sprung caster housing (2 guide pins + 2 springs),1,,,PETG,26.9,26.9,10mm travel (carriage top 4 -> 14); bolts to front MidCross member
+MANUFACTURED - 3D print,RV-309,FrontCasterCarriage,Front caster sprung carriage plate,1,,,PETG,5.2,5.2,"caster 30x30 bolt pattern, guide pins at +-18"
+MANUFACTURED - 3D print,RV-310,RearCasterRiser,Rear rigid caster riser (M4 inserts for caster plate),1,,,PETG,61.5,61.5,caster 30x30 pattern; bolts to rear MidCross
+MANUFACTURED - 3D print,RV-311,ComputeTray,Compute tray: Pi 5 + ESP32 expansion board standoffs,1,,,PETG,31.3,31.3,COMPUTE_L x COMPUTE_W; Pi 58x49 holes; ESP32 board 4x M4 APPROX
+MANUFACTURED - 3D print,RV-312,DriverMount,DFR0601 motor driver mount (M3 inserts),1,,,PETG,6.7,6.7,DFR0601 45x45 hole square
+MANUFACTURED - 3D print,RV-313,SkinSide,Side skin panel with wheel notch (used L and R),2,,,PETG,95.2,190.4,"frame length, TOPRING_Z, WHEEL_D/AXLE_Z notch"
+MANUFACTURED - 3D print,RV-314,SkinFront,Front skin panel with status light slot,1,,,PETG,93.6,93.6,"frame width, TOPRING_Z"
+MANUFACTURED - 3D print,RV-315,SkinRear,Rear skin panel with battery drawer opening,1,,,PETG,77.3,77.3,"frame width, TOPRING_Z"
+MANUFACTURED - 3D print,RV-316,DrawerFace,Battery drawer face with pull handle,1,,,PETG,27.8,27.8,covers rear opening (battery + 4 mm)
+MANUFACTURED - sheet metal,RV-430,DeckPlate,Deck plate 2mm 5052 with 20mm M4 interconnect grid,1,,,5052-H32 2.0mm,733.0,733.0,"globals BODY_L x BODY_W, DECK_T, GRID"
+MANUFACTURED - sheet metal,RV-431,FloorPan,Floor pan 1.5mm 5052 (caster sweep holes),1,,,5052-H32 1.5mm,457.1,457.1,globals RAIL_X/RAIL_Y/PROFILE/PAN_T/CASTER_X
+MANUFACTURED - sheet metal,RV-432,BatteryDrawerTray,"Battery drawer tray, 1.5mm 5052 U-channel",1,,,5052-H32 1.5mm,279.8,279.8,"fits BAT_W 90 + 17mm/side foam, walls 43.5"
+MANUFACTURED - sheet metal,RV-433,DrawerGuide,"Drawer guide, 1.5mm 5052 L-angle (used L and R)",2,,,5052-H32 1.5mm,62.7,125.4,rests on MidCross members at +-RAIL_X
+MANUFACTURED - sheet metal,RV-434,MotorBracket,"Motor bracket, 3mm 5052 L (face plate inside wheel recess)",2,,,5052-H32 3.0mm,30.4,60.8,leg rests on bottom side rail; plate fits inside Wasteland d76 recess; inside bend R1.5 (clears gearbox by 1.1mm - confirm R with fabricator)
+MANUFACTURED - sheet metal,RV-435,ChargePad,"Charging contact pad, 1mm brass",2,,,C260 brass 1.0mm,4.3,8.6,20 x 26 to suit dock contacts
+MANUFACTURED - weldment,RV-410,ChassisFrame_2020,"Chassis frame, 2020 aluminium extrusion weldment",1,,,6063-T5 2020 T-slot,2250.0,2250.0,globals RAIL_X/RAIL_Y/BOTRING_Z/TOPRING_Z/MIDX_Z/PROFILE
+MANUFACTURED - weldment,RV-420,SensorTower_2020,"Sensor tower: twin 2020 posts, brace, rear struts",1,,,6063-T5 2020 T-slot / 6061 plate,450.0,450.0,"globals POST_*, BRACE_Z, STRUT_X0/STRUT_Z, DECK_Z"
+PURCHASED,RV-501,Gearmotor_37D_70to1_Enc,Pololu 37D 70:1 metal gearmotor 12V with 64 CPR encoder (helical pinion),2,Pololu,4754,,215.0,430.0,datasheet Pololu_37D_gearmotor_dimensions.pdf p2 (L=24 for 70:1); hole clocking APPROX
+PURCHASED,RV-502,SonicHub_1309_6mm,"goBILDA 1309 Series Sonic Hub 6mm bore (M4, 16mm square pattern)",2,goBILDA,1309-0016-0006,,14.0,28.0,"vendor: 8mm thick, 6mm bore, 4xM4 on 16mm square (pattern per goBILDA 3616 drawing); OD 32 APPROX"
+PURCHASED,RV-503,Wheel_Wasteland_144x52,"goBILDA Wasteland Wheel 144mm dia x 52mm wide (14mm bore, 16/32mm square patterns)",2,goBILDA / ServoCity,3616-0014-0144,,348.0,696.0,"goBILDA 3616-0014-0144 schematic: d144 x 52, bore d14, holes d4 on 16 and 32 square, web 4 thick at 16 / 32 from the faces; recess d76 measured off the section (APPROX)"
+PURCHASED,RV-504,Caster_2in_Swivel,"2 inch swivel caster, top plate 40x40 (model TBD)",2,TBD,TBD,,60.0,120.0,"APPROX: generic 2in caster, height = CASTER_H 68, trail 10"
+PURCHASED,RV-511,OAK-D-Pro-W,"Luxonis OAK-D Pro W (USB), with USB-C plug keep-out",1,Luxonis,OAK-D-PRO-W,,91.0,91.0,"datasheet Luxonis DM9098 sec 9: 97x29.5x22.9, cams 19.5 from bottom, VESA 2xM4 75; VESA height, USB-C and tripod positions APPROX"
+PURCHASED,RV-512,LiDAR_STL-19P,LDROBOT STL-19P / D500 LiDAR,1,LDROBOT,STL-19P,,45.0,45.0,"datasheet LDROBOT STL-19P v1.0 sec 5.1: 54x46.29x35, dome 35.29x12.8, window 7.8 below top, 3x d2.5 holes; hole x-positions APPROX (+-1)"
+PURCHASED,RV-513,ToF_VL53L4CD_Adafruit5396,"Adafruit VL53L4CD time-of-flight sensor, STEMMA QT",4,Adafruit,5396,,1.8,7.2,vendor: 25.5x17.7x4.6; mounting holes and connector side APPROX - measure before printing
+PURCHASED,RV-514,OAK_Y_Adapter,"Luxonis OAK Y-adapter (USB-C data + power split), envelope",1,Luxonis,OAK-Y-ADAPTER,,10.0,10.0,APPROX envelope 34x24x10
+PURCHASED,RV-521,RaspberryPi5_ActiveCooler,Raspberry Pi 5 with active cooler,1,Raspberry Pi,SC1112 + SC1148,,72.0,72.0,"datasheet RaspberryPi5_mechanical_drawing.pdf: 85x56, holes d2.7 58x49 inset 3.5; component heights APPROX"
+PURCHASED,RV-522,ESP32_ExpansionBoard38P_DevKit,"ESP32-S Expansion Board 38-Pin (header carrier, DC jack) + ESP32-WROOM-32E USB-C dev board",1,ProtoSupplies (generic ESP32-S 38P expansion board),ESP32-S Expansion Board 38-Pin,,35.0,35.0,"carrier 77x54, 4x M4 (ProtoSupplies); dev board ~28x56, 1.0in row spacing, measured from team photo; hole positions, header and jack placement APPROX"
+PURCHASED,RV-531,MotorDriver_DFR0601,DFRobot DFR0601 dual-channel 12A DC motor driver,1,DFRobot,DFR0601,,30.0,30.0,"datasheet DFRobot_DFR0601_dimensions.png: 50x50x12.5, 4x d3 on 45x45"
+PURCHASED,RV-551,EStop_22mm_Box,"Emergency stop, 22mm mushroom in 45x45 enclosure (model TBD)",1,TBD,TBD,,80.0,80.0,APPROX: height 45 so top = ESTOP_TOP
+PURCHASED,RV-552,TouchDisplay2_7in,"Raspberry Pi Touch Display 2, 7in 720x1280",1,Raspberry Pi,SC1635,,270.0,270.0,"vendor 189.32x120.24, active 155x88; thickness 12 and hole pattern APPROX - use the official mechanical drawing before printing the head"
+RESERVED (buy / design),RV-532,PowerPCB_Envelope,Power/battery/protection PCB in case - RESERVED ENVELOPE (PCB to be designed),1,,,,150.0,150.0,globals PCB_L x PCB_W x PCB_H
+RESERVED (buy / design),RV-541,Battery4S_Envelope,4S battery pack ENVELOPE with XT60 (pack model TBD),1,,,,900.0,900.0,globals BAT_L x BAT_W x BAT_H; XT60 15.8x8.2x16; pack APPROX until chosen
+"HARDWARE (estimate, not modelled)",HW-01,,"Heat-set insert M2.5 (Pi 5 x4, LiDAR x3)",7,,,,,,estimate
+"HARDWARE (estimate, not modelled)",HW-02,,"Heat-set insert M3 (OAK wedge x2, driver x4, charge pads x2)",8,,,,,,estimate
+"HARDWARE (estimate, not modelled)",HW-03,,"Heat-set insert M4 (ESP32 board x4, rear caster riser x4)",8,,,,,,estimate
+"HARDWARE (estimate, not modelled)",HW-04,,2020 inside corner bracket + M4 T-nut set (frame joints),24,,,,,,estimate
+"HARDWARE (estimate, not modelled)",HW-05,,"M4 x 8 SHCS + M4 slot-6 T-nut (pan, deck, skins, guides, brackets, caster blocks)",90,,,,,,estimate
+"HARDWARE (estimate, not modelled)",HW-06,,M5 x 12 SHCS (head to post bores),2,,,,,,estimate
+"HARDWARE (estimate, not modelled)",HW-07,,"M3 x 6 SHCS (gearbox face to motor bracket, 6 per motor)",12,,,,,,estimate
+"HARDWARE (estimate, not modelled)",HW-08,,"M4 x 8 SHCS (wheel to Sonic Hub, 4 per wheel)",8,,,,,,estimate
+"HARDWARE (estimate, not modelled)",HW-09,,M4 x 10 SHCS (caster plates),8,,,,,,estimate
+"HARDWARE (estimate, not modelled)",HW-10,,M4 shoulder bolt 4 x 20 (front caster guide pins),2,,,,,,estimate
+"HARDWARE (estimate, not modelled)",HW-11,,"Compression spring ~1.5 N/mm, 6 N preload (front caster)",2,,,,,,estimate
+"HARDWARE (estimate, not modelled)",HW-12,,"M2.5 x 6 self-tapping screw (cliff sensor boards, 2 per cradle)",8,,,,,,estimate
+"HARDWARE (estimate, not modelled)",HW-19,,M4 x 12 SHCS + M4 slot-6 T-nut (cliff cradles through the end skins into the MidCross),8,,,,,,estimate
+"HARDWARE (estimate, not modelled)",HW-13,,"Microswitch, lever (bumper)",2,,,,,,estimate
+"HARDWARE (estimate, not modelled)",HW-14,,Neodymium magnet d6 x 3 (dock detect),1,,,,,,estimate
+"HARDWARE (estimate, not modelled)",HW-15,,XT60 panel-mount female + bracket (drawer blind mate) - bracket TBD,1,,,,,,estimate
+"HARDWARE (estimate, not modelled)",HW-16,,Cable grommet d25 / d16 (deck ports),3,,,,,,estimate
+"HARDWARE (estimate, not modelled)",HW-17,,"Addressable LED strip, ~260 mm (status light slot)",1,,,,,,estimate
+"HARDWARE (estimate, not modelled)",HW-18,,Drawer latch / magnetic catch (validation recommendation),1,,,,,,estimate

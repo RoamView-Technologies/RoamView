@@ -1,0 +1,28 @@
+# robot_localization EKF: wheel speed (forward, sideways) + IMU yaw rate -> odom -> base_footprint.
+# Wheel odometry alone gets turns wrong by a few percent (tyre contact is never exactly on the track width);
+# the BNO086 gyro does not. This is the same fusion the real RoamView would run on the Pi.
+ekf_filter_node:
+  ros__parameters:
+    frequency: 50.0
+    sensor_timeout: 0.2
+    two_d_mode: true
+    publish_tf: true
+    odom_frame: odom
+    base_link_frame: base_footprint
+    world_frame: odom
+    # [x y z, roll pitch yaw, vx vy vz, vroll vpitch vyaw, ax ay az]
+    odom0: /odom
+    odom0_config: [false, false, false,
+                   false, false, false,
+                   true,  true,  false,
+                   false, false, false,
+                   false, false, false]
+    odom0_queue_size: 10
+    imu0: /imu
+    imu0_config: [false, false, false,
+                  false, false, false,
+                  false, false, false,
+                  false, false, true,
+                  false, false, false]
+    imu0_queue_size: 20
+    imu0_remove_gravitational_acceleration: true
