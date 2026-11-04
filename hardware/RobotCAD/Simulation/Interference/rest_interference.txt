@@ -1,0 +1,7 @@
+RV-100 interference detection at rest (coincident faces ignored): 6 interference(s)
+         0.0 mm3   RV-130_BatteryDrawer-1/RV-316_DrawerFace-1 <-> RV-130_BatteryDrawer-1/RV-432_BatteryDrawerTray-1
+         0.0 mm3   RV-110_DriveModule-2/RV-434_MotorBracket-1 <-> RV-110_DriveModule-2/RV-501_Gearmotor_37D_70to1_Enc-1
+         0.0 mm3   RV-110_DriveModule-1/RV-434_MotorBracket-1 <-> RV-110_DriveModule-1/RV-501_Gearmotor_37D_70to1_Enc-1
+         0.0 mm3   RV-314_SkinFront-1 <-> RV-433_DrawerGuide-2
+         0.0 mm3   RV-130_BatteryDrawer-1/RV-316_DrawerFace-1 <-> RV-433_DrawerGuide-1
+         0.0 mm3   RV-315_SkinRear-1 <-> RV-433_DrawerGuide-1

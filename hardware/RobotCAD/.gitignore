@@ -1,0 +1,14 @@
+# Python caches
+__pycache__/
+*.pyc
+
+# SolidWorks lock / temp files (left behind while a file is open or after a crash)
+~$*
+*.SWBAK
+*.swbak
+
+# Previous FOV component STLs, kept by export_fov_stl.py as a local backup only
+Simulation/FOV/parts_old/
+
+# my custome files
+design_rules_november.md
