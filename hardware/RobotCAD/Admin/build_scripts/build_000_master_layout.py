@@ -90,11 +90,12 @@ def sk_side_chassis(p, pl):
         body = s.rect(a, b)
         rect_dims(s, body, a, b, "x", "z", Q("BODY_L"), f'{Q("DECK_Z")} - {Q("FLOOR_Z")}')
         place(s, s.corner(body, a), a, {"x": f'{Q("BODY_L")} / 2', "z": Q("FLOOR_Z")})
-        ba, bb = (L / 2, 0, G["BUMPER_Z0"]), (L / 2 + G["BUMPER_T"], 0, G["BUMPER_Z1"])
+        # bumper floats BUMPER_GAP proud of the body on its guide pins (switch travel)
+        bx = L / 2 + G["BUMPER_GAP"]
+        ba, bb = (bx, 0, G["BUMPER_Z0"]), (bx + G["BUMPER_T"], 0, G["BUMPER_Z1"])
         bump = s.rect(ba, bb)
-        s.rel("sgCOLINEAR", s.edge(bump, (L / 2, 0, (ba[2] + bb[2]) / 2)), s.edge(body, (L / 2, 0, (F + D) / 2)))
         rect_dims(s, bump, ba, bb, "x", "z", Q("BUMPER_T"), f'{Q("BUMPER_Z1")} - {Q("BUMPER_Z0")}')
-        s.d_along("z", "origin", s.corner(bump, ba), (ba[0] + 30, 0, ba[2] / 2), expr=Q("BUMPER_Z0"))
+        place(s, s.corner(bump, ba), ba, {"x": f'{Q("BODY_L")} / 2 + {Q("BUMPER_GAP")}', "z": Q("BUMPER_Z0")})
         cp = (G["CONTACT_X"], 0, G["CONTACT_Z"])
         place(s, s.point(cp), cp, {"x": Q("CONTACT_X"), "z": Q("CONTACT_Z")})
         ep = (G["ESTOP_X"], 0, G["ESTOP_TOP"])
@@ -283,8 +284,8 @@ def sk_top_zones(p, pl):
              Q("BAT_L"), Q("BAT_W"), (G["BAT_X"] + G["BAT_L"] / 2, G["BAT_W"] / 2),
              {"x": f'{Q("BAT_X")} + {Q("BAT_L")} / 2', "y": f'{Q("BAT_W")} / 2'}),
             ("PCB", (G["PCB_X"] - G["PCB_L"] / 2, -G["PCB_W"] / 2), (G["PCB_X"] + G["PCB_L"] / 2, G["PCB_W"] / 2),
-             Q("PCB_L"), Q("PCB_W"), (G["PCB_X"] - G["PCB_L"] / 2, G["PCB_W"] / 2),
-             {"x": f'{Q("PCB_X")} - {Q("PCB_L")} / 2', "y": f'{Q("PCB_W")} / 2'}),
+             Q("PCB_L"), Q("PCB_W"), (G["PCB_X"] + G["PCB_L"] / 2, G["PCB_W"] / 2),
+             {"x": f'{Q("PCB_X")} + {Q("PCB_L")} / 2', "y": f'{Q("PCB_W")} / 2'}),
             ("DRV", (G["DRV_X"] - G["DRV_S"] / 2, G["DRV_Y"] - G["DRV_S"] / 2),
              (G["DRV_X"] + G["DRV_S"] / 2, G["DRV_Y"] + G["DRV_S"] / 2),
              Q("DRV_S"), Q("DRV_S"), (G["DRV_X"] - G["DRV_S"] / 2, G["DRV_Y"] - G["DRV_S"] / 2),
@@ -387,7 +388,11 @@ def IF_SPECS():
         ("IF_Cliff_FR", (SKIN_OUT, SKIN_OUT_E), (-g["CLIFF_Y"], Q("CLIFF_Y")), (g["MIDX_Z"], Q("MIDX_Z")), F, L),
         ("IF_Cliff_RL", (-SKIN_OUT, SKIN_OUT_E), (g["CLIFF_Y"], Q("CLIFF_Y")), (g["MIDX_Z"], Q("MIDX_Z")), B, R),
         ("IF_Cliff_RR", (-SKIN_OUT, SKIN_OUT_E), (-g["CLIFF_Y"], Q("CLIFF_Y")), (g["MIDX_Z"], Q("MIDX_Z")), B, R),
-        ("IF_Bumper", (g["BODY_L"] / 2, f'{Q("BODY_L")} / 2'), (0, None), (g["BUMPER_Z0"], Q("BUMPER_Z0")), F, L),
+        ("IF_Bumper", (g["BODY_L"] / 2 + g["BUMPER_GAP"], f'{Q("BODY_L")} / 2 + {Q("BUMPER_GAP")}'), (0, None),
+         (g["BUMPER_Z0"], Q("BUMPER_Z0")), F, L),
+        # bumper-switch brackets clamp the front skin to the MidCross outer slot, like the cliff cradles
+        ("IF_BumperSwL", (SKIN_OUT, SKIN_OUT_E), (g["BSW_Y"], Q("BSW_Y")), (g["MIDX_Z"], Q("MIDX_Z")), F, L),
+        ("IF_BumperSwR", (SKIN_OUT, SKIN_OUT_E), (-g["BSW_Y"], Q("BSW_Y")), (g["MIDX_Z"], Q("MIDX_Z")), F, L),
         ("IF_ChargePads", (g["CONTACT_X"], Q("CONTACT_X")), (0, None), (g["CONTACT_Z"], Q("CONTACT_Z")), F, L),
         ("IF_SkinL", (0, None), (g["SKIN_Y"], Q("SKIN_Y")), (g["PAN_TOP"], Q("PAN_TOP")), F, L),
         ("IF_SkinR", (0, None), (-g["SKIN_Y"], Q("SKIN_Y")), (g["PAN_TOP"], Q("PAN_TOP")), B, R),

@@ -170,7 +170,7 @@ fig.savefig(os.path.join(OUT, "oak_occlusion.png"), dpi=100)
 plt.close(fig)
 lines.append(f"  layout hand estimate: 454 mm; as-built depth camera: "
              f"{min(floor_min['mono L (depth)'], floor_min['mono R (depth)']):.0f} mm "
-             f"(= {min(floor_min['mono L (depth)'], floor_min['mono R (depth)']) + lens[0] - G['BODY_L'] / 2 - G['BUMPER_T']:.0f} mm ahead of the bumper)")
+             f"(= {min(floor_min['mono L (depth)'], floor_min['mono R (depth)']) + lens[0] - G['BODY_L'] / 2 - G['BUMPER_GAP'] - G['BUMPER_T']:.0f} mm ahead of the bumper)")
 lines.append("")
 
 # ------------------------------------------------------------------ cliff sensors
@@ -199,7 +199,7 @@ for sx, sy, nm in ((1, 1, "FL"), (1, -1, "FR"), (-1, 1, "RL"), (-1, -1, "RR")):
     spot = o + d * t_floor[:, None]
     names = sorted({short(LABELS[k]) for k in own[blocked]})
     spot_x[nm] = spot[:, 0].mean() * sx
-    lead_caster = spot_x[nm] - (G["CASTER_X"] + 10 + G["CASTER_D"] / 2)
+    lead_caster = spot_x[nm] - (G["CASTER_X"] + G["CASTER_TRAIL"] + G["CASTER_D"] / 2)
     lead_wheel = spot_x[nm] - G["WHEEL_D"] / 2
     lines.append(f"Cliff {nm}: sensor at ({o0[0]:.0f}, {o0[1]:.0f}, {o0[2]:.1f}) mm, {G['CLIFF_ANG']:g} deg from vertical, "
                  f"18 deg cone: {blocked.mean() * 100:.0f} % of rays blocked" + (f" by {', '.join(names)}" if names else "")
@@ -211,14 +211,14 @@ for sy in (1, -1):
     ax.add_patch(plt.Rectangle((-G["WHEEL_D"] / 2, sy * G["TRACK"] / 2 - G["WHEEL_W"] / 2), G["WHEEL_D"], G["WHEEL_W"],
                                color="#222", alpha=0.6))
 for sx in (1, -1):
-    ax.add_patch(plt.Circle((sx * G["CASTER_X"], 0), 35, fill=False, ec="#888", ls="--"))
+    ax.add_patch(plt.Circle((sx * G["CASTER_X"], 0), G["CASTER_TRAIL"] + G["CASTER_D"] / 2, fill=False, ec="#888", ls="--"))
 ax.set_aspect("equal")
 ax.set_title("Cliff-sensor floor spots (green = clear) vs wheels and caster sweep (dashed)")
 ax.set_xlabel("x fwd (mm)")
 ax.set_ylabel("y left (mm)")
 fig.savefig(os.path.join(OUT, "cliff_spots.png"), dpi=110, bbox_inches="tight")
 plt.close(fig)
-tyre = G["CASTER_X"] - 10 + G["CASTER_D"] / 2            # leading tyre edge, caster trailing (straight driving)
+tyre = G["CASTER_X"] - G["CASTER_TRAIL"] + G["CASTER_D"] / 2            # leading tyre edge, caster trailing (straight driving)
 fwd, rev = min(spot_x["FL"], spot_x["FR"]) - tyre, min(spot_x["RL"], spot_x["RR"]) - tyre
 lines.append(f"  caster trailing (straight driving): floor spot is {fwd:.0f} mm ahead of the front caster tyre, "
              f"{rev:.0f} mm behind the rear caster tyre")

@@ -1,0 +1,76 @@
+"""Plain-language purpose of every BOM line: what the part does and why it was chosen.
+
+bom.py writes this into the "Purpose" column. Keep each entry to one or two short sentences that a project
+manager can follow. A part without an entry is flagged when bom.py runs.
+"""
+
+PURPOSE = {
+    # 3D printed
+    "RV-301": "Outer shell of the head that holds the touchscreen, the camera and the bezel. Printed because the shape would be costly to machine and is cheap to reprint after a change.",
+    "RV-302": "Front frame of the head that holds the depth camera and passes its cable through. A separate print, so the camera mount can change without reprinting the whole head.",
+    "RV-303": "Small angled block that tilts the depth camera 5° down so it sees the floor ahead. Changing the tilt only means reprinting this small part.",
+    "RV-304": "Raises the LiDAR to the right height so its scan clears the body and the tower. Printed so the height can be tuned cheaply.",
+    "RV-305": "Soft front bumper that absorbs light knocks and presses the two bump switches. TPU flexes instead of cracking, and it has windows for the front cliff sensors.",
+    "RV-306": "Holds the two charging contacts and the magnet the dock uses to detect the robot. Keeps the pads at the exact height and spacing of the dock contacts.",
+    "RV-307": "Holds a cliff sensor at 50° so it watches the floor just ahead of each corner. Without it the robot could not see a stair or ledge in time.",
+    "RV-308": "Housing for the sprung front caster, holding its guide pins and springs. The suspension keeps both drive wheels pressed on the floor over uneven ground.",
+    "RV-309": "Plate that carries the front caster and rides up and down on the springs. It lets the caster move 10 mm to follow bumps and door sills.",
+    "RV-310": "Spacer that sets the rear caster at the right height and holds its nut. A rigid rear caster with a sprung front one keeps the robot steady without rocking.",
+    "RV-311": "Holds the Raspberry Pi 5 and the ESP32 board on standoffs in one place. Keeps the main electronics organised and easy to reach for wiring.",
+    "RV-312": "Mounts the motor driver board on threaded inserts. Holds it firmly close to the motors so the high current wires stay short.",
+    "RV-313": "Side cover panels, one per side, with a cutout for the wheel. They protect the inside of the robot and give it a finished look.",
+    "RV-314": "Front cover panel with a slot for the status light. Closes the front of the body and lets people see what the robot is doing.",
+    "RV-315": "Rear cover panel with the opening for the battery drawer. Closes the back of the body while leaving the battery easy to reach.",
+    "RV-316": "Front of the battery drawer, with a pull handle. Lets anyone swap the battery in seconds without tools.",
+    "RV-317": "Holds a bump switch behind the bumper, with slotted holes. The slots let the team set exactly where the switch triggers during assembly.",
+    # sheet metal
+    "RV-430": "Aluminium top plate that closes the chassis and carries the tower, LiDAR and emergency stop. Its regular hole grid lets new modules bolt on without drilling.",
+    "RV-431": "Aluminium bottom plate that closes the chassis from below and carries the casters. Stiffens the frame and keeps floor dirt away from the electronics.",
+    "RV-432": "Metal tray that carries the battery and slides out of the back. Keeps the heaviest part low for stability and makes swapping it quick.",
+    "RV-433": "Rails the battery drawer slides on, one per side. They guide the drawer in straight so its power connector lines up every time.",
+    "RV-434": "Bracket that bolts each drive motor to the frame, tucked inside the wheel. Aluminium because it carries the robot's weight; checks show it is 3.4 times stronger than needed.",
+    "RV-435": "Brass plates that touch the dock contacts to charge the battery. Brass conducts well and resists corrosion.",
+    # frame
+    "RV-410": "Main frame of the robot, built from 20 mm aluminium T-slot extrusion. Strong and light, and parts can be bolted anywhere along the slots, so the design is easy to change.",
+    "RV-420": "Twin posts that lift the head, screen and depth camera above the body. Same extrusion as the chassis, so the head height is easy to adjust.",
+    # purchased
+    "RV-501": "Drive motor for each wheel, with a gearbox and an encoder that counts wheel turns. The encoder tells the robot how far it has moved, and the motor runs well within its torque limits.",
+    "RV-502": "Hub that connects each motor shaft to its wheel. An off-the-shelf goBILDA part that fits both the shaft and the wheel bolt pattern.",
+    "RV-503": "The two 144 mm drive wheels. Large treaded wheels roll over door sills and rough floors more easily, and the deep hub hides the motor mount.",
+    "RV-504": "Swivel casters at the front and back that keep the robot balanced on its two drive wheels. A stock goBILDA part that screws straight into the printed mounts.",
+    "RV-511": "Depth camera that lets the robot see obstacles, people and the docking marker. Wide angle with built-in AI processing, which takes work off the Raspberry Pi.",
+    "RV-512": "Spinning laser scanner that maps the room and tells the robot where it is. The main navigation sensor; low cost and well supported in ROS.",
+    "RV-513": "Small distance sensors, one per corner, that watch the floor. They detect stairs and drops so the robot stops before it falls.",
+    "RV-514": "Splits the camera cable into a data line and a separate power feed. The camera can draw more power than the Pi's USB port reliably gives.",
+    "RV-521": "Main computer that runs ROS 2, navigation and the camera software. The active cooler stops it slowing down under constant load.",
+    "RV-522": "Microcontroller that drives the motors and reads the encoders and safety sensors in real time. Keeps time-critical safety tasks off the main computer.",
+    "RV-531": "Motor driver that turns control signals into power for the two motors. Its 12 A rating leaves wide headroom over what the motors draw.",
+    "RV-551": "Red emergency stop button on the deck that cuts motor power when pressed. A required safety feature for a robot that moves around people.",
+    "RV-552": "7 inch touchscreen in the head for showing information and taking input from people. The official Pi display, so it works without extra drivers.",
+    "RV-553": "Small switches behind the bumper that tell the robot it has touched something. A last line of defence if the camera and LiDAR miss an obstacle.",
+    "RV-554": "Springs that push the front caster down onto the floor. They keep the drive wheels in contact over bumps and stay below their load limit at full travel.",
+    # reserved
+    "RV-532": "Space reserved for the power board that will protect and distribute battery power. The board is still being designed, so the model holds its size and an estimated mass.",
+    "RV-541": "Space reserved for the 4S battery pack that powers the robot. The pack is not chosen yet, so the model uses a placeholder size and a 900 g estimate.",
+    # hardware (not modelled)
+    "HW-01": "Threaded inserts melted into printed parts for the Pi and LiDAR screws. Screws can be removed and refitted many times without wearing out the plastic.",
+    "HW-02": "Threaded inserts for the camera wedge, motor driver and charge pads. Screws can be removed and refitted many times without wearing out the plastic.",
+    "HW-03": "Threaded inserts for the ESP32 board and the rear caster riser. Screws can be removed and refitted many times without wearing out the plastic.",
+    "HW-04": "Brackets that join the frame extrusions at the corners. Standard T-slot hardware, so the frame can be taken apart and changed.",
+    "HW-05": "The main screws and slot nuts that fix panels, plates and brackets to the frame. Using one common size keeps assembly simple and spares easy to stock.",
+    "HW-06": "Screws that hold the head on top of the tower posts.",
+    "HW-07": "Screws that hold each motor gearbox to its bracket.",
+    "HW-08": "Screws that fasten each wheel to its hub.",
+    "HW-09": "Screws that hold the caster plates to the frame.",
+    "HW-10": "Smooth bolts the front caster carriage slides on. They keep the caster straight while the springs compress.",
+    "HW-12": "Small screws that hold each cliff sensor board in its cradle.",
+    "HW-19": "Screws that fix each cliff sensor cradle through the cover panel to the frame.",
+    "HW-13": "Screws that hold each bump switch to its slotted bracket, so its position can be adjusted.",
+    "HW-20": "Screws that fix the bump switch brackets to the frame.",
+    "HW-21": "Bolts and light springs that let the bumper push back 4 mm when hit and return afterwards. That movement is what presses the bump switches.",
+    "HW-14": "Small magnet the dock senses when the robot is in place. Confirms the robot is docked before charging starts.",
+    "HW-15": "Panel connector that plugs the battery in automatically when the drawer is pushed home. No loose cable to connect by hand; its bracket is still to be designed.",
+    "HW-16": "Rubber grommets that line the cable holes in the deck. They protect the wires from the sharp metal edges.",
+    "HW-17": "Colour LED strip behind the front slot that shows the robot's status. Lets people see at a glance whether it is driving, charging or stopped.",
+    "HW-18": "Catch that holds the battery drawer closed. Recommended by the design checks, since nothing else stops the drawer sliding out.",
+}

@@ -200,7 +200,8 @@ def case_housing():
     m = mesh_step("RV-308_FrontCasterHousing", 1.5)
     F = max(0.15 * W, 15.0) * BUMP
     up = facets_where(m, lambda X, Y, Z: (np.abs(Y - 14.0) < 0.05) & (np.abs(X) < 22) & (np.abs(Z) < 22))
-    wall = facets_where(m, lambda X, Y, Z: np.abs(Z - 38.0) < 0.05)
+    zw = G["RAIL_X"] - G["PROFILE"] / 2 - G["CASTER_X"]                 # back wall face = MidCross inner face
+    wall = facets_where(m, lambda X, Y, Z: np.abs(Z - zw) < 0.05)
     vm, um, disp, tot = solve(m, 2100.0, 0.38, [(wall, None)], [(up, (0.0, F, 0.0))])
     report("caster_housing", m, vm, um, disp, tot, 30.0, 2.0,
            [f"  RV-308 PETG (E 2.1 GPa, yield 30 MPa across layers); carriage bottomed, {F:.1f} N up (2 g)",

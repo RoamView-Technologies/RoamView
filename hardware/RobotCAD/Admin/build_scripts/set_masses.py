@@ -33,13 +33,18 @@ def prop(doc, name):
 
 def main():
     sw = app()
+    sw.CloseAllDocuments(True)
     rows = []
     pats = ["3DPrinted/RV-*.SLDPRT", "SheetMetal_Weldments/*/RV-*.SLDPRT", "COTS/*/RV-*.SLDPRT"]
     for pat in pats:
         for path in sorted(glob.glob(os.path.join(ROOT, pat))):
             pn, name = os.path.basename(path)[:-7].split("_", 1)        # "RV-434_MotorBracket.SLDPRT"
-            sw.OpenDoc6(path, K.swDocPART, K.swOpenDocOptions_Silent, "", 0, 0)
-            doc = cast(sw.ActiveDoc, "IModelDoc2")
+            r = sw.OpenDoc6(path, K.swDocPART, K.swOpenDocOptions_Silent, "", 0, 0)
+            # use the document OpenDoc6 returns, never ActiveDoc: if an assembly that uses this part is still open,
+            # ActiveDoc is that assembly and the override would land on it
+            doc = cast(r[0] if isinstance(r, tuple) else r, "IModelDoc2")
+            if doc is None or os.path.normcase(doc.GetPathName()) != os.path.normcase(path):
+                raise RuntimeError(f"opened the wrong document for {path}")
             doc.ForceRebuild3(False)                    # a freshly built part can report a stale volume until rebuilt
             m = cast(doc.Extension.CreateMassProperty(), "IMassProperty")
             m.OverrideMass = False

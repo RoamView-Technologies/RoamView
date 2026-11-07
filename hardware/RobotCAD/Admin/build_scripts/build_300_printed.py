@@ -38,7 +38,6 @@ def p301_head(sw):
               + [("circle", (-25, 0), 20.0)], 3, +1, cut=True)
     c.frame("IF_Mount")
     c.frame("IF_Bezel", (x1, 0, 0))
-    c.frame("IF_YAdapter", (-40, 0, 3))
     c.frame_line("IF_Display", "y", 0, (x0, zr), (xt, zt))           # x up the slope, z out of the screen
     return c.finish()
 
@@ -103,18 +102,42 @@ def cliff_windows(z_ref):
     return win, zm
 
 
+# Bumper switch (Omron D2F-01L-D on RV-317). Bracket frame = IF_BumperSw: skin outer face, MidCross slot height.
+# Lever heights above the switch hole line, from the datasheet: free 10 max, operate 6.8 +- 1.5, bottom ~5.3.
+BSW_XH, BSW_Z = 5.5, -7.4          # switch hole line out from the skin (solder lugs clear the base); below the bolt
+BSW_TAB, BSW_W = 4.0, 18.0          # tab thickness, bracket width
+BSW_Z0, BSW_Z1 = BSW_Z - 2.9 - BSW_TAB, 5.5     # bracket bottom / top (local z)
+
+
+def bumper_switch_pockets():
+    """Back-face pockets that take the brackets and switches, as (y, z) rects in bumper-local coordinates, plus the
+    depth that puts the pocket floor on the lever's free position (10 above the hole line) with the bumper at rest.
+    Pushed fully home (BUMPER_GAP), the floor brings the lever to 6 above the hole line: past the worst-case
+    operating point once the slotted switch is set, and clear of bottoming."""
+    zm = G["MIDX_Z"] - G["BUMPER_Z0"]
+    floor = BSW_XH + 10.0                                               # skin to pocket floor at rest
+    depth = floor - G["BUMPER_GAP"]
+    assert G["BUMPER_T"] - depth >= 3.5, "bumper front wall over the switch is too thin"
+    assert floor - G["BUMPER_GAP"] >= 10.0 + 1.0, "the pocket floor reaches the bracket tab at full travel"
+    rects = [("rect", (sy * G["BSW_Y"] - (BSW_W / 2 + 1.5) - (3.5 if sy > 0 else 0), zm + BSW_Z0 - 1.5),
+              (sy * G["BSW_Y"] + (BSW_W / 2 + 1.5) + (3.5 if sy < 0 else 0), zm + BSW_Z1 + 1.5)) for sy in (1, -1)]
+    return rects, depth
+
+
 def p305_bumper(sw):
-    """Local origin = IF_Bumper (front of body, BUMPER_Z0). TPU; two microswitches in back pockets, two windows
-    for the front cliff-sensor cradles (RV-307), which are fixed to the frame and sit 2 mm behind the face."""
-    c = Cots(sw, "RV-305", "Bumper", PR, "Front soft bumper (TPU): 2 microswitch pockets, 2 cliff-sensor windows",
+    """Local origin = IF_Bumper (back face, BUMPER_Z0); the bumper rides BUMPER_GAP proud of the front skin on two
+    guide pins. TPU; two pockets over the bumper-switch brackets (RV-317 + Omron D2F), two windows for the front
+    cliff-sensor cradles (RV-307), which are fixed to the frame."""
+    c = Cots(sw, "RV-305", "Bumper", PR, "Front soft bumper (TPU): 2 bumper-switch pockets, 2 cliff-sensor windows",
              source="PRINT", color=TPU, Material="TPU 95A", link_globals=True,
-             DimSource="globals BODY_W, BUMPER_T, BUMPER_Z0/Z1, CLIFF_*")
+             DimSource="globals BODY_W, BUMPER_T/GAP, BUMPER_Z0/Z1, BSW_Y, CLIFF_*")
     hw = G["BODY_W"] / 2 - 8
     c.feature("Body", "x", 0, [("rect", (-hw, 0), (hw, G["BUMPER_Z1"] - G["BUMPER_Z0"]),
                                 {"w": f'{Q("BODY_W")} - 16', "h": f'{Q("BUMPER_Z1")} - {Q("BUMPER_Z0")}',
                                  "pu": f'{Q("BODY_W")} / 2 - 8'})],
               G["BUMPER_T"], +1, depth_expr=Q("BUMPER_T"))
-    c.feature("SwitchPockets", "x", 0, [("rectc", (sy * 55, 45), 20, 12) for sy in (1, -1)], 8, +1, cut=True)
+    pockets, depth = bumper_switch_pockets()
+    c.feature("SwitchPockets", "x", 0, pockets, depth, +1, cut=True)
     c.feature("GuidePins", "x", 0, [("circle", (sy * 150, 20), 5.0) for sy in (1, -1)], 10, +1, cut=True)
     win, _ = cliff_windows(G["BUMPER_Z0"])
     c.feature("CliffWindows", "x", 0, win, G["BUMPER_T"], +1, cut=True)
@@ -164,7 +187,7 @@ def cliff_geom():
     assert hi[0] <= xf, f"board stands proud of the cradle front ({hi[0]:.2f} > {xf})"
     assert z_at(CRADLE_SEAT) <= -4.5, "M4 counterbore seat breaks into the sensor face"
     # lowest point where the 18 deg cone leaves the bumper's front plane
-    exit_z = die[1] - (G["BUMPER_T"] - die[0]) / math.tan(a - math.radians(9))
+    exit_z = die[1] - (G["BUMPER_GAP"] + G["BUMPER_T"] - die[0]) / math.tan(a - math.radians(9))
     return dict(pt=pt, xf=xf, zt=zt, z0=z_at(0), zf=z_at(xf), exit_z=exit_z)
 
 
@@ -191,62 +214,98 @@ def p307_cliffmount(sw):
     return c.finish()
 
 
+def p317_switchbracket(sw):
+    """Local origin = IF_BumperSwL/R on the front skin's outer face at MidCross height, x outward. One M4 through
+    the skin into the MidCross T-slot; the D2F sits on the tab below the bolt with its lever toward the bumper.
+    The M2 holes are slots along x (+-1.5) so the switch can be set to operate at about 2 mm of bumper travel."""
+    c = Cots(sw, "RV-317", "BumperSwitchBracket", PR, "Bumper switch bracket (Omron D2F, slotted M2), M4 to MidCross",
+             source="PRINT", color=PETG, Material="PETG", Print="flat on the base plate",
+             DimSource="D2F holes 6.5 apart, M2 x 10 + washer + nut; datasheet lever travel")
+    w2, tt = BSW_W / 2, BSW_Z - 2.9
+    c.feature("Base", "y", -w2, [("rect", (0, BSW_Z0), (3, BSW_Z1))], BSW_W, +1)
+    c.feature("Tab", "y", -w2, [("rect", (3, BSW_Z0), (10, tt))], BSW_W, +1)
+    c.feature("SkinBolt", "x", 0, [("circle", (0, 0), 4.5)], 3, +1, cut=True)
+    c.feature("SwitchSlots", "z", tt, [("rectc", (BSW_XH, sy * 3.25), 5.2, 2.2) for sy in (1, -1)], BSW_TAB, -1,
+              cut=True)
+    c.frame("IF_Mount")
+    c.frame("IF_Switch", (BSW_XH, 0, tt))
+    return c.finish()
+
+
+PI_Y, ESP_Y = 47.5, -44.5          # board centres on the compute tray (85 and 77 long, along y)
+M8_NUT_HEX = [(7.74 * math.cos(math.radians(a)), 7.74 * math.sin(math.radians(a))) for a in range(0, 360, 60)]
+
+
 def caster_block(c, rigid):
-    """Shared body: top plate under the mid cross member + back wall bolted to it (toward local +x)."""
-    c.feature("Top", "z", 14 if not rigid else 0, [("rect", (-25, -30), (38, 30))], 9.5 if not rigid else 23.5, +1)
+    """Shared body: top plate under the mid cross member + back wall bolted to its inner face (toward local +x).
+    The wall sits wherever the MidCross is, so the block follows CASTER_X; the bolts follow MIDX_Z - CASTER_H."""
+    W = G["RAIL_X"] - G["PROFILE"] / 2 - G["CASTER_X"]                 # MidCross inner face, local x
+    zb = G["MIDX_Z"] - G["CASTER_H"]                                    # MidCross slot height, local z
+    c.feature("Top", "z", 14 if not rigid else 0, [("rect", (-25, -30), (W, 30))], 9.5 if not rigid else 23.5, +1)
     if not rigid:
-        c.feature("BackWall", "z", 3.5, [("rect", (32, -30), (38, 30))], 10.5, +1)
-    c.feature("RailBolts", "x", 38, [("circle", (sy * 15, 13.5), 4.3) for sy in (1, -1)], 8, -1, cut=True)
+        c.feature("BackWall", "z", 3.5, [("rect", (W - 6, -30), (W, 30))], 10.5, +1)
+    c.feature("RailBolts", "x", W, [("circle", (sy * 15, zb), 4.3) for sy in (1, -1)], 8, -1, cut=True)
 
 
 def p308_housing(sw):
     c = Cots(sw, "RV-308", "FrontCasterHousing", PR, "Front sprung caster housing (2 guide pins + 2 springs)",
              source="PRINT", color=PETG, Material="PETG",
-             DimSource="10mm travel (carriage top 4 -> 14); bolts to front MidCross member")
+             DimSource="10mm travel (carriage top 4 -> 14); bolts to front MidCross member; centre hole clears the "
+                       "caster's M8 stud and nut at full travel")
     caster_block(c, rigid=False)
     c.feature("GuidePins", "z", 14, [("circle", (sx * 18, 0), 4.2) for sx in (1, -1)], 9.5, +1, cut=True)
-    c.feature("SpringSeats", "z", 14, [("circle", (0, sy * 18), 10.0) for sy in (1, -1)], 5, +1, cut=True)
+    c.feature("SpringSeats", "z", 14, [("circle", (0, sy * 18), 10.0) for sy in (1, -1)], G["SPRING_SEAT"], +1,
+              cut=True)
+    c.feature("StudClearance", "z", 14, [("circle", (0, 0), 17.0)], 9.5, +1, cut=True)
     c.frame("IF_Mount")
+    for nm, sy in (("IF_SpringL", 1), ("IF_SpringR", -1)):          # seat bottom: top end of each spring
+        c.frame(nm, (0, sy * 18, 14 + G["SPRING_SEAT"]))
     return c.finish()
 
 
 def p309_carriage(sw):
     c = Cots(sw, "RV-309", "FrontCasterCarriage", PR, "Front caster sprung carriage plate", source="PRINT",
-             color=PETG, Material="PETG", DimSource="caster 30x30 bolt pattern, guide pins at +-18")
-    c.feature("Plate", "z", 0, [("rectc", (0, 0), 44, 44)], 4, +1)
-    c.feature("Holes", "z", 0, [("circle", (sx * 15, sy * 15), 4.5) for sx in (1, -1) for sy in (1, -1)]
-              + [("circle", (sx * 18, 0), 4.4) for sx in (1, -1)], 4, +1, cut=True)
+             color=PETG, Material="PETG",
+             DimSource="goBILDA 3621-0001-0001 M8 stud through the centre, M8 nyloc nut on top; guide pins at +-18 "
+                       "(x); Lee Spring LC 032E 05 S springs at +-18 (y) on 7.0 pilots (spring ID 7.52)")
+    c.feature("Plate", "z", 0, [("rectc", (0, 0), 44, 48)], 4, +1)
+    c.feature("SpringPilots", "z", 4, [("circle", (0, sy * 18), 7.0) for sy in (1, -1)], 1.5, +1)
+    c.feature("Holes", "z", 0, [("circle", (0, 0), 9.0)] + [("circle", (sx * 18, 0), 4.4) for sx in (1, -1)],
+              4, +1, cut=True)
     c.frame("IF_Mount")
     return c.finish()
 
 
 def p310_riser(sw):
-    c = Cots(sw, "RV-310", "RearCasterRiser", PR, "Rear rigid caster riser (M4 inserts for caster plate)",
-             source="PRINT", color=PETG, Material="PETG", DimSource="caster 30x30 pattern; bolts to rear MidCross")
+    c = Cots(sw, "RV-310", "RearCasterRiser", PR, "Rear rigid caster riser (captive M8 nut for the caster stud)",
+             source="PRINT", color=PETG, Material="PETG",
+             DimSource="goBILDA 3621-0001-0001 M8 x 15 stud; M8 nut dropped into the hex pocket from above; "
+                       "bolts to rear MidCross")
     caster_block(c, rigid=True)
-    c.feature("Inserts_M4", "z", 0, [("circle", (sx * 15, sy * 15), M4[0]) for sx in (1, -1) for sy in (1, -1)],
-              M4[1], +1, cut=True)
+    c.feature("StudHole_M8", "z", 0, [("circle", (0, 0), 9.0)], 8.5, +1, cut=True)
+    c.feature("NutPocket_M8", "z", 23.5, [("poly", M8_NUT_HEX)], 15, -1, cut=True)
     c.frame("IF_Mount")
     return c.finish()
 
 
 def p311_computetray(sw):
-    """Local origin = IF_Compute (pan top). Pi 5 at +y, ESP32 expansion board at -y."""
+    """Local origin = IF_Compute (pan top). Boards turned 90 deg so the tray is short along x and fits between the
+    caster sweeps: Pi 5 at +y with its ports toward +y, ESP32 expansion board at -y with its USB-C toward -y."""
     c = Cots(sw, "RV-311", "ComputeTray", PR, "Compute tray: Pi 5 + ESP32 expansion board standoffs",
              source="PRINT", color=PETG, Material="PETG", link_globals=True,
              DimSource="COMPUTE_L x COMPUTE_W; Pi 58x49 holes; ESP32 board 4x M4 APPROX")
     c.feature("Plate", "z", 0, [("rectc", (0, 0), G["COMPUTE_L"], G["COMPUTE_W"],
                                  {"w": Q("COMPUTE_L"), "h": Q("COMPUTE_W")})], 3, +1)
-    pi = [(-39, 38 + sy * 24.5) for sy in (1, -1)] + [(19, 38 + sy * 24.5) for sy in (1, -1)]
-    esp = [(sx * 34.5, -45 + sy * 23.5) for sx in (1, -1) for sy in (1, -1)]
+    pi = [(-py, PI_Y + px) for px in (-39, 19) for py in (24.5, -24.5)]       # Pi x along tray +y
+    esp = [(py, ESP_Y - px) for px in (34.5, -34.5) for py in (23.5, -23.5)]  # ESP x along tray -y
     c.feature("Standoffs", "z", 3, [("circle", p, 6.0) for p in pi] + [("circle", p, 10.0) for p in esp], 6, +1)
     c.feature("Inserts", "z", 9, [("circle", p, M25[0]) for p in pi] + [("circle", p, M4[0]) for p in esp], 6, -1,
               cut=True)
-    c.feature("PanHoles", "z", 0, [("circle", (sx * 38, sy * 72), 4.3) for sx in (1, -1) for sy in (1, -1)], 3, +1,
+    c.feature("PanHoles", "z", 0, [("circle", (sx * 28, sy * 86), 4.3) for sx in (1, -1) for sy in (1, -1)], 3, +1,
               cut=True)
     c.frame("IF_Mount")
-    c.frame("IF_Pi", (0, 38, 9))
-    c.frame("IF_ESP32", (0, -45, 9))
+    c.frame("IF_Pi", (0, PI_Y, 9), x="y", y="x", flip_y=True)
+    c.frame("IF_ESP32", (0, ESP_Y, 9), x="y", y="x", flip_x=True)
     return c.finish()
 
 
@@ -301,6 +360,13 @@ def skin_end(sw, pn, name, desc, opening):
         c.feature("DrawerOpening", "x", 0, [("rect", (-66, z0), (66, z1))], G["SKIN_T"], +1, cut=True)
     else:
         c.feature("LightSlot", "x", 0, [("rect", (-130, h - 16), (130, h - 10))], G["SKIN_T"], +1, cut=True)
+        # bumper-switch brackets (RV-317): M4 into the MidCross slot; lead hole inboard, below the MidCross
+        zm = G["MIDX_Z"] - G["PAN_TOP"]
+        c.feature("SwitchBolts", "x", 0, [("circle", (sy * G["BSW_Y"], zm), 4.5) for sy in (1, -1)],
+                  G["SKIN_T"], +1, cut=True)
+        yl = G["BSW_Y"] - BSW_W / 2 - 2.5
+        c.feature("SwitchLeads", "x", 0, [("rectc", (sy * yl, zm - 12.5), 4, 5) for sy in (1, -1)],
+                  G["SKIN_T"], +1, cut=True)
     # cliff cradles (RV-307): 2x M4 through the skin into the MidCross slot; cable hole inboard, between the
     # bottom ring and the MidCross
     zm = G["MIDX_Z"] - G["PAN_TOP"]
@@ -337,7 +403,7 @@ def p316_drawerface(sw):
 PARTS = {"301": p301_head, "302": p302_bezel, "303": p303_wedge, "304": p304_pedestal, "305": p305_bumper,
          "306": p306_padholder, "307": p307_cliffmount, "308": p308_housing, "309": p309_carriage,
          "310": p310_riser, "311": p311_computetray, "312": p312_drivermount, "313": p313_skinside,
-         "314": p314_skinfront, "315": p315_skinrear, "316": p316_drawerface}
+         "314": p314_skinfront, "315": p315_skinrear, "316": p316_drawerface, "317": p317_switchbracket}
 
 if __name__ == "__main__":
     sw = app()

@@ -33,12 +33,33 @@ def to3(axis, at, uv):
     return (p["x"], p["y"], p["z"])
 
 
+def open_step(sw, step):
+    """Import a vendor STEP as one multibody part (a STEP assembly is flattened on import, no diagnostics prompt).
+    STEP axes land on SolidWorks axes unchanged, so STEP (X, Y, Z) = ROS local (y, z, x)."""
+    sw.SetUserPreferenceIntegerValue(K.swImportNeutralAssemblyStructureMapping,
+                                     K.swImportNeutralAssemblyStructureMapping_MultibodyPart)
+    for t in (K.swImportAutoRunImportDiagnostics, K.swImportNeutralRunDiagnostics):
+        sw.SetUserPreferenceToggle(t, False)
+    res = sw.LoadFile4(step, "r", None, 0)
+    doc = cast(res[0] if isinstance(res, tuple) else res, "IModelDoc2")
+    if doc is None or doc.GetType() != K.swDocPART:
+        raise RuntimeError(f"STEP did not import as a part: {step} {res}")
+    return doc
+
+
 class Cots:
     def __init__(self, sw, part_no, name, folder, desc, source="COTS", color=(0.3, 0.3, 0.32),
-                 link_globals=False, transparency=0.0, **props):
+                 link_globals=False, transparency=0.0, step=None, **props):
+        """step: vendor STEP file to use as the body (see open_step); frames and keep-outs are added on top."""
         self.sw, self.part_no, self.name = sw, part_no, name
         self.path = os.path.join(ROOT, folder, f"{part_no}_{name}.SLDPRT")
-        self.p = Part.new(sw)
+        if step:
+            self.p = Part(sw, open_step(sw, step))
+            self.p.ext.SetUserPreferenceInteger(K.swUnitSystem, 0, K.swUnitSystem_MMGS)
+            self.p.sm.AddToDB = True
+            self.p.sm.DisplayWhenAdded = False
+        else:
+            self.p = Part.new(sw)
         if link_globals:
             self.p.link_globals()
         self.planes = {}
@@ -152,6 +173,63 @@ class Cots:
         s = self.sketch(name, axis, at, shapes, plane_expr)
         return self.p.extrude(s.feat, f"{'CUT' if cut else 'EX'}_{name}", depth, depth_expr or str(depth), axis, sign,
                               at, cut=cut, merge=merge)
+
+    def move_bodies(self, rot=(), trans=(0.0, 0.0, 0.0)):
+        """Place vendor STEP bodies on the part's interface origin with Move/Copy Body features.
+        rot: sequence of (ROS axis, degrees) rotations about the origin, applied in order; trans: ROS mm, applied last."""
+        def select_all():
+            self.p.clear()
+            for b in cast(self.p.doc, "IPartDoc").GetBodies2(K.swSolidBody, True) or []:
+                data = cast(self.p.selmgr.CreateSelectData(), "ISelectData")
+                data.Mark = 1
+                cast(b, "IBody2").Select2(True, data)
+        sw_idx = dict(x=2, y=0, z=1)                               # ROS axis -> SolidWorks model axis
+        # InsertMoveCopyBody2's three angle arguments turn about model Z, Y, X in that order (found by reading the
+        # bodies back after test moves), so ROS x (model Z) uses slot 0, ROS z (model Y) slot 1, ROS y (model X) slot 2.
+        rot_slot = dict(x=0, y=2, z=1)
+        for axis, deg in rot:
+            ang = [0.0, 0.0, 0.0]
+            ang[rot_slot[axis]] = math.radians(deg)
+            select_all()
+            if self.p.fm.InsertMoveCopyBody2(0, 0, 0, 0, 0, 0, 0, ang[0], ang[1], ang[2], False, 1) is None:
+                raise RuntimeError(f"rotate bodies about {axis} failed")
+        t = [0.0, 0.0, 0.0]
+        for i, axis in enumerate("xyz"):
+            t[sw_idx[axis]] = trans[i] * MM
+        select_all()
+        if self.p.fm.InsertMoveCopyBody2(t[0], t[1], t[2], 0, 0, 0, 0, 0, 0, 0, False, 1) is None:
+            raise RuntimeError("translate bodies failed")
+        self.p.clear()
+
+    def coil(self, name, d_mean, wire, length, turns):
+        """Helical compression spring along local +z from z = 0 to `length` (wire envelope): a helix on a
+        circle of `d_mean` swept with a circular profile of `wire` diameter. Ends are left open (not ground)."""
+        s = self.sketch(f"{name}_Base", "z", wire / 2, [("circle", (0, 0), d_mean)])
+        h = length - wire
+        for rev in (False, True):
+            self.p.clear()
+            s.feat.Select2(False, 0)
+            self.p.doc.InsertHelix(rev, False, False, False, K.swHelixDefinedByHeightAndRevolution, h * MM,
+                                   h / turns * MM, turns, 0, 0)
+            helix = self.p.last_feature()
+            if helix is None or helix.GetTypeName2() != "Helix":
+                raise RuntimeError(f"{name}: helix failed")
+            self.p.clear()
+            helix.Select2(False, 4)                                 # mark 4 = sweep path
+            f = cast(self.p.fm.InsertProtrusionSwept4(False, False, 0, False, False, 0, 0, False, 0, 0, 0, 0, True,
+                                                      True, True, 0, True, True, wire * MM, 0), "IFeature")
+            if f is None:
+                raise RuntimeError(f"{name}: sweep failed")
+            lo, hi = self.p.feature_box(f)
+            if abs(lo[2]) < 0.05 and abs(hi[2] - length) < 0.05:     # grew up along local +z
+                helix.Name, f.Name = f"HX_{name}", f"SW_{name}"
+                self.p.clear()
+                return f
+            for feat in (f, helix):
+                self.p.clear()
+                feat.Select2(False, 0)
+                self.p.ext.DeleteSelection2(0)
+        raise RuntimeError(f"{name}: coil did not land on z 0..{length}")
 
     def sketch(self, name, axis, at, shapes, plane_expr=None):
         with Sketch(self.p, self.plane(axis, at, plane_expr), f"SK_{name}", anchor=to3(axis, at, (0, 0))) as s:
