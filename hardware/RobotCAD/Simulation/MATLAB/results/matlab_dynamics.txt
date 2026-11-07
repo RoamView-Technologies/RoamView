@@ -1,0 +1,80 @@
+RoamView dynamics in Simscape Multibody (rv_dynamics.slx), MATLAB 2024a
+Robot 8.67 kg, COM x -2.0 z 145.9 mm; motor Pololu 37D 70:1; PWM cap 71 % at 16.8 V; mu 0.70, Crr 0.02
+Torque is the load torque at each gearbox output; current includes the 0.2 A no-load current.
+
+0. Standing still (flat)
+   drive wheels 29.0 / 29.0 N, front caster 14.9 N, rear caster 12.1 N (sum 85.1 N, weight 85.1 N)
+   front carriage compression 0.62 mm (preload 12 N, 3.0 N/mm)
+   hand calc ignored the front preload (42.0 N per wheel, rear 1.2 N); the spring moves ~13 N onto each caster.
+
+1. Flat floor: 0.5 m/s^2 to 0.5 m/s, cruise, brake at 1 m/s^2
+   cruise 0.5 m/s          0.06 N.m/motor (  6 % of continuous), 0.32 A   | hand calc 0.07 N.m, 0.34 A
+   accelerate 0.5 m/s^2    0.27 N.m/motor ( 27 % of continuous), 0.73 A   | hand calc 0.24 N.m, 0.68 A
+   braking: stop in 155 mm after the command (hand calc 125 mm), 0.80 s; regen torque 0.34 N.m/motor
+   braking pitch 0.05 deg nose down, front carriage compression max 0.7 mm (hand calc ~3 mm), front caster 15.1 N max
+   rear caster load min 3.1 N while braking (static 12.1 N): stays on the floor
+   braking load transfer comes off the rigid rear caster first; the front spring barely moves while the rear stays loaded.
+
+2. 5 deg ramp, uphill: 0.5 m/s^2 to 0.3 m/s, cruise
+   cruise 0.3 m/s          0.33 N.m/motor ( 33 % of continuous), 0.86 A   | hand calc 0.36 N.m, 0.93 A
+   accelerate 0.5 m/s^2    0.54 N.m/motor ( 55 % of continuous), 1.28 A   | hand calc 0.54 N.m, 1.28 A
+   rolled back 5.1 mm while holding still before the start
+
+3. 15 mm square-edged threshold (40 mm long) at 0.3 m/s
+   design spring = 2 x 1.5 N/mm, 6 N preload each; soft spring = 2 x 0.4 N/mm, 3 N preload each
+   forward, as designed (front sprung caster leads): STUCK (travelled 224 mm of 608 needed)
+      min speed -0.20 m/s, peak torque 2.40 N.m (98 % of instantaneous 2.45), peak current 5.0 A
+      peak caster contact force front 97 N / rear 62 N, carriage compression max 10.1 mm (stop at 10 mm), pitch max 1.3 deg
+      carriage range used -0.0 to 10.1 mm (droop limit -0 mm)
+   reverse, as designed (rear rigid caster leads): STUCK (travelled 224 mm of 648 needed)
+      min speed -0.17 m/s, peak torque 2.41 N.m (98 % of instantaneous 2.45), peak current 5.0 A
+      peak caster contact force front 35 N / rear 195 N, carriage compression max 7.1 mm (stop at 10 mm), pitch max 3.8 deg
+      carriage range used -0.1 to 7.1 mm (droop limit -0 mm)
+   forward, 3-inch casters (CASTER_D 75 option): STUCK (travelled 220 mm of 608 needed)
+      min speed -0.21 m/s, peak torque 1.93 N.m (79 % of instantaneous 2.45), peak current 4.1 A
+      peak caster contact force front 97 N / rear 61 N, carriage compression max 10.1 mm (stop at 10 mm), pitch max 1.4 deg
+      carriage range used 0.5 to 10.1 mm (droop limit -0 mm)
+   forward, design spring, carriage 18 mm travel + 12 mm droop: STUCK (travelled 224 mm of 608 needed)
+      min speed -0.18 m/s, peak torque 2.40 N.m (98 % of instantaneous 2.45), peak current 5.0 A
+      peak caster contact force front 81 N / rear 63 N, carriage compression max 12.1 mm (stop at 18 mm), pitch max 1.3 deg
+      carriage range used -0.1 to 12.1 mm (droop limit -12 mm)
+   forward, soft spring: CROSSES (travelled 668 mm of 608 needed)
+      min speed -0.21 m/s, peak torque 2.07 N.m (84 % of instantaneous 2.45), peak current 4.3 A
+      peak caster contact force front 117 N / rear 67 N, carriage compression max 10.2 mm (stop at 10 mm), pitch max 5.3 deg
+      carriage range used -0.0 to 10.2 mm (droop limit -0 mm)
+   reverse, soft spring: CROSSES (travelled 678 mm of 648 needed)
+      min speed -0.09 m/s, peak torque 1.80 N.m (73 % of instantaneous 2.45), peak current 3.8 A
+      peak caster contact force front 87 N / rear 201 N, carriage compression max 10.1 mm (stop at 10 mm), pitch max 6.2 deg
+      carriage range used -0.0 to 10.1 mm (droop limit -0 mm)
+   hand calc: front sprung caster MARGINAL (31.5 N push vs 59 N traction), rear caster PASS, drive wheel 1.84 N.m
+   Why the hand calc is optimistic: it gives each drive wheel 42 N. With the preloaded spring the casters carry
+   about 27 N between them, so each drive wheel has 29 N and the traction is about 41 N, not 59 N. At a square
+   edge the leading caster needs a push of its vertical load x tan(65 deg), about 2.1 x 16 N, and that load grows
+   as the carriage compresses, so the drive wheels slip at the edge. More carriage travel alone does not help;
+   a softer, lighter spring does, because it leaves more weight on the drive wheels and less on the caster.
+   The 3-inch caster lowers the edge angle (tan 53 deg) but with the design spring it still stalls.
+
+4. Hard stops and launches, caster trails turned inward (smallest support polygon)
+   emergency stop from 0.5 m/s, drawer closed: peak decel/accel 5.9 m/s^2, pitch max 4.5 deg
+      minimum contact loads L 0.0  R 0.0  front 0.0  rear 0.0 N
+      time unloaded (< 0.5 N): L 24  R 25  front 16  rear 319 ms
+   emergency stop from 0.5 m/s reversing, drawer out 250 mm: peak decel/accel 1.7 m/s^2, pitch max 0.2 deg
+      minimum contact loads L 0.1  R 0.0  front 12.9  rear 41.5 N
+      time unloaded (< 0.5 N): L 8  R 9  front 0  rear 0 ms
+   full-power launch forward, drawer out 250 mm: peak decel/accel 1.7 m/s^2, pitch max 0.2 deg
+      minimum contact loads L 0.0  R 0.0  front 4.8  rear 44.7 N
+      time unloaded (< 0.5 N): L 19  R 20  front 0  rear 0 ms
+   hand calc: forward tip needs 7.6 m/s^2 (0.77 g). A full-reverse stop reaches about the traction limit: the
+   rigid rear caster lifts first, the nose settles onto the front carriage stop, and the robot rocks back.
+   With the drawer out, a full-power launch (or a hard stop in reverse) unloads the drive wheels: the motor
+   reaction pitches the robot back onto the rear caster, which caps the acceleration. Nothing tips over.
+
+5. Turning at 0.5 m/s, yaw rate command ramped 0 to 3 rad/s (left turn)
+   peak lateral acceleration 1.50 m/s^2 at yaw rate 2.99 rad/s; inner (left) wheel load min 21.5 N, outer max 33.3 N
+   roll max 0.01 deg; static lateral tip needs about 12.3 m/s^2 -> no wheel lift
+   outer wheel duty peaks at 0.68 (cap 0.71): above ~3.4 rad/s the outer motor runs out of speed
+
+6. Spin in place at 3 rad/s, then reverse to -3 rad/s in 0.15 s
+   peak radial load 32.3 N, peak lateral (axial) load 0.7 N per wheel
+   worst bending at the gearbox bushing 0.49 N.m (wheel L, t = 2.52 s): radial 32.3 N x 15 mm + lateral 0.5 N x 72 mm
+   compare: straight 2 g bump on the shaft gives 0.87 N.m; the lateral tyre force is what loads the gearbox in a spin

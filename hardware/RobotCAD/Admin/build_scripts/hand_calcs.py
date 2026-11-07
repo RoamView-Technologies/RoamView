@@ -25,7 +25,7 @@ SY_SHAFT = 350.0         # Pololu steel output shaft, conservative
 FS_ALU, FS_PRINT = 3.0, 2.0
 
 # ---- static loads ----
-xr = G["CASTER_X"] - 10                     # rear caster contact (trail inward)
+xr = G["CASTER_X"] - G["CASTER_TRAIL"]       # rear caster contact (trail inward)
 rear = max(0.0, -CX) / xr * W               # rigid rear caster
 wheel = (W - rear) / 2                      # each drive wheel (front caster preload ignored -> conservative)
 BUMP = 2.0                                  # 2 g vertical bump factor
@@ -89,7 +89,23 @@ line(S, f"   F = {Fc:.1f} N, arm {arm_c:.0f} mm, 60 x 9.5 section -> sigma = {si
         f" (Z-direction strength)  {'PASS' if SY_PETG_Z / sig_c >= FS_PRINT else 'FAIL'}")
 Fr = rear * BUMP
 line(S, f"   rear riser RV-310 is a solid 23.5 mm block in compression: {Fr:.0f} N over 60 x 63 mm -> "
-        f"{Fr / (60 * 63):.2f} MPa  PASS\n")
+        f"{Fr / (60 * 63):.2f} MPa  PASS")
+
+# 4b. front caster springs (2 x Lee Spring LC 032E 05 S, RV-554)
+k_s, FL, Ls, Lsol = G["SPRING_K"], G["SPRING_FL"], G["SPRING_L"], G["SPRING_SOLID"]
+TRAVEL, F_MAX = 10.0, 23.34                     # carriage travel (limit mate); vendor max load (at solid)
+pre = 2 * k_s * (FL - Ls)                       # both springs, carriage on its bottom stop
+L_full = Ls - TRAVEL
+F_full = k_s * (FL - L_full)
+xf_s = G["CASTER_X"] - G["CASTER_TRAIL"]
+dF_brake = M * 1.0 * CZ / xf_s                  # load moved onto the front caster braking at 1 m/s^2
+comp = max(0.0, dF_brake) / (2 * k_s)
+line(S, f"   front springs 2 x LC 032E 05 S ({k_s:.3f} N/mm, FL {FL}, solid {Lsol}): installed {Ls:.1f} mm -> "
+        f"preload {pre / 2:.1f} N each, {pre:.1f} N total")
+line(S, f"   full travel {TRAVEL:.0f} mm -> {L_full:.1f} mm long, {L_full - Lsol:.1f} mm above solid, {F_full:.1f} N "
+        f"each (vendor max {F_MAX} N)  {'PASS' if L_full > Lsol and F_full <= F_MAX else 'FAIL'}")
+line(S, f"   braking 1 m/s^2 moves {dF_brake:.1f} N onto the front caster -> about {comp:.1f} mm compression "
+        f"({math.degrees(math.atan(comp / xf_s)):.1f} deg pitch), {TRAVEL - comp:.1f} mm travel left for bumps\n")
 
 # 5. drawer guides (L 1.5 mm) carrying tray + battery
 m_dr = 0.280 + 0.900 + 0.021
@@ -158,7 +174,7 @@ line(D, f"\n  15 mm threshold, drive wheel: lever r sin(phi) = {r * math.sin(phi
         f"({T_th / T_inst * 100:.0f} % of instantaneous limit)  {'PASS' if T_th <= T_inst else 'FAIL'}")
 rc = G["CASTER_D"] / 2 / 1000
 phic = math.acos((rc - h) / rc)
-for nm, N in (("front sprung caster (preload ~15 N)", 15.0), ("rear rigid caster (reversing)", rear)):
+for nm, N in ((f"front sprung caster (preload {pre:.0f} N)", pre), ("rear rigid caster (reversing)", rear)):
     Fpush = N * math.tan(phic)
     trac = mu * 2 * wheel
     line(D, f"  15 mm threshold, {nm:35s}: needs {Fpush:5.1f} N push (tan {math.degrees(phic):.0f} deg) vs traction "
@@ -167,7 +183,7 @@ line(D, "  A 2-inch caster meets a 15 mm edge at 66 deg: it gets over only becau
         "  are common, switch to 3-inch casters (CASTER_D 75, CASTER_H ~ 95) - a global change.")
 # braking / tipping
 a_brake = 1.0
-xf = G["CASTER_X"] - 10
+xf = G["CASTER_X"] - G["CASTER_TRAIL"]
 a_tip_f = g * (xf + CX) / CZ if CZ else 0
 line(D, f"\n  braking from 0.5 m/s at {a_brake} m/s^2: stop in {0.5 ** 2 / 2 / a_brake * 1000:.0f} mm, regenerative "
         f"torque {per_motor(M * a_brake) * eta * eta:.2f} N.m/motor")

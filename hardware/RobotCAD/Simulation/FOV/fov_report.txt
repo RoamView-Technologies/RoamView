@@ -1,5 +1,5 @@
 RoamView - 3D sensor field-of-view / self-occlusion check
-mesh: 53 components, 94289 triangles; robot bounds (ROS mm) x -223..236  y -208..208  z 0..538
+mesh: 59 components, 395112 triangles; robot bounds (ROS mm) x -223..236  y -208..208  z 0..538
 
 LiDAR STL-19P @ (110, 0, 260), scan plane, 0.72 deg steps, self-occlusion within 1 m
   blocked: 17.3 deg of 360 (4.8 %)
@@ -12,15 +12,15 @@ LiDAR STL-19P @ (110, 0, 260), scan plane, 0.72 deg steps, self-occlusion within
 OAK mono L (depth)  FOV 127 x 79.5 deg:  0.0 % of rays hit the robot; floor visible from 452 mm ahead of the lens (centreline)
 OAK mono R (depth)  FOV 127 x 79.5 deg:  0.0 % of rays hit the robot; floor visible from 452 mm ahead of the lens (centreline)
 OAK RGB             FOV 95 x 72 deg:  0.0 % of rays hit the robot; floor visible from 515 mm ahead of the lens (centreline)
-  layout hand estimate: 454 mm; as-built depth camera: 452 mm (= 272 mm ahead of the bumper)
+  layout hand estimate: 454 mm; as-built depth camera: 452 mm (= 268 mm ahead of the bumper)
 
 Cliff FL: sensor at (218, 105, 72.0) mm, 50 deg from vertical, 18 deg cone: 0 % of rays blocked; range 111 mm; floor spot x 281..338, y 87..123; lead over caster tyre (swivelled outward) 120 mm, over drive-wheel contact edge 233 mm
 Cliff FR: sensor at (218, -105, 72.0) mm, 50 deg from vertical, 18 deg cone: 0 % of rays blocked; range 111 mm; floor spot x 281..338, y -123..-87; lead over caster tyre (swivelled outward) 120 mm, over drive-wheel contact edge 233 mm
 Cliff RL: sensor at (-218, 105, 72.0) mm, 50 deg from vertical, 18 deg cone: 0 % of rays blocked; range 111 mm; floor spot x -338..-281, y 87..123; lead over caster tyre (swivelled outward) 120 mm, over drive-wheel contact edge 233 mm
 Cliff RR: sensor at (-218, -105, 72.0) mm, 50 deg from vertical, 18 deg cone: 0 % of rays blocked; range 111 mm; floor spot x -338..-281, y -123..-87; lead over caster tyre (swivelled outward) 120 mm, over drive-wheel contact edge 233 mm
-  caster trailing (straight driving): floor spot is 140 mm ahead of the front caster tyre, 140 mm behind the rear caster tyre
-  forward 0.3 m/s: stop at 1 m/s^2 with 50 ms latency needs 60 mm -> OK (margin +80 mm)
-  forward 0.5 m/s: stop at 1 m/s^2 with 50 ms latency needs 150 mm -> NOT COVERED (margin -10 mm)
-  reverse 0.3 m/s: stop at 1 m/s^2 with 50 ms latency needs 60 mm -> OK (margin +80 mm)
+  caster trailing (straight driving): floor spot is 164 mm ahead of the front caster tyre, 164 mm behind the rear caster tyre
+  forward 0.3 m/s: stop at 1 m/s^2 with 50 ms latency needs 60 mm -> OK (margin +104 mm)
+  forward 0.5 m/s: stop at 1 m/s^2 with 50 ms latency needs 150 mm -> OK (margin +14 mm)
+  reverse 0.3 m/s: stop at 1 m/s^2 with 50 ms latency needs 60 mm -> OK (margin +104 mm)
 
 Docking tag (80 mm at x 296, z 400) seen from the lens when docked: all 9 sample points CLEAR; tag spans -14.4..3.2 deg vertically and -9.1..9.1 deg horizontally from the optical axis (mono FOV +-39.75 x +-63.5); range 250..268 mm (mono fixed focus from 196 mm)

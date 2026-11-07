@@ -1,0 +1,12 @@
+quantity,value,unit
+mass,8.6721,kg
+com_x,-1.96,mm
+com_y,0.05,mm
+com_z,145.91,mm
+drawer_mass,1.2076,kg
+Ixx,0.213442,kg.m2
+Ixy,0.000767,kg.m2
+Ixz,-0.015137,kg.m2
+Iyy,0.249742,kg.m2
+Iyz,-0.000741,kg.m2
+Izz,0.214481,kg.m2

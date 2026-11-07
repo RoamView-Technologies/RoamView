@@ -1,4 +1,4 @@
-RV-100 collision sweeps (moving parts placed explicitly; originals hidden; touching faces ignored)
+RV-100 collision sweeps (moving parts placed explicitly; originals and the above-deck tower hidden; touching faces ignored)
   drawer pulled 0 mm                           CLEAR
   drawer pulled 100 mm                         CLEAR
   drawer pulled 200 mm                         CLEAR

@@ -1,0 +1,24 @@
+RoamView arena run (rv_arena.slx, Simscape Multibody), 2026-11-06 09:50
+Robot 8.67 kg; front spring 0.50 N/mm with 6 N preload per spring (recommended); cruise 0.4 m/s, pure pursuit
+Footprint for the checks: x -223 to 236 mm, width 417 mm over the tyres, underside 30 mm above the floor
+
+RESULT: finished the course in 67.2 s (23.2 m driven).
+Collisions with walls or furniture: none
+Underside scraping on ramp, cable cover or threshold: none
+Closest approach to an obstacle: 168 mm (wall_mid_S, t 57.3 s)
+Max pitch 7.4 deg, max roll 2.0 deg; peak motor current 3.6 A; battery energy 0.06 Wh for the motors
+
+Section by section (while the robot centre is within 0.5 m of each feature):
+  feature              reached  time s   pitch deg  roll deg  min wheel N  min front N  min rear N  peak A  front spring mm
+  ramp up                  yes     2.9        5.0       0.0         13.7          0.0         0.0     1.4             10.1
+  platform                 yes     4.7        5.0       0.0         15.4          0.0         0.0     1.4              1.1
+  ramp down                yes     6.4        7.4       0.0         14.2          0.0         0.0     0.8             10.1
+  cable cover              yes     9.2        4.6       0.0          0.0          0.0         0.0     2.9             10.1
+  slalom                   yes    25.3        0.0       0.0         28.7         13.7         4.0     0.9              0.7
+  sofa                     yes    46.0        0.0       0.0         30.0         13.7        11.2     0.3              0.6
+  bin                      yes    51.2        0.0       0.0         30.0         13.7        11.2     0.3              0.6
+  doorway threshold        yes    54.4        5.5       2.0          0.0          0.0         0.0     3.6             10.2
+  parked                   yes    64.9        0.0       0.0         29.9         13.7         6.0     0.4              0.7
+
+A load of 0 N means that wheel or caster left the floor. The obstacles are rigid; the collision check uses a
+box over the robot's plan extents (tyres and charge pads included) from the lowest chassis point to the deck.

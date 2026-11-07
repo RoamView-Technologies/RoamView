@@ -1,9 +1,9 @@
 FEA caster_housing
   RV-308 PETG (E 2.1 GPa, yield 30 MPa across layers); carriage bottomed, 30.0 N up (2 g)
-  fixed: back wall face on the mid cross member (1386 facets)
+  fixed: back wall face on the mid cross member (1384 facets)
   hand calc: 1.2 MPa, FS 26
-  mesh: 13896 nodes, 63371 quadratic tets
+  mesh: 15238 nodes, 68923 quadratic tets
   applied load (sum): (0.0, 30.0, 0.0) N
-  max displacement: 0.1134 mm
-  von Mises: peak 3.3 MPa (single element, includes fixture singularities), 99.5th percentile 1.1 MPa
-  safety factor on yield 30 MPa: 9.2 (peak), 26.7 (99.5 %)  -> PASS vs FS >= 2
+  max displacement: 0.2470 mm
+  von Mises: peak 5.1 MPa (single element, includes fixture singularities), 99.5th percentile 1.6 MPa
+  safety factor on yield 30 MPa: 5.8 (peak), 19.0 (99.5 %)  -> PASS vs FS >= 2

@@ -22,7 +22,7 @@ P = {
     "motor": rf"{COTS}\Motors\RV-501_Gearmotor_37D_70to1_Enc.SLDPRT",
     "hub": rf"{COTS}\Wheels_Casters\RV-502_SonicHub_1309_6mm.SLDPRT",
     "wheel": rf"{COTS}\Wheels_Casters\RV-503_Wheel_Wasteland_144x52.SLDPRT",
-    "caster": rf"{COTS}\Wheels_Casters\RV-504_Caster_2in_Swivel.SLDPRT",
+    "caster": rf"{COTS}\Wheels_Casters\RV-504_Caster_goBILDA_3621.SLDPRT",
     "oak": rf"{COTS}\Sensors\RV-511_OAK-D-Pro-W.SLDPRT",
     "lidar": rf"{COTS}\Sensors\RV-512_LiDAR_STL-19P.SLDPRT",
     "tof": rf"{COTS}\Sensors\RV-513_ToF_VL53L4CD_Adafruit5396.SLDPRT",
@@ -33,7 +33,7 @@ P = {
     "driver": rf"{COTS}\Electronics\RV-531_MotorDriver_DFR0601.SLDPRT",
     "pcb": rf"{COTS}\Electronics\RV-532_PowerPCB_Envelope.SLDPRT",
     "battery": rf"{COTS}\Electronics\RV-541_Battery4S_Envelope.SLDPRT",
-    "estop": rf"{COTS}\Electronics\RV-551_EStop_22mm_Box.SLDPRT",
+    "estop": rf"{COTS}\Electronics\RV-551_EStop_ECS-22RE1RM2Q-020Q.SLDPRT",
     "frame": rf"{WELD}\RV-410_ChassisFrame_2020.SLDPRT",
     "tower": rf"{WELD}\RV-420_SensorTower_2020.SLDPRT",
     "deck": rf"{SM}\RV-430_DeckPlate.SLDPRT", "pan": rf"{SM}\RV-431_FloorPan.SLDPRT",
@@ -47,6 +47,9 @@ P = {
     "ctray": rf"{PR}\RV-311_ComputeTray.SLDPRT", "dmount": rf"{PR}\RV-312_DriverMount.SLDPRT",
     "skinside": rf"{PR}\RV-313_SkinSide.SLDPRT", "skinfront": rf"{PR}\RV-314_SkinFront.SLDPRT",
     "skinrear": rf"{PR}\RV-315_SkinRear.SLDPRT", "face": rf"{PR}\RV-316_DrawerFace.SLDPRT",
+    "swbracket": rf"{PR}\RV-317_BumperSwitchBracket.SLDPRT",
+    "bswitch": rf"{COTS}\Electronics\RV-553_Microswitch_D2F-01L-D.SLDPRT",
+    "spring": rf"{COTS}\Hardware\RV-554_Spring_LeeSpring_LC032E05S.SLDPRT",
     "layout": r"Layout\RV-000_MasterLayout.SLDPRT", "dock": r"Layout\RV-001_ReferenceDock.SLDPRT",
 }
 
@@ -101,6 +104,9 @@ def a120_casterF(sw):
     a.plane_mate(c["carriage"], "Right Plane", c["housing"], "Right Plane", name="M_carriage_y")
     a.plane_mate(c["carriage"], "Front Plane", c["housing"], "Front Plane", name="M_carriage_x")
     a.limit_mate(c["carriage"], "Top Plane", c["housing"], "Top Plane", 0, 10, 0, name="M_spring_travel")
+    for side in ("L", "R"):                       # rigid at installed length, hung from the housing seats
+        c[f"spring{side}"] = a.insert(P["spring"])
+        a.cs_mate(c[f"spring{side}"], "IF_Top", c["housing"], f"IF_Spring{side}", name=f"M_spring{side}")
     c["caster"] = a.insert(P["caster"])
     a.axis_mate(c["caster"], "AX_Z", c["carriage"], "AX_Z", name="M_swivel_axis")
     a.plane_mate(c["caster"], "Top Plane", c["carriage"], "Top Plane", name="M_swivel_face")
@@ -135,7 +141,7 @@ def a140_tower(sw):
     return simple(sw, "RV-140_SensorTower", "RV-140", "Sensor tower: posts, head, bezel, OAK, display", "tower",
                   [("head", "IF_Mount", "tower", "IF_Head"), ("bezel", "IF_Mount", "head", "IF_Bezel"),
                    ("wedge", "IF_Mount", "bezel", "IF_Wedge"), ("oak", "IF_Mount", "wedge", "IF_OAK"),
-                   ("display", "IF_Mount", "head", "IF_Display"), ("yad", "IF_Mount", "head", "IF_YAdapter")],
+                   ("display", "IF_Mount", "head", "IF_Display"), ("yad", "IF_Mount", "oak", "IF_USB")],
                   [("oak_lens", "oak", "oak_rgb_lens")])
 
 
@@ -159,6 +165,11 @@ def a180_cliff(sw):
                   [("tof", "IF_Mount", "cliffmount", "IF_Sensor")])
 
 
+def a182_bumperswitch(sw):
+    return simple(sw, "RV-182_BumperSwitch", "RV-182", "Bumper switch module (x2): bracket + Omron D2F", "swbracket",
+                  [("bswitch", "IF_Mount", "swbracket", "IF_Switch")])
+
+
 def a185_pads(sw):
     return simple(sw, "RV-185_ChargePads", "RV-185", "Charging pads in holder", "padholder",
                   [("pad#L", "IF_Mount", "padholder", "IF_PadL"), ("pad#R", "IF_Mount", "padholder", "IF_PadR")])
@@ -168,7 +179,8 @@ SUBS = {"drive": r"Assemblies\RV-110_DriveModule.SLDASM", "casterF": r"Assemblie
         "casterR": r"Assemblies\RV-125_CasterRear_Rigid.SLDASM", "drawer": r"Assemblies\RV-130_BatteryDrawer.SLDASM",
         "towerA": r"Assemblies\RV-140_SensorTower.SLDASM", "compute": r"Assemblies\RV-150_ComputeBay.SLDASM",
         "driverbay": r"Assemblies\RV-160_DriverBay.SLDASM", "lidarmod": r"Assemblies\RV-170_LidarModule.SLDASM",
-        "cliff": r"Assemblies\RV-180_CliffSensor.SLDASM", "pads": r"Assemblies\RV-185_ChargePads.SLDASM"}
+        "cliff": r"Assemblies\RV-180_CliffSensor.SLDASM", "pads": r"Assemblies\RV-185_ChargePads.SLDASM",
+        "bswitch": r"Assemblies\RV-182_BumperSwitch.SLDASM"}
 
 
 def a100_top(sw):
@@ -189,6 +201,7 @@ def a100_top(sw):
         ("compute", SUBS["compute"], "IF_Compute", False), ("driverbay", SUBS["driverbay"], "IF_MotorDriver", False),
         ("cliffFL", SUBS["cliff"], "IF_Cliff_FL", False), ("cliffFR", SUBS["cliff"], "IF_Cliff_FR", False),
         ("cliffRL", SUBS["cliff"], "IF_Cliff_RL", False), ("cliffRR", SUBS["cliff"], "IF_Cliff_RR", False),
+        ("bswL", SUBS["bswitch"], "IF_BumperSwL", False), ("bswR", SUBS["bswitch"], "IF_BumperSwR", False),
         ("pads", SUBS["pads"], "IF_ChargePads", False),
     ]
     for key, path, frame, flex in place:
@@ -219,7 +232,7 @@ def a190_dock(sw):
 
 
 BUILD = {"110": a110_drive, "120": a120_casterF, "125": a125_casterR, "130": a130_drawer, "140": a140_tower,
-         "150": a150_compute, "160": a160_driver, "170": a170_lidar, "180": a180_cliff, "185": a185_pads,
+         "150": a150_compute, "160": a160_driver, "170": a170_lidar, "180": a180_cliff, "182": a182_bumperswitch, "185": a185_pads,
          "100": a100_top, "190": a190_dock}
 
 if __name__ == "__main__":

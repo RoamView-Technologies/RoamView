@@ -1,0 +1,31 @@
+FEA motor_bracket (PDE Toolbox, MATLAB 2024a)
+  RV-434 5052-H32 3 mm; wheel load 84.4 N (2 g) via 6 bolts + overhang moment 633 N.mm
+  [held]
+  fixed: faces [1 2 31 32], 80 mm2
+  seat held vertically over the whole face: faces 16, 2156 mm2
+  load [0 -14.1 0] N on faces [3 30] (32 mm2)
+  load [11.8 -14.1 0] N on faces [9 24] (32 mm2)
+  load [11.8 -14.1 0] N on faces [8 25] (32 mm2)
+  load [0 -14.1 0] N on faces [7 26] (32 mm2)
+  load [-11.8 -14.1 0] N on faces [6 27] (32 mm2)
+  load [-11.8 -14.1 0] N on faces [4 29] (32 mm2)
+    mesh: 93896 nodes, 58039 quadratic tets, Hmax 1.2 mm
+    applied load (sum): (0.0, -84.4, 0.0) N
+    max displacement: 0.1029 mm
+    von Mises: peak 39.8 MPa (nodal), 99.5th percentile 18.5 MPa
+    safety factor on yield 193 MPa: 4.9 (peak), 10.4 (99.5 %) -> PASS vs FS >= 3
+  [free]
+  fixed: faces [1 2 31 32], 80 mm2
+  seat left free (faces 16)
+  load [0 -14.1 0] N on faces [3 30] (32 mm2)
+  load [11.8 -14.1 0] N on faces [9 24] (32 mm2)
+  load [11.8 -14.1 0] N on faces [8 25] (32 mm2)
+  load [0 -14.1 0] N on faces [7 26] (32 mm2)
+  load [-11.8 -14.1 0] N on faces [6 27] (32 mm2)
+  load [-11.8 -14.1 0] N on faces [4 29] (32 mm2)
+    mesh: 93896 nodes, 58039 quadratic tets, Hmax 1.2 mm
+    applied load (sum): (0.0, -84.4, 0.0) N
+    max displacement: 0.5726 mm
+    von Mises: peak 114.0 MPa (nodal), 99.5th percentile 48.6 MPa
+    safety factor on yield 193 MPa: 1.7 (peak), 4.0 (99.5 %) -> PASS (bulk); peak is at a fixture vs FS >= 3
+  fea.py (gmsh + scikit-fem, partial seat): peak 62.2 MPa, 99.5 % 36.7 MPa, max displacement 0.37 mm

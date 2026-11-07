@@ -1,0 +1,20 @@
+RoamView drivetrain electrical checks (averaged PWM, DC motor referred to the gearbox output)
+Motor model from the 12 V datasheet: R 2.18 ohm, Kt 0.500 N.m/A, Ke 0.736 V.s/rad, no-load loss 0.10 N.m
+
+1. Stall (wheel blocked), per motor
+   12 V datasheet, full duty        12.00 V at the motor: stall  5.5 A, 2.65 N.m; top speed 1.13 m/s 
+   4S full 16.8 V, full duty        16.80 V at the motor: stall  7.7 A, 3.75 N.m; top speed 1.60 m/s (40 % over the 12 V stall current)
+   4S full 16.8 V, duty capped      11.93 V at the motor: stall  5.5 A, 2.63 N.m; top speed 1.12 m/s 
+   4S nominal 14.8 V, duty capped   10.51 V at the motor: stall  4.8 A, 2.31 N.m; top speed 0.99 m/s 
+   4S empty 12.8 V, duty capped      9.09 V at the motor: stall  4.2 A, 1.98 N.m; top speed 0.85 m/s 
+   both motors stalled at full charge, uncapped: 15.4 A from the pack; capped: 10.9 A (DFR0601 12 A/ch)
+
+2. 15 mm threshold at 0.3 m/s, forward (front sprung caster leads)
+   full 16.8 V, capped    STUCK; peak current 5.0 A, peak torque 2.34 N.m, peak pack draw 100 W (motors)
+   full 16.8 V, uncapped  STUCK; peak current 5.3 A, peak torque 2.51 N.m, peak pack draw 103 W (motors)
+   empty 12.8 V, capped   STUCK; peak current 3.8 A, peak torque 1.74 N.m, peak pack draw 63 W (motors)
+
+3. Runtime estimate (PLACEHOLDER pack and electronics load, see rv_params.m)
+   motor bus power: cruise 0.5 m/s 3.8 W, 5 deg ramp at 0.3 m/s 8.4 W
+   mission mix 35 % cruise / 5 % ramp / 60 % parked -> motors 1.7 W + electronics 18 W = 19.7 W
+   5.0 Ah 4S pack, 85 % usable (63 Wh): about 3.2 h; the electronics take 91 % of the energy

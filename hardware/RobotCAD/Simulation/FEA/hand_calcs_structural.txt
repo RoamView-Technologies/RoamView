@@ -1,14 +1,14 @@
 RoamView - structural hand checks (stand-in for FEA)
-Inputs: mass 8.63 kg, COM x -2.1 mm z 147.3 mm; static wheel load 41.7 N, rear caster 1.3 N; bump factor 2 g
+Inputs: mass 8.67 kg, COM x -2.0 mm z 145.9 mm; static wheel load 41.8 N, rear caster 1.5 N; bump factor 2 g
 Criteria: FS >= 3 aluminium/steel, FS >= 2 printed PETG
 
 1. Motor bracket RV-434 (3 mm 5052-H32), leg as cantilever off the bottom side rail
-   F = 83.4 N (2 g), arm 32.5 mm, Z = b t^2/6 = 63 mm3 -> sigma = 43.0 MPa, FS = 4.5  PASS
-   worst case (pivot at bolt line, arm 42.5 mm): sigma = 56.3 MPa, FS = 3.4  PASS
+   F = 83.6 N (2 g), arm 32.5 mm, Z = b t^2/6 = 63 mm3 -> sigma = 43.1 MPa, FS = 4.5  PASS
+   worst case (pivot at bolt line, arm 42.5 mm): sigma = 56.4 MPa, FS = 3.4  PASS
    2x M4 rail bolts (8.8, proof ~ 6.0 kN each): prying tension ~ 136 N each, FS = 44  PASS
 
 2. Gearmotor 6 mm output shaft, bending at the gearbox bearing
-   F = 83.4 N (2 g), overhang 15.0 mm, Z = pi d^3/32 = 21.2 mm3 -> sigma = 59.0 MPa, FS = 5.9  PASS
+   F = 83.6 N (2 g), overhang 15.0 mm, Z = pi d^3/32 = 21.2 mm3 -> sigma = 59.1 MPa, FS = 5.9  PASS
    Pololu gives no radial-load rating for the 37D gearbox bushing: the deep-recess wheel mounting keeps the
    overhang short; bench-test or add an outboard bearing if wheels are side-loaded (e.g. tight spins).
 
@@ -19,6 +19,9 @@ Criteria: FS >= 3 aluminium/steel, FS >= 2 printed PETG
 4. Front caster housing RV-308 (PETG), top plate cantilever, spring bottomed
    F = 30.0 N, arm 35 mm, 60 x 9.5 section -> sigma = 1.2 MPa, FS = 25.8 (Z-direction strength)  PASS
    rear riser RV-310 is a solid 23.5 mm block in compression: 3 N over 60 x 63 mm -> 0.00 MPa  PASS
+   front springs 2 x LC 032E 05 S (1.751 N/mm, FL 19.05, solid 4.7): installed 16.0 mm -> preload 5.3 N each, 10.7 N total
+   full travel 10 mm -> 6.0 mm long, 1.3 mm above solid, 22.9 N each (vendor max 23.34 N)  PASS
+   braking 1 m/s^2 moves 11.0 N onto the front caster -> about 3.2 mm compression (1.6 deg pitch), 6.8 mm travel left for bumps
 
 5. Drawer guides RV-433 (1.5 mm 5052 L) simply supported between the mid cross members
    F = 11.8 N per guide (2 g), span 396 mm -> sigma = 11.7 MPa, FS = 17, mid deflection 0.17 mm  PASS

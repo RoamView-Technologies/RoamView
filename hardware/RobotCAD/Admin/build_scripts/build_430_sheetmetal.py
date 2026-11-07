@@ -6,6 +6,7 @@ RV-434 motor bracket (L, 3 mm, used L and R)           RV-435 charge pad (brass 
 
     python build_430_sheetmetal.py [430 431 ...]
 """
+import math
 import os
 import sys
 import traceback
@@ -37,7 +38,7 @@ def p430_deck(sw):
     row = c.p.pattern1d("GridRow", [seed], ax["x"], nx, G["GRID"], "x", +1)
     c.p.pattern1d("GridPattern", [seed, row], ax["y"], ny, G["GRID"], "y", +1)
     c.feature("CablePorts", "z", 0, [("circle", (G["POST_X"] - 20, 0), 25.0), ("circle", (G["LIDAR_X"] - 25, 0), 16.0),
-                                     ("circle", (G["ESTOP_X"], G["ESTOP_Y"]), 16.0)], T, +1, cut=True)
+                                     ("circle", (G["ESTOP_X"], G["ESTOP_Y"]), 22.3)], T, +1, cut=True)  # E-stop cutout
     c.frame("IF_Mount")
     c.props.update(GridHoles=f"{nx} x {ny} @ {G['GRID']:g}")
     return c.finish()
@@ -53,7 +54,9 @@ def p431_pan(sw):
     c.sheet("Pan", "z", 0, [("rectc", (0, 0), L, W, {"w": f'2 * ({Q("RAIL_X")} + {Q("PROFILE")} / 2)',
                                                      "h": f'2 * ({Q("RAIL_Y")} + {Q("PROFILE")} / 2)'})],
             T, T, want=("z", 0, T))
-    holes = [("circle", (sx * G["CASTER_X"], 0), 84.0, {"pu": Q("CASTER_X")}) for sx in (1, -1)]
+    # caster sweep: wheel edge at trail + D/2, its corners W/2 to the side, plus 1.5 mm
+    d = 2 * (math.hypot(G["CASTER_TRAIL"] + G["CASTER_D"] / 2, G["CASTER_W"] / 2) + 1.5)
+    holes = [("circle", (sx * G["CASTER_X"], 0), round(d, 1), {"pu": Q("CASTER_X")}) for sx in (1, -1)]
     c.feature("Holes", "z", 0, holes, T, +1, cut=True)          # cliff sensors moved to the end skins (RV-307)
     c.frame("IF_Mount")
     return c.finish()

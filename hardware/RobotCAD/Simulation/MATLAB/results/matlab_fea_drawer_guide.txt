@@ -1,0 +1,11 @@
+FEA drawer_guide (PDE Toolbox, MATLAB 2024a)
+  RV-433 5052-H32 1.5 mm L; 11.8 N per guide (2 g) on the horizontal leg
+  [only]
+  fixed: faces [1 2 17 18], 40 mm2
+  load [0 -11.8 0] N on faces 11 (6420 mm2)
+    mesh: 246296 nodes, 139083 quadratic tets, Hmax 1.2 mm
+    applied load (sum): (0.0, -11.8, 0.0) N
+    max displacement: 0.1285 mm
+    von Mises: peak 14.8 MPa (nodal), 99.5th percentile 4.4 MPa
+    safety factor on yield 193 MPa: 13.1 (peak), 43.8 (99.5 %) -> PASS vs FS >= 3
+  fea.py (gmsh + scikit-fem, partial seat): peak 19.5 MPa, 99.5 % 4.3 MPa, max displacement 0.12 mm

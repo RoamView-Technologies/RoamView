@@ -1,0 +1,11 @@
+FEA caster_housing (PDE Toolbox, MATLAB 2024a)
+  RV-308 PETG (E 2.1 GPa, yield 30 MPa across layers); carriage bottomed, 30.0 N up (2 g)
+  [only]
+  fixed: faces 9, 1172 mm2
+  load [0 30 0] N on faces 13 (3809 mm2)
+    mesh: 169042 nodes, 114453 quadratic tets, Hmax 1.5 mm
+    applied load (sum): (0.0, 30.0, 0.0) N
+    max displacement: 0.1765 mm
+    von Mises: peak 3.1 MPa (nodal), 99.5th percentile 1.1 MPa
+    safety factor on yield 30 MPa: 9.8 (peak), 27.2 (99.5 %) -> PASS vs FS >= 2
+  fea.py (gmsh + scikit-fem, partial seat): peak 5.1 MPa, 99.5 % 1.6 MPa, max displacement 0.25 mm

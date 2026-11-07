@@ -50,6 +50,16 @@ def mass_props(doc):
     return m.Mass, (c[2] / MM, c[0] / MM, c[1] / MM)
 
 
+def inertia_ros(doc):
+    """Inertia tensor about the COM in kg.m2, ROS axes (x fwd = SW Z, y left = SW X, z up = SW Y)."""
+    m = cast(doc.Extension.CreateMassProperty(), "IMassProperty")
+    m.UseSystemUnits = True
+    v = list(m.GetMomentOfInertia(0))       # 0 = about the centre of mass, SW axes, row-major 3x3
+    sw_ = [[v[0], v[1], v[2]], [v[3], v[4], v[5]], [v[6], v[7], v[8]]]
+    idx = (2, 0, 1)                          # ROS axis i comes from SW axis idx[i]
+    return [[sw_[idx[i]][idx[j]] for j in range(3)] for i in range(3)]
+
+
 def report(area, name, lines):
     d = os.path.join(ROOT, "Simulation", area)
     os.makedirs(d, exist_ok=True)
@@ -59,14 +69,26 @@ def report(area, name, lines):
 
 
 def cmd_interference(sw):
+    """Two passes: RV-100 with the sensor tower hidden, then the tower (RV-140) on its own. One full pass with the
+    vendor STEP bodies (Y-adapter, casters) crashes SolidWorks; the tower only touches the rest where its posts sit
+    on the deck."""
+    sw.CloseAllDocuments(True)
     doc = open_doc(sw, TOP)
     doc.ForceRebuild3(False)
-    res = interferences(doc)
-    lines = [f"RV-100 interference detection at rest (coincident faces ignored): {len(res)} interference(s)"]
-    for names, vol in sorted(res, key=lambda r: -r[1]):
-        lines.append(f"  {vol:10.1f} mm3   {' <-> '.join(names)}")
+    for c in cast(doc, "IAssemblyDoc").GetComponents(True) or []:
+        c = cast(c, "IComponent2")
+        if c.Name2.startswith("RV-140_SensorTower"):
+            c.Visible = K.swComponentHidden
+    res = [("RV-100 (tower hidden)", n, v) for n, v in interferences(doc)]
+    sw.CloseAllDocuments(True)
+    tdoc = open_doc(sw, os.path.join(ROOT, "Assemblies", "RV-140_SensorTower.SLDASM"))
+    res += [("RV-140", n, v) for n, v in interferences(tdoc)]
+    sw.CloseAllDocuments(True)
+    lines = [f"Interference detection at rest (coincident faces ignored), RV-100 without the tower + RV-140: "
+             f"{len(res)} interference(s)"]
+    for where, names, vol in sorted(res, key=lambda r: -r[2]):
+        lines.append(f"  {vol:10.1f} mm3   {where}: {' <-> '.join(names)}")
     report("Interference", "rest_interference.txt", lines)
-    sw.CloseDoc(doc.GetTitle())
 
 
 # ------------------------------------------------------------------ sweeps (hypothetical positions)
@@ -138,11 +160,14 @@ def cmd_sweeps(sw):
         return hit[0]
 
     targets = {
-        "castF": (orig("RV-120_CasterFront_Sprung-1/RV-504"), r"COTS\Wheels_Casters\RV-504_Caster_2in_Swivel.SLDPRT"),
+        "castF": (orig("RV-120_CasterFront_Sprung-1/RV-504"), r"COTS\Wheels_Casters\RV-504_Caster_goBILDA_3621.SLDPRT"),
         "carriage": (orig("RV-120_CasterFront_Sprung-1/RV-309"), r"3DPrinted\RV-309_FrontCasterCarriage.SLDPRT"),
-        "castR": (orig("RV-125_CasterRear_Rigid-1/RV-504"), r"COTS\Wheels_Casters\RV-504_Caster_2in_Swivel.SLDPRT"),
+        "castR": (orig("RV-125_CasterRear_Rigid-1/RV-504"), r"COTS\Wheels_Casters\RV-504_Caster_goBILDA_3621.SLDPRT"),
         "drawer": (orig("RV-130_BatteryDrawer-1"), r"Assemblies\RV-130_BatteryDrawer.SLDASM"),
     }
+    # The tower sits above the deck, out of reach of every moving part checked here. Hiding it keeps the vendor
+    # STEP bodies (Y-adapter) out of 28 full interference passes, which otherwise crash SolidWorks.
+    orig("RV-140_SensorTower").Visible = K.swComponentHidden
     free, T0 = {}, {}
     for k, (oc, path) in targets.items():
         T0[k] = list(cast(oc.Transform2, "IMathTransform").ArrayData)
@@ -150,16 +175,19 @@ def cmd_sweeps(sw):
         free[k] = a.insert(path)
         free[k].Transform2 = _xf(sw, T0[k])
     a.doc.ForceRebuild3(False)
-    lines = ["RV-100 collision sweeps (moving parts placed explicitly; originals hidden; touching faces ignored)"]
+    lines = ["RV-100 collision sweeps (moving parts placed explicitly; originals and the above-deck tower hidden; "
+             "touching faces ignored)"]
 
     def place(pairs):
         for k, arr in pairs:
             free[k].Transform2 = _xf(sw, arr)
         a.doc.EditRebuild3()
 
-    def check(label, keys):
+    def check(label, keys, ignore=()):
+        """ignore: name fragments whose pairs are expected to overlap (a rigid spring model being compressed)."""
         mine = {free[k].Name2 for k in keys}
-        res = [(n, v) for n, v in interferences(a.doc) if any(any(x.startswith(m) for m in mine) for x in n) and v > 0.5]
+        res = [(n, v) for n, v in interferences(a.doc) if any(any(x.startswith(m) for m in mine) for x in n) and v > 0.5
+               and not any(f in x for f in ignore for x in n)]
         lines.append(f"  {label:44s} {'CLEAR' if not res else str(len(res)) + ' hit(s)'}" + ("" if not res else "  -> " +
                      "; ".join(f"{' <-> '.join(n)} {v:.0f} mm3" for n, v in sorted(res, key=lambda r: -r[1])[:3])))
 
@@ -171,7 +199,10 @@ def cmd_sweeps(sw):
         for ang in range(0, 360, 45):
             place([("castF", moved(T0["castF"], dz_up=lift, rot_deg=ang, pivot_ros=(G["CASTER_X"], 0))),
                    ("carriage", moved(T0["carriage"], dz_up=lift))])
-            check(f"front caster {ang:3d} deg, spring +{lift} mm", ["castF", "carriage"])
+            # the springs are modelled rigid at their rest length, so with the carriage lifted they overlap it by
+            # design; their compression (solid-height margin) is checked in hand_calcs.py instead
+            check(f"front caster {ang:3d} deg, spring +{lift} mm", ["castF", "carriage"],
+                  ignore=("RV-554",) if lift else ())
     place([("castF", T0["castF"]), ("carriage", T0["carriage"])])
     for ang in range(0, 360, 45):
         place([("castR", moved(T0["castR"], rot_deg=ang, pivot_ros=(-G["CASTER_X"], 0)))])
@@ -192,12 +223,21 @@ def cmd_massprops(sw):
     md, _ = mass_props(ddoc)
     sw.CloseDoc(ddoc.GetTitle())
     sw.ActivateDoc3(doc.GetTitle(), False, 0, None)
+    J = inertia_ros(doc)
+    with open(os.path.join(ROOT, "Simulation", "MassProps", "mass_inertia.csv"), "w", encoding="utf-8") as f:
+        rows = [("mass", f"{M:.4f}", "kg"), ("com_x", f"{cx:.2f}", "mm"), ("com_y", f"{cy:.2f}", "mm"),
+                ("com_z", f"{cz:.2f}", "mm"), ("drawer_mass", f"{md:.4f}", "kg")]
+        rows += [(f"I{a}{b}", f"{J[i][j]:.6f}", "kg.m2") for i, a in enumerate("xyz")
+                 for j, b in enumerate("xyz") if j >= i]
+        f.write("quantity,value,unit" + chr(10) + "".join(f"{q},{v},{u}" + chr(10) for q, v, u in rows))
     lines = [f"RV-100 mass properties (component mass overrides applied)",
              f"  total mass          {M:.2f} kg",
              f"  centre of mass      x {cx:7.1f}  y {cy:7.1f}  z {cz:7.1f} mm  (ROS, origin = floor under axle)",
-             f"  drawer + battery    {md:.2f} kg"]
+             f"  drawer + battery    {md:.2f} kg",
+             f"  inertia about COM   Ixx {J[0][0]:.4f}  Iyy {J[1][1]:.4f}  Izz {J[2][2]:.4f}  "
+             f"Ixy {J[0][1]:.4f}  Ixz {J[0][2]:.4f}  Iyz {J[1][2]:.4f} kg.m2 (ROS)"]
     # support polygon: drive wheel contacts and caster contacts (trail turned inward = worst case)
-    trail = 10.0
+    trail = G["CASTER_TRAIL"]
     F, B = (G["CASTER_X"] - trail, 0.0), (-(G["CASTER_X"] - trail), 0.0)
     Lw, Rw = (0.0, G["TRACK"] / 2), (0.0, -G["TRACK"] / 2)
     edges = {"front-left (F-L)": (F, Lw), "rear-left (L-B)": (Lw, B), "rear-right (B-R)": (B, Rw),

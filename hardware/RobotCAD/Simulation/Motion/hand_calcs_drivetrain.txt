@@ -1,20 +1,20 @@
 RoamView - drivetrain hand checks (stand-in for Motion Analysis)
 Motor: Pololu 4754 37D 70:1 @ 12 V: stall 2.65 N.m, continuous limit 0.98, instantaneous 2.45, no-load 150 rpm, 0.2 A / 5.5 A. Wheel r = 72 mm, Crr 0.02, eta 0.9, mu 0.7
-Robot mass 8.63 kg, COM height 147 mm
+Robot mass 8.67 kg, COM height 146 mm
 
   flat, 0.5 m/s cruise           F    1.7 N ->  0.07 N.m/motor (   7 % of continuous), 0.34 A, max speed 1.10 m/s  PASS
-  flat, accelerate 0.5 m/s^2     F    6.0 N ->  0.24 N.m/motor (  24 % of continuous), 0.68 A, max speed 1.03 m/s  PASS
+  flat, accelerate 0.5 m/s^2     F    6.0 N ->  0.24 N.m/motor (  25 % of continuous), 0.68 A, max speed 1.03 m/s  PASS
   5 deg ramp, 0.3 m/s cruise     F    9.1 N ->  0.36 N.m/motor (  37 % of continuous), 0.93 A, max speed 0.98 m/s  PASS
-  5 deg ramp + 0.5 m/s^2         F   13.4 N ->  0.54 N.m/motor (  55 % of continuous), 1.27 A, max speed 0.90 m/s  PASS
+  5 deg ramp + 0.5 m/s^2         F   13.4 N ->  0.54 N.m/motor (  55 % of continuous), 1.28 A, max speed 0.90 m/s  PASS
 
-  15 mm threshold, drive wheel: lever r sin(phi) = 44 mm -> 1.83 N.m (75 % of instantaneous limit)  PASS
-  15 mm threshold, front sprung caster (preload ~15 N): needs  34.4 N push (tan 66 deg) vs traction 58 N, motor force 61 N  MARGINAL
-  15 mm threshold, rear rigid caster (reversing)      : needs   2.9 N push (tan 66 deg) vs traction 58 N, motor force 61 N  PASS
+  15 mm threshold, drive wheel: lever r sin(phi) = 44 mm -> 1.84 N.m (75 % of instantaneous limit)  PASS
+  15 mm threshold, front sprung caster (preload 11 N) : needs  22.4 N push (tan 65 deg) vs traction 58 N, motor force 61 N  PASS
+  15 mm threshold, rear rigid caster (reversing)      : needs   3.1 N push (tan 65 deg) vs traction 58 N, motor force 61 N  PASS
   A 2-inch caster meets a 15 mm edge at 66 deg: it gets over only because it is lightly loaded. If thresholds
   are common, switch to 3-inch casters (CASTER_D 75, CASTER_H ~ 95) - a global change.
 
   braking from 0.5 m/s at 1.0 m/s^2: stop in 125 mm, regenerative torque 0.28 N.m/motor
-  forward tip-over needs decel > 9.2 m/s^2 (0.94 g) - braking at 1 m/s^2 is SAFE; traction limit mu g = 6.9 m/s^2
+  forward tip-over needs decel > 7.6 m/s^2 (0.77 g) - braking at 1 m/s^2 is SAFE; traction limit mu g = 6.9 m/s^2
   drawer cartridge (1.20 kg) under 1.0 m/s^2 braking pushes 1.2 N toward the front stop (XT60 dock end) - closed-position latch recommended
 
   SUPPLY NOTE: 4S pack is 14.8-16.8 V into 12 V motors -> cap PWM at 71 % (or regulate) so stall torque/current stay within the 12 V ratings (7.7 A stall at full charge otherwise); DFR0601 12 A/ch has margin either way.

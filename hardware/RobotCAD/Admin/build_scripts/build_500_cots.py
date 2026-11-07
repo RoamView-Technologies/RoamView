@@ -13,9 +13,12 @@ import traceback
 
 sys.path.insert(0, os.path.dirname(__file__))
 from cots import Cots  # noqa: E402
-from rv_sw import app  # noqa: E402
+from rv_sw import ROOT, app, read_globals  # noqa: E402
+
+G = read_globals()
 
 Q = lambda n: f'"{n}"'          # noqa: E731
+VENDOR = os.path.join(ROOT, "COTS", "vendor")          # vendor CAD and datasheets the models are built from
 BLACK, DARK, GREY, SILVER = (0.08, 0.08, 0.09), (0.18, 0.18, 0.2), (0.55, 0.56, 0.58), (0.78, 0.79, 0.8)
 
 
@@ -75,19 +78,19 @@ def p503_wheel(sw):
 
 
 def p504_caster(sw):
-    """2-inch swivel caster placeholder. Origin = top of mounting plate, wheel below. Total height 68."""
-    c = Cots(sw, "RV-504", "Caster_2in_Swivel", r"COTS\Wheels_Casters",
-             "2 inch swivel caster, top plate 40x40 (model TBD)", color=DARK,
-             Vendor="TBD", VendorPN="TBD", Mass_g="60",
-             DimSource="APPROX: generic 2in caster, height = CASTER_H 68, trail 10")
-    c.feature("Plate", "z", 0, [("rectc", (0, 0), 40, 40)], 3, -1)
-    c.feature("PlateHoles_4x", "z", 0, [("circle", (sx * 15, sy * 15), 4.5) for sx in (1, -1) for sy in (1, -1)],
-              3, -1, cut=True)
-    c.feature("Swivel", "z", -3, [("circle", (0, 0), 30.0)], 12, -1)
-    c.feature("Fork", "z", -15, [("rect", (-22, -13), (4, 13))], 20, -1)
-    c.feature("Wheel", "y", -10, [("circle", (-10, -43), 50.0)], 20, +1)
+    """goBILDA swivel caster 3621-0001-0001, vendor STEP. Origin = hex-flange face (seats under the carriage or
+    riser) on the swivel axis; M8 x 15 stud up +z, wheel below, trail toward -x like a trailing caster.
+    In the STEP, up is -Z, the trail runs along +X and the axle along Y; swivel axis at (-56.855, 19.225),
+    hex face at Z = -14, floor at Z = 53.02 (all mm)."""
+    c = Cots(sw, "RV-504", "Caster_goBILDA_3621", r"COTS\Wheels_Casters",
+             "goBILDA swivel caster, M8 x 1.25 male stud (3621-0001-0001)", color=DARK,
+             step=os.path.join(VENDOR, "3621-0001-0001 assembly.STEP"),
+             Vendor="goBILDA", VendorPN="3621-0001-0001", Mass_g="105",
+             DimSource="vendor STEP gobilda.com/content/step_files/3621-0001-0001.zip: wheel d52.6 x 23.1, "
+                       "trail 21.9, hex face to floor 67.0, M8 x 15 stud, hex 13.9 AF")
+    c.move_bodies(rot=(("y", 90), ("z", 90)), trans=(-56.855, -19.225, -14.0))
     c.frame("IF_Mount")
-    c.frame("IF_Axle", (-10, 0, -43))
+    c.frame("IF_Axle", (-G["CASTER_TRAIL"], 0, G["CASTER_D"] / 2 - G["CASTER_H"]))
     return c.finish()
 
 
@@ -102,9 +105,10 @@ def p511_oak(sw):
     c.feature("VESA_2xM4", "x", 0, [("circle", (sy * 37.5, -4.75), 3.3) for sy in (1, -1)], 8, +1, cut=True)
     c.feature("Lenses", "x", 22.9, [("circle", (37.5, 0), 9.0), ("circle", (-37.5, 0), 9.0),
                                     ("circle", (0, 0), 9.0), ("rectc", (17, 0), 14, 10)], 1, -1, cut=True)
-    c.feature("KeepOut_USB_C", "z", -19.5, [("rectc", (11.45, 0), 8, 13)], 25, -1)
+    c.feature("USB_C_Receptacle", "z", -19.5, [("rectc", (11.45, 0), 2.6, 8.4)], 7, +1, cut=True)
     c.frame("IF_Mount")
     c.frame("oak_rgb_lens", (22.9, 0, 0))
+    c.frame("IF_USB", (11.45, 0, -19.5))                            # receptacle mouth, z into the camera
     return c.finish()
 
 
@@ -141,12 +145,18 @@ def p513_tof(sw):
 
 
 def p514_yadapter(sw):
+    """Luxonis Y-adapter (DM6010), vendor STEP. Plugs straight into the OAK's USB-C port; its two USB-C
+    receptacles (data, power) then face down. STEP: plug along -Z, receptacles on the +Z face at X = +-9.
+    IF_Mount: on the plug axis at the camera face (plug 6.6 mm inserted), z along the plug, y along its long side."""
     c = Cots(sw, "RV-514", "OAK_Y_Adapter", r"COTS\Sensors",
-             "Luxonis OAK Y-adapter (USB-C data + power split), envelope", color=DARK,
-             Vendor="Luxonis", VendorPN="OAK-Y-ADAPTER", Mass_g="10",
-             DimSource="APPROX envelope 34x24x10")
-    c.feature("Envelope", "z", 0, [("rectc", (0, 0), 34, 24)], 10, +1)
-    c.frame("IF_Mount")
+             "Luxonis OAK Y-adapter DM6010 (USB-C data + power split), plugs into the OAK", color=DARK,
+             step=os.path.join(VENDOR, "y-adapter_20211129.stp"),
+             Vendor="Luxonis", VendorPN="OAK-Y-ADAPTER", Mass_g="5",
+             DimSource="vendor STEP github.com/luxonis/oak-hardware DM6010_Y-adapter/Mechanical/y-adapter_20211129.stp "
+                       "(25.5 x 12.6 x 18.6); cable keep-outs assume right-angle USB-C plugs")
+    c.feature("KeepOut_RA_USB_C", "x", 6.5, [("rectc", (sy * 9, 0), 6.5, 12.3) for sy in (1, -1)], 15, +1,
+              merge=False)
+    c.frame("IF_Mount", (-5.5, 0, 0), x="z", y="y")
     return c.finish()
 
 
@@ -235,13 +245,39 @@ def p541_battery_env(sw):
 
 
 def p551_estop(sw):
-    c = Cots(sw, "RV-551", "EStop_22mm_Box", r"COTS\Electronics",
-             "Emergency stop, 22mm mushroom in 45x45 enclosure (model TBD)", color=(0.95, 0.76, 0.19),
-             Vendor="TBD", VendorPN="TBD", Mass_g="80", DimSource="APPROX: height 45 so top = ESTOP_TOP")
-    c.feature("Box", "z", 0, [("rectc", (0, 0), 45, 45)], 18, +1)
-    c.feature("Collar", "z", 18, [("circle", (0, 0), 24)], 14, +1)
-    c.feature("Mushroom", "z", 32, [("circle", (0, 0), 32)], 13, +1)
+    """Excel Cell ECS-22RE1RM2Q-020Q: big mushroom, push-lock turn-reset, 2 NC, panel-mounted through the deck.
+    Origin = deck top face at the cutout centre, z up; the contact unit hangs below the deck."""
+    from rv_sw import read_globals
+    G = read_globals()
+    T = G["DECK_T"]
+    c = Cots(sw, "RV-551", "EStop_ECS-22RE1RM2Q-020Q", r"COTS\Electronics",
+             "Emergency stop, 22 mm big mushroom, push-lock turn-reset, 2 NC, through the deck",
+             color=(0.85, 0.1, 0.1), Vendor="Excel Cell Electronic", VendorPN="ECS-22RE1RM2Q-020Q",
+             DigiKey="5916-ECS-22RE1RM2Q-020Q-ND", Mass_g="60",
+             DimSource="datasheet ECS A31250 p9 (ECS-22RE1RM2Q-XXXQ): mushroom d41.5, 37.5 above the panel, "
+                       "contact unit 35.7 x 50.8, 47.4 behind the panel face, cutout d22.3, panel 1-6 mm; "
+                       "collar / stem split and mass APPROX")
+    c.feature("Collar", "z", 0, [("circle", (0, 0), 30.0)], 10, +1)
+    c.feature("Stem", "z", 10, [("circle", (0, 0), 20.0)], 5, +1)
+    c.feature("Mushroom", "z", 15, [("circle", (0, 0), 41.5)], 22.5, +1)
+    c.feature("Bushing", "z", 0, [("circle", (0, 0), 22.0)], T, -1)
+    c.feature("ContactUnit", "z", -T, [("rectc", (0, 0), 35.7, 50.8)], 47.4 - T, -1)
     c.frame("IF_Mount")
+    return c.finish()
+
+
+def p553_bumper_switch(sw):
+    """Omron D2F-01L-D (hinge lever, gold contacts, solder lugs), vendor STEP. In the STEP the body runs along X
+    (-9.65..3.15), the lever rises along +Y (free position 10 above the hole line Y = 0), the M2 holes run along Z
+    through the 5.8 thickness at X = 0 and -6.5. IF_Mount: on the +Z face at the middle of the hole line,
+    x along the lever travel, z into the switch (so a bracket face carries it)."""
+    c = Cots(sw, "RV-553", "Microswitch_D2F-01L-D", r"COTS\Electronics",
+             "Omron D2F-01L-D subminiature switch, hinge lever, 0.1 A 30 VDC gold contacts (bumper)",
+             color=BLACK, step=os.path.join(VENDOR, "D2F-01L-D.STEP"),
+             Vendor="Omron (Aratas)", VendorPN="D2F-01L-D", DigiKey="SW1054-ND", Mass_g="0.6",
+             DimSource="vendor STEP (DigiKey model 368442) + datasheet D2F_0318: FP 10 max, OP 6.8+-1.5, OT 0.55 min, "
+                       "OF 0.78 N max, 2 x M2 holes 6.5 apart")
+    c.frame("IF_Mount", (2.9, -3.25, 0), x="z", y="y")
     return c.finish()
 
 
@@ -258,10 +294,27 @@ def p552_display(sw):
     return c.finish()
 
 
+def p554_caster_spring(sw):
+    """Lee Spring LC 032E 05 S, stainless, squared and ground ends. Modelled at its installed length SPRING_L
+    (carriage top to the bottom of the housing seat at rest) with the datasheet coil count; the ground end flats
+    are not modelled. Origin = bottom end (on the carriage), +z up into the housing seat."""
+    d, wire, L = G["SPRING_OD"] - G["SPRING_WIRE"], G["SPRING_WIRE"], G["SPRING_L"]
+    c = Cots(sw, "RV-554", "Spring_LeeSpring_LC032E05S", r"COTS\Hardware",
+             "Lee Spring LC 032E 05 S compression spring, 302 stainless (front caster, used x2)", color=SILVER,
+             Vendor="Lee Spring", VendorPN="LC 032E 05 S", Mass_g="0.5",
+             DimSource="leespring.com datasheet: OD 9.14, wire 0.81, free length 19.05, rate 1.751 N/mm, solid 4.7, "
+                       "max load 23.34 N, 5.71 total coils; modelled at installed length")
+    c.coil("Coil", d, wire, L, 5.71)
+    c.frame("IF_Mount")
+    c.frame("IF_Top", (0, 0, L))
+    return c.finish()
+
+
 PARTS = {"501": p501_motor, "502": p502_hub, "503": p503_wheel, "504": p504_caster, "511": p511_oak,
          "512": p512_lidar, "513": p513_tof, "514": p514_yadapter, "521": p521_pi5, "522": p522_esp32,
          "531": p531_driver, "532": p532_pcb_env, "541": p541_battery_env, "551": p551_estop,
-         "552": p552_display}
+         "552": p552_display, "553": p553_bumper_switch,
+         "554": p554_caster_spring}
 
 
 def main():

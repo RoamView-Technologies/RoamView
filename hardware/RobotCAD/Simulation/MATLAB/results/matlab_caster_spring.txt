@@ -1,0 +1,23 @@
+Front caster spring sweep (two springs; rate and preload are per spring; carriage travel 10 mm as designed)
+Braking: 1 m/s^2 from 0.5 m/s. Threshold: 15 mm square edge at 0.3 m/s, forward and reverse.
+Pass: crosses both ways, >= 4 mm bump travel left while braking, rear caster stays on the floor.
+
+  k N/mm  preload N  wheel N  front N  rear N  dip mm  bump left mm  rear min N  pitch deg  fwd  rev  pass
+   0.25       0.0     40.6      1.5     2.4    10.1          -0.1         0.0       4.98  yes   no  no
+   0.25       3.0     35.5      7.4     6.7     8.6           1.4         0.0       3.99  yes  yes  no
+   0.25       6.0     30.3     13.4    11.0     0.7           9.3         1.9       0.02  yes  yes  yes
+   0.50       0.0     40.3      1.9     2.7    10.1          -0.1         0.0       4.93  yes  yes  no
+   0.50       3.0     35.2      7.8     6.9     5.5           4.5         0.0       2.42  yes  yes  no
+   0.50       6.0     30.1     13.7    11.2     0.7           9.3         2.2       0.02  yes  yes  yes
+   1.00       0.0     39.6      2.6     3.2     9.1           0.9         0.0       4.28  yes  yes  no
+   1.00       3.0     34.6      8.5     7.4     2.8           7.2         0.0       1.06  yes  yes  no
+   1.00       6.0     29.5     14.3    11.7     0.7           9.3         2.7       0.02   no   no  no
+   1.50       0.0     39.0      3.4     3.7     5.3           4.7         0.0       2.35  yes  yes  no
+   1.50       3.0     34.0      9.1     7.9     1.6           8.4         0.0       0.47   no  yes  no
+   1.50       6.0     29.0     14.9    12.1     0.7           9.3         3.1       0.02   no   no  no
+
+Current recommendation (1.5 N/mm, 6 N each): fails (threshold forward, threshold reverse).
+Pick: 0.50 N/mm with 6 N preload per spring (front 13.7 N standing, dip 0.7 mm braking, rear min 2.2 N).
+This is the firmest spring in the grid that still gets over a square 15 mm edge both ways. Choose a stock
+compression spring near that rate whose installed length gives that preload, and check the Lee Spring
+LC 032E 05 S from the README shortlist against its datasheet before ordering.
