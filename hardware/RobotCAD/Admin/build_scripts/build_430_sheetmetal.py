@@ -92,8 +92,9 @@ def p434_bracket(sw):
     """Local origin = IF_DriveL: gearbox face centre (motor axis), x fwd, y outboard, z up. Used L and R."""
     c = Cots(sw, "RV-434", "MotorBracket", SM, "Motor bracket, 3mm 5052 L (face plate inside wheel recess)",
              source="SHEET", color=(0.55, 0.57, 0.6), Material="5052-H32 3.0mm",
-             DimSource="leg rests on bottom side rail; plate fits inside Wasteland d76 recess; inside bend R1.5 "
-                       "(clears gearbox by 1.1mm - confirm R with fabricator)")
+             DimSource="leg rests on bottom side rail; plate fits inside the Wasteland deep recess (vendor STEP: "
+                       "d66.6 where the plate sits) with its top corners chamfered to stay inside R31 of the wheel "
+                       "axis, 2 mm clear; inside bend R1.5 (clears gearbox by 1.1mm - confirm R with fabricator)")
     T = 3.0
     zl = (G["BOTRING_Z"] + G["PROFILE"] / 2) + T - G["MOTOR_AXIS_Z"]          # leg inner surface (local z)
     yl = (G["RAIL_Y"] - G["PROFILE"] / 2 - 10) - G["MOTOR_FACE_Y"]            # leg end, 10 mm past the rail
@@ -101,6 +102,10 @@ def p434_bracket(sw):
             want=("y", yl, T))
     c.feature("MotorHoles", "y", 0, c.bolt_circle((0, 0), 31.0, 6, 3.4) + [("circle", (0, -G["MOTOR_UP"]), 14.0)],
               T, +1, cut=True)
+    # The real Wasteland deep recess tapers to d66.6 where the plate sits, so the 42 x 42 plate's top corners
+    # (35 mm from the wheel axis) would touch the rim. Chamfer them about 8 x 6 so every point stays inside R31.
+    c.feature("CornerTrim", "y", 0, [("poly", [(sx * 12.5, 21.5), (sx * 21.5, 21.5), (sx * 21.5, 14.5)])
+                                     for sx in (1, -1)], T, +1, cut=True)
     yr = G["RAIL_Y"] - G["MOTOR_FACE_Y"]
     c.feature("RailHoles", "z", 0, [("circle", (sx * 12, yr), 4.3) for sx in (1, -1)], 30, -1, cut=True)
     c.frame("IF_Mount")

@@ -7,8 +7,9 @@ __pycache__/
 *.SWBAK
 *.swbak
 
-# Previous FOV component STLs, kept by export_fov_stl.py as a local backup only
-Simulation/FOV/parts_old/
+# Simulation outputs (videos, renders, STLs, reports, MATLAB) - local only, never tracked
+Simulation/
 
-# my custome files
+# my custom files
 design_rules_november.md
+tasks.md

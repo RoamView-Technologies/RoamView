@@ -60,18 +60,17 @@ def p503_wheel(sw):
     """goBILDA 3616-0014-0144 Wasteland Wheel, 144 x 52. The 4 mm mounting web sits 16 mm from one face and
     32 mm from the other. Mounted deep-side toward the motor, so the hub sits inside the wheel and the wheel
     centre plane is only WHEEL_WEB_OFF (6 mm) inboard of the web.
-    Origin = web face the hub bolts to (deep side), +y = outboard."""
+    Origin = web face the hub bolts to (deep side), +y = outboard.
+    Vendor STEP (rim + rubber tyre): axis along STEP X, web from X -2 to +2, shallow side toward -X (face at -18),
+    deep side toward +X (face at +34). In ROS terms that is y = X, so turn 180 deg about z (deep side to -y) and
+    shift +2 mm to put the deep web face on the origin."""
     c = Cots(sw, "RV-503", "Wheel_Wasteland_144x52", r"COTS\Wheels_Casters",
              "goBILDA Wasteland Wheel 144mm dia x 52mm wide (14mm bore, 16/32mm square patterns)", color=BLACK,
+             step=os.path.join(VENDOR, "3616-0014-0144 Assembly.step"),
              Vendor="goBILDA / ServoCity", VendorPN="3616-0014-0144", Mass_g="348", MaxLoad_kg="6",
-             DimSource="goBILDA 3616-0014-0144 schematic: d144 x 52, bore d14, holes d4 on 16 and 32 square, "
-                       "web 4 thick at 16 / 32 from the faces; recess d76 measured off the section (APPROX)")
-    c.feature("Tyre", "y", -32, [("circle", (0, 0), 144.0)], 52, +1)
-    c.feature("RecessDeep", "y", -32, [("circle", (0, 0), 76.0)], 32, +1, cut=True)
-    c.feature("RecessShallow", "y", 20, [("circle", (0, 0), 76.0)], 16, -1, cut=True)
-    c.feature("WebHoles", "y", 0, [("circle", (0, 0), 14.0)]
-              + [("circle", (sx * 8, sz * 8), 4.0) for sx in (1, -1) for sz in (1, -1)]
-              + [("circle", (sx * 16, sz * 16), 4.0) for sx in (1, -1) for sz in (1, -1)], 4, +1, cut=True)
+             DimSource="vendor STEP gobilda.com/content/step_files/3616-0014-0144.zip: d144 x 52, bore d14, "
+                       "web 4 thick at 16 / 32 from the faces; deep recess d53 at the web to d69 at the face")
+    c.move_bodies(rot=(("z", 180),), trans=(0.0, 2.0, 0.0))
     c.frame("IF_Mount")
     c.frame("IF_Center", (0, -6, 0))
     return c.finish()

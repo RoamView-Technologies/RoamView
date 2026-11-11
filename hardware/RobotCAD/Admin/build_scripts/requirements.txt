@@ -1,0 +1,19 @@
+# RoamView CAD and simulation scripts (presentation_views, bay_video, drive_video, docking_video, fea, fov_check)
+# Requires Python 3.11. Build the venv with setup_env.bat, which uses Python 3.11.
+# Each line below only matches Python 3.11, so on any other version every package is
+# skipped and the install does nothing. If you see "Ignoring ...", you are on the wrong Python.
+numpy==2.4.6          ; python_version == "3.11"
+scipy==1.17.1         ; python_version == "3.11"
+matplotlib==3.11.2    ; python_version == "3.11"
+pillow==13.0.0        ; python_version == "3.11"
+trimesh==5.2.0        ; python_version == "3.11"
+rtree==1.4.1          ; python_version == "3.11"
+vtk==9.7.2            ; python_version == "3.11"
+pyvista==0.49.2       ; python_version == "3.11"
+imageio==2.38.1       ; python_version == "3.11"
+imageio-ffmpeg==0.8.1 ; python_version == "3.11"
+openpyxl==3.1.5       ; python_version == "3.11"
+gmsh==4.15.2          ; python_version == "3.11"
+meshio==5.3.5         ; python_version == "3.11"
+scikit-fem==12.0.2    ; python_version == "3.11"
+pyamg==5.4.1          ; python_version == "3.11"
