@@ -1,0 +1,85 @@
+// URDF Exporter config for RV-100. Lengths in mm, angles in degrees, all positions in the robot frame
+// (REP 103: x forward, y left, z up; origin on the floor under the drive axle centre = the CAD origin).
+// Names in expressions are the globals in Admin/RV_globals.txt. cx, cy, cz in a filter are a part's bounding-box centre.
+{
+  "robot": "roamview",
+  "package": "roamview_sim",
+  "outputDir": "../../../../../../Downloads",
+  "urdfFile": "urdf/roamview_rv100.urdf",
+  "meshDir": "meshes/rv100",
+  "globalsFile": "../Admin/RV_globals.txt",
+  "axes": { "x": "Z", "y": "X", "z": "Y" },
+  "skipHidden": true,
+  "skipExcludedFromBom": true,
+  "root": "base_footprint",
+
+  "links": [
+    { "name": "base_footprint", "visual": false },
+
+    { "name": "base_link", "default": true,
+      "origin": { "xyz": [0, 0, "AXLE_Z"] },
+      "collision": [
+        { "type": "bbox", "exclude": ["RV-120*", "RV-125*"], "filter": "cz < DECK_Z" },
+        { "type": "bbox", "exclude": ["RV-120*", "RV-125*"], "filter": "cz >= DECK_Z" }
+      ] },
+
+    { "name": "left_wheel", "components": ["RV-110*/RV-503*", "RV-110*/RV-502*"], "filter": "cy > 0",
+      "origin": { "bbox": { "components": ["RV-110*/RV-503*"], "filter": "cy > 0" } },
+      "collision": [ { "type": "cylinder", "radius": "WHEEL_D / 2", "length": "WHEEL_W", "rpy_deg": [90, 0, 0] } ] },
+
+    { "name": "right_wheel", "components": ["RV-110*/RV-503*", "RV-110*/RV-502*"], "filter": "cy < 0",
+      "origin": { "bbox": { "components": ["RV-110*/RV-503*"], "filter": "cy < 0" } },
+      "collision": [ { "type": "cylinder", "radius": "WHEEL_D / 2", "length": "WHEEL_W", "rpy_deg": [90, 0, 0] } ] },
+
+    { "name": "caster_front_carriage", "components": ["RV-120*/RV-309*", "RV-120*/RV-504*"],
+      "origin": { "bbox": { "components": ["RV-120*/RV-309*"] }, "align": ["center", "center", "min"] } },
+
+    { "name": "caster_front_ball", "visual": false,
+      "origin": { "xyz": ["CASTER_X - CASTER_TRAIL", 0, "CASTER_D / 2"] },
+      "collision": [ { "type": "sphere", "radius": "CASTER_D / 2" } ] },
+
+    { "name": "caster_rear_ball", "visual": false,
+      "origin": { "xyz": ["-(CASTER_X + CASTER_TRAIL)", 0, "CASTER_D / 2"] },
+      "collision": [ { "type": "sphere", "radius": "CASTER_D / 2" } ] },
+
+    { "name": "bumper_link", "components": ["RV-305*"],
+      "origin": { "bbox": { "components": ["RV-305*"] } },
+      "collision": [ { "type": "bbox" } ] }
+  ],
+
+  "joints": [
+    { "name": "base_joint", "type": "fixed", "parent": "base_footprint", "child": "base_link" },
+    { "name": "left_wheel_joint", "type": "continuous", "parent": "base_link", "child": "left_wheel",
+      "axis": [0, 1, 0], "limit": { "effort": 2.45, "velocity": 15.7 }, "dynamics": { "damping": 0.005, "friction": 0 } },
+    { "name": "right_wheel_joint", "type": "continuous", "parent": "base_link", "child": "right_wheel",
+      "axis": [0, 1, 0], "limit": { "effort": 2.45, "velocity": 15.7 }, "dynamics": { "damping": 0.005, "friction": 0 } },
+    { "name": "caster_front_spring_joint", "type": "prismatic", "parent": "base_link", "child": "caster_front_carriage",
+      "axis": [0, 0, 1], "limit": { "lower": 0, "upper_mm": "SPRING_L - SPRING_SEAT", "effort": 200, "velocity": 1 },
+      "dynamics": { "damping": 30, "friction": 0 } },
+    { "name": "caster_front_ball_joint", "type": "fixed", "parent": "caster_front_carriage", "child": "caster_front_ball" },
+    { "name": "caster_rear_ball_joint", "type": "fixed", "parent": "base_link", "child": "caster_rear_ball" },
+    { "name": "bumper_joint", "type": "fixed", "parent": "base_link", "child": "bumper_link" }
+  ],
+
+  "frames": [
+    { "name": "lidar_link", "parent": "base_link", "origin": { "xyz": ["LIDAR_X", 0, "SCAN_Z"] } },
+    { "name": "camera_link", "parent": "base_link",
+      "origin": { "bbox": { "components": ["*RV-511*"] }, "align": ["max", "center", "center"], "rpy_deg": [0, "OAK_TILT", 0] } },
+    { "name": "camera_optical_frame", "parent": "camera_link", "origin": { "relative": true, "rpy_deg": [-90, 0, -90] } },
+    { "name": "imu_link", "parent": "base_link", "origin": { "bbox": { "components": ["*RV-511*"] }, "rpy_deg": [0, "OAK_TILT", 0] } },
+    { "name": "cliff_front_left_link", "parent": "base_link", "origin": { "xyz": ["CLIFF_X", "CLIFF_Y", "CLIFF_Z"], "rpy_deg": [0, "90 - CLIFF_ANG", 0] } },
+    { "name": "cliff_front_right_link", "parent": "base_link", "origin": { "xyz": ["CLIFF_X", "-CLIFF_Y", "CLIFF_Z"], "rpy_deg": [0, "90 - CLIFF_ANG", 0] } },
+    { "name": "cliff_rear_left_link", "parent": "base_link", "origin": { "xyz": ["-CLIFF_X", "CLIFF_Y", "CLIFF_Z"], "rpy_deg": [0, "90 - CLIFF_ANG", 180] } },
+    { "name": "cliff_rear_right_link", "parent": "base_link", "origin": { "xyz": ["-CLIFF_X", "-CLIFF_Y", "CLIFF_Z"], "rpy_deg": [0, "90 - CLIFF_ANG", 180] } },
+    { "name": "dock_contact_link", "parent": "base_link", "origin": { "xyz": ["CONTACT_X", 0, "CONTACT_Z"] } }
+  ],
+
+  "gazebo": [
+    "<gazebo reference=\"left_wheel\"><mu1>0.7</mu1><mu2>0.7</mu2></gazebo>",
+    "<gazebo reference=\"right_wheel\"><mu1>0.7</mu1><mu2>0.7</mu2></gazebo>",
+    "<gazebo reference=\"caster_front_ball\"><mu1>0</mu1><mu2>0</mu2></gazebo>",
+    "<gazebo reference=\"caster_rear_ball\"><mu1>0</mu1><mu2>0</mu2></gazebo>",
+    "<gazebo reference=\"caster_front_spring_joint\"><springStiffness>${2 * SPRING_K * 1000}</springStiffness><springReference>${-(SPRING_FL - SPRING_L) / 1000}</springReference></gazebo>",
+    "<gazebo><plugin filename=\"gz-sim-diff-drive-system\" name=\"gz::sim::systems::DiffDrive\"><left_joint>left_wheel_joint</left_joint><right_joint>right_wheel_joint</right_joint><wheel_separation>${TRACK / 1000}</wheel_separation><wheel_radius>${WHEEL_D / 2000}</wheel_radius><topic>/model/roamview/cmd_vel</topic><odom_topic>/model/roamview/odometry</odom_topic><frame_id>odom</frame_id><child_frame_id>base_footprint</child_frame_id><odom_publish_frequency>50</odom_publish_frequency></plugin><plugin filename=\"gz-sim-joint-state-publisher-system\" name=\"gz::sim::systems::JointStatePublisher\"><topic>/model/roamview/joint_states</topic></plugin></gazebo>"
+  ]
+}

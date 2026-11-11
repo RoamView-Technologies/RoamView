@@ -1,0 +1,15 @@
+# Python caches
+__pycache__/
+*.pyc
+
+# SolidWorks lock / temp files (left behind while a file is open or after a crash)
+~$*
+*.SWBAK
+*.swbak
+
+# Simulation outputs (videos, renders, STLs, reports, MATLAB) - local only, never tracked
+Simulation/
+
+# my custom files
+design_rules_november.md
+tasks.md
